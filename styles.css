@@ -1,0 +1,3281 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    height: 100vh;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    align-items: stretch;
+}
+
+.container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    border-bottom: 2px solid #dee2e6;
+    flex-wrap: wrap;
+}
+
+.player-info-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.player-info-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.player-controls-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.player-controls-bottom {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.player-info h2 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.player-stats {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: #adb5bd;
+}
+
+.player-stats span {
+    display: flex;
+    align-items: center;
+}
+
+#allyCode {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    width: 180px;
+}
+
+#fetchBtn {
+    padding: 6px 16px;
+    background: #ffc107;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+#fetchBtn:hover {
+    background: #ffca28;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(255, 193, 7, 0.4);
+}
+
+#fetchBtn:active { transform: translateY(0); }
+
+.cache-status {
+    font-size: 0.75rem;
+    color: #adb5bd;
+    white-space: nowrap;
+}
+
+.link-btn {
+    background: transparent;
+    border: none;
+    color: #ffd54f;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 213, 79, 0.4);
+    text-underline-offset: 3px;
+}
+.link-btn-danger {
+    color: #ff8a80;
+    text-decoration-color: rgba(255, 138, 128, 0.4);
+}
+.link-btn:hover { color: #fff; text-decoration-color: #ffd54f; }
+
+
+.filter-section {
+    padding: 20px 30px;
+    background: #f1f3f5;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#searchInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.filter-section select {
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+.clear-btn {
+    padding: 10px 20px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.clear-btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.tabs {
+    display: flex;
+    background: #e9ecef;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #666;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    background: #dee2e6;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #1e3c72;
+    border-bottom-color: #1e3c72;
+}
+
+.tab-content {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-pane {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 0;
+}
+
+.tab-pane.active {
+    display: flex;
+}
+
+.stats-summary {
+    background: #e7f5ff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: #1864ab;
+}
+
+/* ===================================================
+   TAB SCROLLABLE CONTENT
+   Inner list/grid containers fill remaining pane
+   height and scroll independently.
+   =================================================== */
+#characters, #ships, #keywords, #statuses, #journeyguide {
+    padding: 0;
+}
+#characters .stats-summary,
+#characters .char-view-toggle,
+#ships .stats-summary,
+#keywords .stats-summary,
+#statuses .stats-summary,
+.journey-guide-header {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dee2e6;
+    background: white;
+    margin-bottom: 0;
+}
+.char-card-grid, .roster-list, .keyword-list, .status-list, .journey-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+.roster-list {
+    display: grid;
+    gap: 10px;
+}
+}
+
+.roster-item {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 50px 1fr auto auto auto auto;
+    grid-template-areas:
+        "rank name stars gear relic power"
+        "rank tags tags tags tags tags";
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.roster-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(5px);
+}
+
+.roster-item[data-type="ship"] {
+    grid-template-columns: 48px 50px 1fr auto auto auto;
+    grid-template-areas: "portrait rank name stars level power";
+}
+
+.roster-portrait {
+    grid-area: portrait;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.roster-portrait-placeholder {
+    background: #e9ecef;
+}
+
+.roster-rank {
+    grid-area: rank;
+    font-weight: bold;
+    color: #868e96;
+    text-align: center;
+}
+
+.roster-name {
+    grid-area: name;
+    font-weight: 600;
+    color: #212529;
+    font-size: 1.05rem;
+}
+
+.roster-tags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.roster-stat {
+    padding: 4px 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.roster-stat.stars {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.roster-stat.gear {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.roster-stat.relic {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.roster-stat.power {
+    background: #d4edda;
+    color: #155724;
+    font-weight: 600;
+}
+
+.tag {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #e7f5ff;
+    color: #1864ab;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #a5d8ff;
+}
+
+.tag-none {
+    display: inline-block;
+    padding: 3px 8px;
+    color: #adb5bd;
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+/* Journey requirement filter banner */
+.journey-req-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    margin-bottom: 12px;
+    background: #f3e8ff;
+    border: 1px solid #d0aff0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #4a1272;
+}
+.journey-req-banner strong { color: #6a1f9a; }
+.journey-req-banner-clear {
+    margin-left: auto;
+    padding: 3px 10px;
+    border: 1px solid #d0aff0;
+    border-radius: 5px;
+    background: white;
+    color: #6a1f9a;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.journey-req-banner-clear:hover { background: #ede0ff; }
+
+/* ── Tag filter dropdown ────────────────────────────────────────────────────── */
+.tag-filter-wrap {
+    position: relative;
+}
+.tag-filter-btn {
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background: white;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s;
+}
+.tag-filter-btn:hover { border-color: #1e3c72; }
+.tag-filter-btn.tag-filter-btn-active {
+    border-color: #1e3c72;
+    background: #eef2ff;
+    color: #1e3c72;
+    font-weight: 600;
+}
+.tag-filter-panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    padding: 8px 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+}
+.tag-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.1s;
+}
+.tag-filter-item:hover { background: #f1f3f5; }
+.tag-filter-item input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #1e3c72;
+    cursor: pointer;
+}
+
+/* ── Character portrait cards ─────────────────────────────────────────────── */
+
+/* View toggle: All / By Faction */
+.char-view-toggle {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.char-view-btn {
+    padding: 6px 16px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background: white;
+    color: #495057;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.char-view-btn:hover { border-color: #1e3c72; color: #1e3c72; }
+.char-view-btn.active {
+    background: #1e3c72;
+    border-color: #1e3c72;
+    color: white;
+}
+
+.char-sort-select {
+    padding: 6px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background: white;
+    color: #495057;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-left: auto;
+}
+.char-sort-select:focus { outline: none; border-color: #1e3c72; }
+
+/* Grid wrapper */
+.char-card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+/* In factions mode the outer container is a column of sections, not a grid */
+.char-card-grid.char-faction-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Individual card */
+.char-card {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+.char-card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+    transform: translateY(-2px);
+}
+
+/* Alignment-coloured header band */
+.char-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 8px 8px;
+    color: #fff;
+}
+.char-card-header.align-dark    { background: linear-gradient(135deg, #7a1f1f 0%, #c0392b 100%); }
+.char-card-header.align-light   { background: linear-gradient(135deg, #1e3c72 0%, #3a7bd5 100%); }
+.char-card-header.align-neutral { background: linear-gradient(135deg, #343a40 0%, #6c757d 100%); }
+
+.char-card-portrait {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.4);
+    flex-shrink: 0;
+}
+.char-card-portrait-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.char-card-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 4px;
+}
+
+/* Card body */
+.char-card-body {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.char-card-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+}
+.char-card-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.char-card-badge.stars  { background: #fff3cd; color: #856404; }
+.char-card-badge.gear   { background: #d1ecf1; color: #0c5460; }
+.char-card-badge.relic  { background: #f8d7da; color: #721c24; }
+.char-card-badge.req-at { background: #e8d5f5; color: #6a1f9a; border: 1px solid #d0aff0; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.char-card-badge.req-at:hover { background: #d9b8f0; }
+.req-at-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #6a1f9a;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    line-height: 1.4;
+}
+
+/* Req-at popover */
+.req-at-popover {
+    background: white;
+    border: 1px solid #d0aff0;
+    border-radius: 10px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    padding: 6px;
+    z-index: 500;
+    min-width: 200px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.req-at-popover-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.1s;
+}
+.req-at-popover-row:hover { background: #f3e8ff; }
+.req-at-popover-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid #d0aff0;
+}
+.req-at-popover-name {
+    flex: 1;
+    font-size: 0.82rem;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.req-at-popover-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #6a1f9a;
+    flex-shrink: 0;
+}
+.req-at-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.char-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    justify-content: center;
+}
+.char-tag-btn {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #e7f5ff;
+    color: #1864ab;
+    border: 1px solid #a5d8ff;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.1s, border-color 0.1s;
+}
+.char-tag-btn:hover { background: #c5e3ff; border-color: #74c0fc; }
+
+/* Unowned (locked) card */
+.char-card-unowned { position: relative; }
+.char-card-unowned .char-card-header { filter: grayscale(60%); opacity: 0.7; }
+.char-card-unowned .char-card-body { opacity: 0.5; }
+.char-card-locked {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    pointer-events: none;
+}
+.char-card-lock-icon {
+    font-size: 0.85rem;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+.char-card-unowned { cursor: default; }
+.char-card-unowned:hover { box-shadow: none; transform: none; }
+
+/* Faction sections (By Faction view) */
+.char-faction-section {
+    border-bottom: 1px solid #dee2e6;
+}
+.char-faction-section:first-child { border-top: 1px solid #dee2e6; }
+
+.char-faction-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f1f3f5;
+    cursor: pointer;
+    font-weight: 600;
+    color: #212529;
+    list-style: none;
+    user-select: none;
+}
+.char-faction-header::-webkit-details-marker { display: none; }
+.char-faction-header:hover { background: #e9ecef; }
+.char-faction-name { flex: 1; font-size: 0.95rem; }
+.char-faction-count { font-size: 0.8rem; color: #868e96; font-weight: 400; }
+
+.char-faction-body {
+    padding: 12px;
+    background: white;
+}
+
+@media (max-width: 1200px) {
+    .char-card-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+    .char-card-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .char-card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.placeholder {
+    text-align: center;
+    color: #868e96;
+    padding: 60px 20px;
+    font-size: 1.1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 20px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #1e3c72;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    margin: 20px 30px;
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+    .roster-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .roster-rank {
+        text-align: left;
+    }
+
+    .filter-section {
+        flex-direction: column;
+    }
+
+    #searchInput, .filter-section select {
+        width: 100%;
+    }
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-card {
+    background: white;
+    border-radius: 12px;
+    padding: 0;                /* header now provides its own padding */
+    max-width: 640px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: background 0.2s;
+}
+
+/* Alignment-themed card backgrounds — subtle tint behind the white content */
+.modal-card.align-dark   { background: linear-gradient(180deg, #fff5f5 0%, #ffffff 220px); }
+.modal-card.align-light  { background: linear-gradient(180deg, #eef4ff 0%, #ffffff 220px); }
+.modal-card.align-neutral { background: white; }
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #212529;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.modal-close:hover {
+    background: white;
+}
+
+/* Modal header — portrait left, name + chips right, themed band */
+.modal-header {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding: 24px 30px;
+    border-radius: 12px 12px 0 0;
+    color: white;
+}
+
+.modal-header.align-dark {
+    background: linear-gradient(135deg, #7a1f1f 0%, #c0392b 100%);
+}
+.modal-header.align-light {
+    background: linear-gradient(135deg, #1e3c72 0%, #3a7bd5 100%);
+}
+.modal-header.align-neutral {
+    background: linear-gradient(135deg, #343a40 0%, #6c757d 100%);
+}
+
+.modal-portrait {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.modal-portrait-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.modal-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-header .modal-title {
+    color: white;
+    margin-bottom: 12px;
+    padding-right: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header .modal-stats {
+    margin-bottom: 0;
+}
+
+/* Chips already styled by .modal-stat — keep them as is, they show fine on the band */
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    padding-right: 30px;
+}
+
+.modal-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-stat {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.modal-stat.stars  { background: #fff3cd; color: #856404; }
+.modal-stat.gear   { background: #d1ecf1; color: #0c5460; }
+.modal-stat.relic  { background: #f8d7da; color: #721c24; }
+.modal-stat.power  { background: #d4edda; color: #155724; }
+.modal-stat.level  { background: #e2e3e5; color: #383d41; }
+
+.modal-section-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #868e96;
+    margin-bottom: 8px;
+}
+
+.modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* Modal tabs — Abilities / Gear / Info */
+.modal-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 30px;
+    border-bottom: 2px solid #dee2e6;
+    margin-top: 4px;
+}
+
+.modal-tab-btn {
+    padding: 12px 18px;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.modal-tab-btn:hover {
+    color: #212529;
+}
+
+.modal-tab-btn.active {
+    color: #1e3c72;
+    border-bottom-color: #1e3c72;
+}
+
+.modal-card.align-dark .modal-tab-btn.active {
+    color: #c0392b;
+    border-bottom-color: #c0392b;
+}
+
+.modal-card.align-light .modal-tab-btn.active {
+    color: #1e3c72;
+    border-bottom-color: #1e3c72;
+}
+
+.modal-tab-content {
+    padding: 20px 30px 30px;
+}
+
+.modal-tab-pane {
+    display: none;
+}
+
+.modal-tab-pane.active {
+    display: block;
+}
+
+.modal-empty {
+    color: #868e96;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.modal-description {
+    color: #495057;
+    font-style: italic;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.modal-info-row {
+    margin-bottom: 6px;
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+/* Collapsible gear tier — uses native <details> */
+.gear-tier {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.gear-tier > summary {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #212529;
+    list-style: none;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.gear-tier > summary::-webkit-details-marker { display: none; }
+
+.gear-tier > summary::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.15s;
+    color: #868e96;
+}
+
+.gear-tier[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.gear-tier > summary:hover {
+    background: #e9ecef;
+}
+
+.gear-pieces {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px 14px 14px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.gear-piece {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: #f1f3f5;
+    color: #1864ab;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    min-width: 0;        /* lets text truncate inside flex */
+}
+
+.gear-piece:hover {
+    background: #e7f5ff;
+    border-color: #a5d8ff;
+}
+
+.gear-piece-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+}
+
+.gear-piece-icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-weight: 700;
+}
+
+.gear-piece-name {
+    color: #212529;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gear-piece-unknown {
+    background: #fff8e1;
+    border-color: #ffe082;
+    color: #856404;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.8rem;
+}
+
+/* Abilities tab — real ability cards grouped by type (Basic/Special/Leader/Unique).
+   Background colour ramps with ability tier:
+     0   → light red       (untrained)
+     1-3 → red → orange → yellow
+     4   → yellow          (mid)
+     5-6 → yellow → light green
+     7   → green           (maxed for non-zeta abilities)
+     8   → green + zeta/omega/omicron icon replaces numeric tier
+*/
+.ability-group {
+    margin-bottom: 18px;
+}
+
+.ability-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.ability-cards {
+    display: grid;
+    gap: 8px;
+}
+
+.ability-card {
+    background: #f8f9fa;          /* fallback if data-ramp-step is missing */
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+/* Card is a <details> element. Strip native triangle marker — we don't use it;
+   the card itself reads as clickable via cursor + hover state. */
+.ability-card > summary {
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.ability-card > summary::-webkit-details-marker { display: none; }
+
+/* Body slides in below the summary when expanded */
+.ability-card-body {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.ability-description {
+    color: #2d3748;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.ability-description-empty {
+    color: #868e96;
+    font-style: italic;
+}
+
+/* Status-effect callouts inside ability descriptions. Renders the inline
+   "Blight: -100% Health Steal..." clauses as separate definition blocks
+   below the main prose. Rules detected by splitDescriptionForCallouts() in
+   app.js — matched on every "Capital Phrase: capital-led prose" pattern.
+   Two variants — default (light) for normal abilities, omicron (dark/silver)
+   when the parent ability has an omicron upgrade mode. */
+.ability-callout {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #f1f3f5;
+    border-left: 3px solid #adb5bd;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.ability-callout-name {
+    font-weight: 700;
+    color: #495057;
+    margin-right: 4px;
+}
+
+.ability-callout-def {
+    color: #2d3748;
+}
+
+/* Omicron variant — silver/black palette matching the omicron-hexagon icon.
+   Used when the ability is omicron-able (player payload's is_omicron flag,
+   or fallback to bundle's material === 'omicron'). Most common case: the
+   "While in Grand Arenas/Territory Wars/Territory Battles/Raids:" mode-modifier
+   clauses, which are exclusively on omicron abilities. */
+.ability-callout-omicron {
+    background: linear-gradient(135deg, #2a2d33 0%, #3a3d44 100%);
+    border-left-color: #b8c4d1;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25),
+                0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.ability-callout-omicron .ability-callout-name {
+    color: #e5edf5;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.ability-callout-omicron .ability-callout-def {
+    color: #f0f4f8;
+}
+
+/* Keyword highlights inside an omicron callout need a brighter blue so they
+   stay readable on the dark background. */
+.ability-callout-omicron .kw {
+    color: #74c0fc;
+}
+.ability-callout-omicron .kw:hover {
+    color: #a5d8ff;
+    text-decoration-color: rgba(165, 216, 255, 0.5);
+}
+
+/* On the gold Ultimate card, callouts get a slightly warmer light variant
+   (the dark omicron variant — which most GL ultimates have anyway — looks
+   harsh against the gold). Override only the non-omicron variant; let the
+   omicron variant stay dark for contrast. */
+.ability-card[data-type="Ultimate"] .ability-callout:not(.ability-callout-omicron) {
+    background: rgba(255, 255, 255, 0.5);
+    border-left-color: rgba(120, 80, 0, 0.4);
+}
+.ability-card[data-type="Ultimate"] .ability-callout:not(.ability-callout-omicron) .ability-callout-name {
+    color: #5a3d00;
+}
+.ability-card[data-type="Ultimate"] .ability-callout:not(.ability-callout-omicron) .ability-callout-def {
+    color: #4a3000;
+}
+
+/* In-description keyword highlight. Cobalt-blue + bold reads cleanly on every
+   tier-ramp background (red-yellow-green pastels) AND on the gold Ultimate
+   card. Cursor pointer hints at the future click→jump-to-Keywords-tab affordance.
+   The colour stays the same on hover; we just darken slightly to feel responsive. */
+.kw {
+    color: #1864ab;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.12s;
+}
+.kw:hover {
+    color: #0d3a5e;
+    text-decoration: underline;
+    text-decoration-color: rgba(13, 58, 94, 0.35);
+    text-underline-offset: 2px;
+}
+
+/* Inside the gold Ultimate card the cobalt blue still reads, but a slightly
+   darker shade better matches the warm background. */
+.ability-card[data-type="Ultimate"] .kw {
+    color: #2c4a8a;
+}
+.ability-card[data-type="Ultimate"] .kw:hover {
+    color: #14264a;
+}
+
+/* 9-step ramp keyed off `data-ramp-step` (0..8). The step is computed in JS via
+   rampStepFor(tier, tier_max) so 3-tier (Galactic Legends), 7-tier, 8-tier and
+   9-tier abilities all use the same red→green palette regardless of ladder length:
+     tier 0       → step 0 (light red, untrained)
+     tier = max   → step 8 (green, paired with tier-icon swap)
+     in between   → discrete or proportional mapping per tier_max */
+.ability-card[data-ramp-step="0"] { background: #fde2e2; border-color: #f5c2c2; }
+.ability-card[data-ramp-step="1"] { background: #fad4c8; border-color: #f0b6a3; }
+.ability-card[data-ramp-step="2"] { background: #fde2b8; border-color: #f3c98a; }
+.ability-card[data-ramp-step="3"] { background: #fdeeae; border-color: #f0d97a; }
+.ability-card[data-ramp-step="4"] { background: #fff4b8; border-color: #ecd96a; }
+.ability-card[data-ramp-step="5"] { background: #ecf3a8; border-color: #c8d57a; }
+.ability-card[data-ramp-step="6"] { background: #dceeb0; border-color: #aed18b; }
+.ability-card[data-ramp-step="7"] { background: #d4edda; border-color: #b7e4c7; }
+.ability-card[data-ramp-step="8"] { background: #c8ecd2; border-color: #95d3a8; }
+
+/* GL Ultimate cards override the red→green ramp with a rich amber-gold —
+   selector is more specific (data-type + data-ramp-step) so it wins over the
+   ramp rules above. The inner glow gives them a "premium" feel; the gradient
+   adds a subtle metallic sheen from top-left. Always painted gold regardless
+   of tier (they're tier_max=1 and effectively always at max in practice). */
+.ability-card[data-type="Ultimate"] {
+    background: linear-gradient(135deg, #ffe082 0%, #ffd54f 60%, #f59f00 100%);
+    border-color: #f59f00;
+    box-shadow: inset 0 0 12px rgba(255, 235, 150, 0.6),
+                0 1px 3px rgba(245, 159, 0, 0.25);
+}
+.ability-card[data-type="Ultimate"] .ability-name {
+    color: #5a3d00;
+    text-shadow: 0 1px 0 rgba(255, 245, 200, 0.5);
+}
+.ability-card[data-type="Ultimate"] .ability-card-body {
+    border-top-color: rgba(120, 80, 0, 0.25);
+}
+.ability-card[data-type="Ultimate"] .ability-description {
+    color: #4a3000;
+}
+
+.ability-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ability-name {
+    font-weight: 600;
+    color: #212529;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.ability-tier-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.ability-tier {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    color: #495057;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 2px 8px;
+}
+
+/* Tier-8 icon replaces the numeric pill — same footprint, real game-asset PNGs.
+   No background pill — the icon art carries its own colour & shape. */
+.ability-tier-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    line-height: 1;
+}
+
+.ability-icon-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Glow halos echo the icon's primary colour — zeta=purple, omega=gold, omicron=silver, ultimate=amber. */
+.icon-zeta     { filter: drop-shadow(0 0 3px rgba(159, 122, 234, 0.7)); }
+.icon-omega    { filter: drop-shadow(0 0 3px rgba(255, 200,   0, 0.7)); }
+.icon-omicron  { filter: drop-shadow(0 0 3px rgba(200, 200, 220, 0.8)); }
+.icon-ultimate { filter: drop-shadow(0 0 4px rgba(255, 180,  40, 0.9)); }
+
+/* Adjacent omicron icon (sits right of zeta when both apply) */
+.icon-adjacent {
+    margin-left: 2px;
+}
+
+/* Inactive variant — available but not yet unlocked by the player */
+.icon-inactive {
+    opacity: 0.45;
+    filter: grayscale(0.7) saturate(0.4);
+}
+
+/* Mechanic-tag footer (Taunt, +Speed, Burning, …) — ability_classes from base char def */
+.ability-classes {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed #dee2e6;
+}
+
+@media (max-width: 600px) {
+    .gear-pieces {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .modal-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .modal-portrait {
+        width: 80px;
+        height: 80px;
+    }
+    .modal-tabs, .modal-tab-content {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+/* =============================================================================
+   Refresh-abilities modal — guided 3-step popup that ingests a fresh
+   abilities-data.json from the user's filesystem.
+   ========================================================================== */
+
+.refresh-card {
+    max-width: 640px;
+    padding: 0;
+}
+
+.refresh-header {
+    padding: 24px 30px 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.refresh-header .modal-title {
+    margin-bottom: 6px;
+}
+
+.refresh-sub {
+    color: #495057;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.refresh-steps {
+    list-style: none;
+    counter-reset: refresh-step;
+    padding: 16px 30px 24px;
+    margin: 0;
+}
+
+.refresh-steps > li {
+    counter-increment: refresh-step;
+    padding-left: 38px;
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.refresh-steps > li:last-child {
+    margin-bottom: 0;
+}
+
+.refresh-steps > li::before {
+    content: counter(refresh-step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #ffc107;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-step-head {
+    font-weight: 600;
+    color: #212529;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.refresh-step-head kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    background: #f1f3f5;
+    border: 1px solid #ced4da;
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.8rem;
+    color: #495057;
+}
+
+.refresh-step-body {
+    /* nothing — children own their layout */
+}
+
+.refresh-step-hint {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #868e96;
+}
+
+.refresh-step-hint code {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    background: #f1f3f5;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+/* Action buttons inside the steps (open-tab link + copy) */
+.refresh-action-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.refresh-action-btn:hover {
+    background: #2a5298;
+}
+
+.refresh-copy-btn {
+    margin-top: 8px;
+}
+
+/* Read-only script textarea */
+.refresh-script {
+    width: 100%;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    background: #0a1830;
+    color: #cfe7ff;
+    border: 1px solid #1e3c72;
+    border-radius: 6px;
+    padding: 10px;
+    resize: vertical;
+    min-height: 90px;
+    max-height: 260px;
+    white-space: pre;
+    overflow: auto;
+}
+
+/* Drop-zone for the resulting JSON file */
+.refresh-dropzone {
+    display: block;
+    border: 2px dashed #ced4da;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    background: #f8f9fa;
+    transition: all 0.15s;
+}
+
+.refresh-dropzone:hover,
+.refresh-dropzone-active {
+    border-color: #1e3c72;
+    background: #e7f5ff;
+}
+
+.refresh-dropzone-text strong {
+    display: block;
+    font-size: 1rem;
+    color: #212529;
+    margin-bottom: 4px;
+}
+
+.refresh-dropzone-text span {
+    font-size: 0.85rem;
+    color: #868e96;
+}
+
+.refresh-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #495057;
+    min-height: 1.2em;
+}
+
+.refresh-status-ok  { color: #155724; }
+.refresh-status-err { color: #721c24; }
+
+/* =============================================================================
+   Keywords tab — list of ability-class keywords, each expanding to show the
+   units that have it. Curated source: characters-data.json's ability_classes
+   (same field swgoh.gg uses for its ?ac= filter).
+   ========================================================================== */
+
+.keyword-list {
+    display: grid;
+    gap: 6px;
+}
+
+.kw-section {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.15s, border-color 0.3s, background 0.3s;
+}
+
+.kw-section[open] {
+    border-color: #a5d8ff;
+    box-shadow: 0 2px 6px rgba(30, 60, 114, 0.08);
+}
+
+/* Brief flash when navigated to from a description-keyword click */
+.kw-section-flash {
+    border-color: #ffc107;
+    background: #fff8e1;
+}
+
+.kw-section-head {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    list-style: none;
+    user-select: none;
+}
+.kw-section-head::-webkit-details-marker { display: none; }
+
+.kw-section-head::before {
+    content: '▸';
+    color: #adb5bd;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 6px;
+}
+.kw-section[open] .kw-section-head::before {
+    transform: rotate(90deg);
+}
+
+.kw-section-head:hover {
+    background: #f8f9fa;
+}
+
+.kw-section-label {
+    font-weight: 600;
+    color: #1864ab;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.kw-section-count {
+    color: #868e96;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.kw-section-body {
+    padding: 6px 18px 16px 38px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    border-top: 1px solid #f1f3f5;
+    background: #fafbfc;
+}
+
+.kw-unit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 0;
+}
+
+.kw-unit:hover {
+    border-color: #1864ab;
+    background: #e7f5ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(30, 60, 114, 0.08);
+}
+
+.kw-unit-portrait {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.kw-unit-portrait-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.kw-unit-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #212529;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+/* Unowned units — visible (so user knows the keyword exists on them) but
+   non-clickable. Reduced opacity + grayscale portrait communicates "not in
+   your roster". */
+.kw-unit-unowned {
+    cursor: default;
+    opacity: 0.5;
+}
+.kw-unit-unowned .kw-unit-portrait {
+    filter: grayscale(0.8);
+}
+.kw-unit-unowned:hover {
+    border-color: #e9ecef;
+    background: white;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =============================================================================
+   Status tab — list of in-description "Status: definition" callouts, grouped
+   by status name with owner/user split. Source: splitDescriptionForCallouts()
+   walking every ability description in the bundle. Mode modifiers ("While in
+   <X>:") excluded — they live in the per-unit omicron callouts.
+
+   Two top-level groups, both alphabetical inside:
+     1. Cross-unit mechanics (status referenced by ≥1 non-owner unit)
+     2. Single-unit statuses (collapsed wrapper — visible for review, kept
+        out of immediate sight so cross-unit list dominates)
+   ========================================================================== */
+
+.status-list {
+    display: grid;
+    gap: 6px;
+}
+
+/* Wrapper around the single-unit group — collapsed by default so the
+   interesting cross-unit set is what the user sees first. */
+.status-group {
+    margin-top: 14px;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.status-group-head {
+    padding: 12px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    user-select: none;
+    color: #495057;
+}
+.status-group-head::-webkit-details-marker { display: none; }
+.status-group-head::before {
+    content: '▸';
+    color: #adb5bd;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+.status-group[open] > .status-group-head::before {
+    transform: rotate(90deg);
+}
+.status-group-head:hover {
+    background: #e9ecef;
+}
+
+.status-group-label {
+    font-weight: 600;
+    flex: 1;
+}
+
+.status-group-count {
+    color: #868e96;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.status-group-body {
+    padding: 8px;
+    background: #ffffff;
+    display: grid;
+    gap: 6px;
+}
+
+.status-section {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.status-section[open] {
+    border-color: #adb5bd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.status-section-head {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    user-select: none;
+}
+.status-section-head::-webkit-details-marker { display: none; }
+
+.status-section-head::before {
+    content: '▸';
+    color: #adb5bd;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+.status-section[open] .status-section-head::before {
+    transform: rotate(90deg);
+}
+
+.status-section-head:hover {
+    background: #f8f9fa;
+}
+
+.status-section-name {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.status-section-count {
+    color: #868e96;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+}
+
+.status-badge-cross {
+    background: #d3f9d8;
+    color: #2b8a3e;
+    border: 1px solid #b2f2bb;
+}
+
+.status-badge-unit {
+    background: #f1f3f5;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+/* Section body — list of per-unit collapsible rows */
+.status-section-body {
+    padding: 4px 14px 14px 38px;
+    background: #fafbfc;
+    border-top: 1px solid #f1f3f5;
+}
+
+/* Sub-header dividing "Defined by" and "Used by" within a status section. */
+.status-section-subheader {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #868e96;
+    font-weight: 700;
+    padding: 10px 0 6px;
+}
+.status-section-subheader:first-child {
+    padding-top: 6px;
+}
+
+.status-section-rows {
+    display: grid;
+    gap: 4px;
+}
+
+/* Per-unit row inside a status section — collapsible <details> for definers
+   (so the user can expand to see the canonical definition prose) and a flat
+   <div> for users (no body to expand — they don't carry the definition). */
+.status-unit {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+}
+
+.status-unit[open] {
+    border-color: #74c0fc;
+}
+
+.status-unit-head {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+}
+.status-unit-head::-webkit-details-marker { display: none; }
+
+.status-unit-head::before {
+    content: '▸';
+    color: #ced4da;
+    font-size: 0.85rem;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+.status-unit[open] .status-unit-head::before {
+    transform: rotate(90deg);
+}
+
+.status-unit-head:hover {
+    background: #f8f9fa;
+}
+
+/* Flat user-row variant — same layout as the head row but it's the entire
+   element (no body, no expand). Used for "Used by" rows where the unit
+   doesn't carry the definition. */
+.status-unit-flat {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Definition-prose blocks inside a definer's expandable body. One block per
+   ability that defines the status (e.g. Lord Vader has 4 abilities all
+   referencing Ashes of the Republic; each gets its own block). */
+.status-definition-block {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    border-left: 3px solid #adb5bd;
+    border-radius: 0 4px 4px 0;
+}
+.status-definition-block:first-child {
+    margin-top: 6px;
+}
+
+.status-definition-ability {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #495057;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.status-definition-block .ability-description {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #2d3748;
+}
+
+.status-unit-portrait-wrap {
+    flex-shrink: 0;
+}
+
+.status-unit-portrait {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.04);
+    display: block;
+}
+
+.status-unit-portrait-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.status-unit-name {
+    font-weight: 600;
+    color: #212529;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.status-unit-ability {
+    color: #868e96;
+    font-size: 0.82rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+}
+
+.status-unit-jump {
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-unit-jump:hover {
+    background: #2a5298;
+    transform: translateX(2px);
+}
+
+.status-unit-body {
+    padding: 0 12px 12px 50px;
+    border-top: 1px solid #f1f3f5;
+}
+
+.status-unit-body .ability-description {
+    margin-top: 8px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #2d3748;
+}
+
+/* Unowned units — visible but de-emphasised (same pattern as Keywords tab) */
+.status-unit-unowned {
+    opacity: 0.55;
+}
+.status-unit-unowned .status-unit-portrait {
+    filter: grayscale(0.7);
+}
+
+/* =============================================================================
+   Journey Guide
+   ============================================================================= */
+
+/* Journey tab outer container — stacks sections vertically */
+#journeyList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Section collapsible */
+.journey-section {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    width: 100%;
+}
+
+.journey-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    color: #fff;
+    gap: 12px;
+}
+.journey-section-header::-webkit-details-marker { display: none; }
+.journey-section-header::before {
+    content: '▸';
+    font-size: 0.85rem;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+.journey-section[open] > .journey-section-header::before {
+    transform: rotate(90deg);
+}
+
+.journey-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    flex: 1;
+}
+.journey-section-meta {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    white-space: nowrap;
+}
+
+.journey-section-body {
+    padding: 14px;
+    background: #f8f9fa;
+}
+
+/* Journey card grid — inside each section */
+.journey-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 1400px) { .journey-list { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1000px) { .journey-list { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .journey-list { grid-template-columns: 1fr; } }
+
+/* Card */
+.journey-card {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.15s, opacity 0.15s;
+}
+.journey-card:active { }
+.journey-card-dragging { opacity: 0.35; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.journey-card-placeholder {
+    border-radius: 10px;
+    border: 2px dashed #339af0;
+    background: rgba(51, 154, 240, 0.08);
+    box-sizing: border-box;
+}
+
+/* Card header — colored by unit alignment (same as unit modal) */
+.journey-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    color: #fff;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.journey-card-header::-webkit-details-marker { display: none; }
+.journey-card-header.align-dark    { background: linear-gradient(135deg, #7a1f1f 0%, #c0392b 100%); }
+.journey-card-header.align-light   { background: linear-gradient(135deg, #1e3c72 0%, #3a7bd5 100%); }
+.journey-card-header.align-neutral { background: linear-gradient(135deg, #343a40 0%, #6c757d 100%); }
+/* Remove old readiness-based header colors */
+
+.journey-card-portrait {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+.journey-card-portrait-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.journey-card-header-text {
+    flex: 1;
+    min-width: 0;
+}
+.journey-card-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.journey-card-event {
+    font-size: 0.72rem;
+    opacity: 0.82;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.journey-progress-bar-wrap {
+    margin-top: 5px;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.25);
+    overflow: hidden;
+}
+.journey-progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+.journey-progress-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    opacity: 0.9;
+    margin-top: 3px;
+}
+
+.journey-type-badge {
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Requirements list */
+.journey-reqs {
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.journey-missing-label {
+    padding: 10px 8px;
+    color: #868e96;
+    font-style: italic;
+    font-size: 0.85em;
+    text-align: center;
+}
+
+.journey-unavailable {
+    opacity: 0.6;
+    filter: grayscale(60%);
+}
+.journey-unavailable .journey-card-header {
+    background: #3a3a3a !important;
+}
+.journey-lock-icon {
+    font-size: 1.1em;
+    margin-right: 4px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* One requirement row: portrait | name | stat cells */
+.journey-req-row {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px 8px;
+    padding: 5px 6px;
+    border-radius: 4px;
+    align-items: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.journey-req-row:hover { background: rgba(0,0,0,0.04); }
+.journey-req-row.journey-req-unowned { cursor: default; }
+.journey-req-row.journey-req-unowned:hover { background: transparent; }
+
+/* Stat cells wrap below the portrait+name on a second row */
+.journey-req-row .journey-req-portrait,
+.journey-req-row .journey-req-portrait-placeholder {
+    grid-row: 1 / 3;
+}
+
+.journey-req-row .journey-req-name {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Stat cells sit on the second row, spanning all columns after portrait */
+.journey-req-stats {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Ramp colors removed — all requirement rows use white background */
+.journey-req-row[data-ramp-step="0"],
+.journey-req-row[data-ramp-step="1"],
+.journey-req-row[data-ramp-step="2"],
+.journey-req-row[data-ramp-step="3"],
+.journey-req-row[data-ramp-step="4"],
+.journey-req-row[data-ramp-step="5"],
+.journey-req-row[data-ramp-step="6"],
+.journey-req-row[data-ramp-step="7"],
+.journey-req-row[data-ramp-step="8"] { background: transparent; }
+
+.journey-req-unowned {
+    background: transparent;
+}
+.journey-req-unowned .journey-req-name::before {
+    content: none;
+}
+.journey-req-unowned .journey-req-name::after {
+    content: ' 🔒';
+}
+.journey-req-unowned .journey-req-name,
+.journey-req-unowned .journey-stat-label {
+    color: #6c757d;
+}
+.journey-req-unowned .journey-pip { background: rgba(0,0,0,0.08); }
+.journey-req-unowned .journey-level-bar { background: rgba(0,0,0,0.08); }
+.journey-req-faction { background: #f8f9fa; }
+.journey-faction-note { font-size: 0.7rem; color: #868e96; font-style: italic; }
+
+/* Portraits in req rows */
+.journey-req-portrait {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+.journey-req-portrait-placeholder {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #6c757d;
+}
+
+/* Stat cell: label + pip bar */
+.journey-stat-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.journey-stat-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap;
+}
+
+/* Pip bar */
+.journey-pips {
+    display: flex;
+    gap: 1px;
+}
+.journey-pip {
+    height: 4px;
+    flex: 1;
+    border-radius: 1px;
+    background: rgba(0,0,0,0.12);
+}
+.journey-pip.lit-green  { background: #40c057; }
+.journey-pip.lit-yellow { background: #fab005; }
+.journey-pip.lit-red    { background: #fa5252; }
+.journey-pip-none       { height: 4px; width: 16px; border-radius: 2px; background: rgba(0,0,0,0.08); }
+
+/* Single-bar level */
+.journey-level-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(0,0,0,0.12);
+    overflow: hidden;
+    width: 100%;
+}
+.journey-level-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s;
+}
+
+/* Journey Guide header row */
+.journey-guide-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+    background: #e7f5ff;
+    padding: 8px 15px;
+    border-radius: 8px;
+}
+.journey-guide-header .stats-summary {
+    flex: 1;
+    margin-bottom: 0;
+    background: transparent;
+    padding: 0;
+}
+.journey-add-btn {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid rgba(30, 60, 114, 0.25);
+    box-shadow: 0 1px 4px rgba(30, 60, 114, 0.15);
+    background: transparent;
+    color: #1e3c72;
+    font-size: 1.4em;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.journey-add-btn:hover { background: #15aabf; color: #fff; border-color: #15aabf; }
+
+/* Edit pencil on cards */
+.journey-card-edit-btn {
+    position: absolute;
+    top: 6px;
+    right: 36px;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 0.85em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 2;
+}
+.journey-card summary { position: relative; }
+.journey-card:hover .journey-card-edit-btn { opacity: 1; }
+
+
+/* Journey editor modal */
+.journey-editor-card {
+    max-width: 560px;
+    width: 95vw;
+    max-height: 90vh;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(30, 60, 120, 0.55) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 85%, rgba(80, 20, 100, 0.4) 0%, transparent 55%),
+        linear-gradient(160deg, #0d1117 0%, #111827 50%, #0d1117 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Sticky header */
+.je-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+}
+.je-title {
+    flex: 1;
+    font-size: 1em;
+    font-weight: 700;
+    color: #e0e0e0;
+    letter-spacing: 0.02em;
+}
+.je-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.je-btn-save, .je-btn-cancel, .je-btn-delete {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.1s;
+}
+.je-btn-save { background: rgba(51, 154, 240, 0.25); color: #74c0fc; }
+.je-btn-save:hover { background: rgba(51, 154, 240, 0.45); transform: scale(1.08); }
+.je-btn-delete { background: rgba(201, 42, 42, 0.2); color: #ff8787; }
+.je-btn-delete:hover { background: rgba(201, 42, 42, 0.4); transform: scale(1.08); }
+.je-btn-cancel { background: rgba(255,255,255,0.08); color: #aaa; font-size: 0.95em; font-weight: 700; }
+.je-btn-cancel:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* Status bar below header */
+.je-status {
+    font-size: 0.8em;
+    min-height: 0;
+    padding: 0 18px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.2s, padding 0.2s;
+    color: #aaa;
+    flex-shrink: 0;
+}
+.je-status:not(:empty) { max-height: 2em; padding: 5px 18px; }
+.je-status.ok { color: #51cf66; }
+.je-status.err { color: #ff6b6b; }
+
+/* Scrollable body */
+.je-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 16px 18px 80px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.je-body::-webkit-scrollbar { width: 6px; }
+.je-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+.je-form { display: flex; flex-direction: column; gap: 13px; }
+.je-row { display: flex; flex-direction: column; gap: 5px; }
+.je-row-2col { flex-direction: row; gap: 12px; }
+.je-row-2col > div { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.je-row label, .je-section-label {
+    font-size: 0.72em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+.je-section-label {
+    margin-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 12px;
+}
+.je-form input[type="text"] {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 7px;
+    color: #e8e8e8;
+    padding: 8px 11px;
+    font-size: 0.9em;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.15s, background 0.15s;
+}
+.je-form input[type="text"]:focus {
+    outline: none;
+    border-color: #339af0;
+    background: rgba(51, 154, 240, 0.08);
+}
+.je-form select {
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 7px;
+    color: #e8e8e8;
+    padding: 8px 11px;
+    font-size: 0.9em;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+.je-form select:focus { outline: none; border-color: #339af0; }
+.je-form select option { background: #1e293b; color: #e8e8e8; }
+
+/* Unit search dropdown */
+.je-unit-search-wrap { position: relative; }
+.je-unit-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a2235;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 7px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    margin-top: 3px;
+}
+.je-unit-dropdown.open { display: block; }
+.je-unit-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 0.88em;
+    color: #d0d0d0;
+}
+.je-unit-option:hover { background: rgba(51,154,240,0.2); }
+.je-unit-option img {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.je-reward-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    font-size: 0.88em;
+    color: #888;
+    padding: 4px 0;
+}
+.je-reward-preview img {
+    width: 38px;
+    height: 38px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+.je-reward-preview span { color: #c0c0c0; }
+
+/* Requirement rows in editor */
+.je-req-list { display: flex; flex-direction: column; gap: 6px; }
+.je-req-row {
+    display: grid;
+    grid-template-columns: 28px 1fr auto auto auto auto;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 7px;
+    padding: 7px 9px;
+    font-size: 0.85em;
+    color: #d0d0d0;
+}
+.je-req-row img {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+.je-req-row input[type="number"] {
+    width: 52px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 5px;
+    color: #e0e0e0;
+    padding: 4px 6px;
+    font-size: 0.88em;
+    text-align: center;
+}
+.je-req-row input[type="number"]:focus { outline: none; border-color: #339af0; }
+.je-req-row input[type="number"]:disabled { opacity: 0.25; cursor: not-allowed; }
+.je-req-label { font-size: 1rem; color: rgba(255,255,255,0.35); text-align: center; display: block; }
+.je-req-remove {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.25);
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color 0.15s;
+}
+.je-req-remove:hover { color: #ff6b6b; }
+.je-add-req-wrap { margin-top: 4px; }
+
+
+
+/* Sync New Units modal */
+.sync-era-body { display: flex; flex-direction: column; gap: 8px; }
+.sync-era-list { display: flex; flex-direction: column; gap: 4px; max-height: 220px; overflow-y: auto; }
+.sync-era-item { display: flex; align-items: center; gap: 8px; font-size: 0.9em; color: #343a40; cursor: pointer; }
+.sync-era-item input[type="checkbox"] { accent-color: #339af0; cursor: pointer; }
+.sync-era-custom-wrap { display: flex; gap: 6px; margin-top: 4px; }
+.sync-era-custom { flex: 1; background: #f8f9fa; border: 1px solid #ced4da; color: #212529; border-radius: 6px; padding: 6px 10px; font-size: 0.85em; }
+.sync-era-custom:focus { outline: none; border-color: #339af0; }
+.sync-new-units-list { display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto; margin-bottom: 10px; }
+.sync-unit-item { display: flex; align-items: center; gap: 10px; padding: 4px 6px; background: rgba(0,0,0,0.04); border-radius: 6px; }
+.sync-unit-portrait { width: 36px; height: 36px; border-radius: 4px; object-fit: cover; background: rgba(0,0,0,0.08); }
+.sync-unit-name { font-size: 0.9em; color: #212529; flex: 1; }
+
+/* ===================================================
+   TEAMS / FLEET / FARMS TABS
+   =================================================== */
+
+/* --- Shared tab header (add-button row) --- */
+.farms-header, .teams-header, .fleet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid #dee2e6;
+    background: white;
+    flex-shrink: 0;
+}
+.farms-add-btn, .teams-add-btn, .fleet-add-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: #1e3c72;
+    color: white;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.farms-add-btn:hover, .teams-add-btn:hover, .fleet-add-btn:hover { background: #3a7bd5; }
+
+/* --- List containers --- */
+.farms-list, .teams-list, .fleet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+/* ===================================================
+   TEAM CARD (Teams tab)
+   =================================================== */
+.team-card {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    background: white;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.15s;
+    flex-shrink: 0;
+}
+.team-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+.team-card-dragging { opacity: 0.4; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.team-card-drag-over { border: 2px dashed #339af0; background: rgba(51,154,240,0.04); }
+
+.team-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #1e3c72 0%, #3a7bd5 100%);
+    color: white;
+    cursor: grab;
+    user-select: none;
+}
+.team-card-header:active { cursor: grabbing; }
+.team-card-priority {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+}
+.team-card-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.team-card-edit-btn {
+    width: 26px; height: 26px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.team-card:hover .team-card-edit-btn { opacity: 1; }
+.team-card-edit-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* Unit strip (shared by team and farm cards) */
+.team-unit-strip {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    padding: 10px 14px;
+    align-items: flex-start;
+    overflow-x: auto;
+}
+.team-unit-slot {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 80px;
+    border-right: 1px solid #f1f3f5;
+    padding: 0 8px 0 0;
+    margin-right: 8px;
+}
+.team-unit-slot:last-child { border-right: none; margin-right: 0; }
+.team-unit-portrait-wrap {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+}
+.team-unit-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #212529;
+    text-align: left;
+    padding: 0 0 3px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 72px;
+}
+
+/* ===================================================
+   TEAM UNIT PORTRAIT FRAME (visual gear border + star arc)
+   =================================================== */
+
+/* Outer frame — sized to leave room for the border thickness */
+.tup-frame {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    box-sizing: content-box;
+    overflow: visible;
+}
+
+/* Gear border tiers */
+.tup-gear-low  { border: 3px solid #1a237e; } /* navy  — gear < 7  */
+.tup-gear-7    { border: 3px solid #6a0dad; } /* purple — gear 7-11 */
+.tup-gear-12   { border: 3px solid #c9a227; } /* gold   — gear 12  */
+.tup-gear-13   { border: 4px solid #c9a227; } /* base gold for G13, overridden by align */
+.tup-gear-13.tup-align-light { border-color: #3a7bd5; }
+.tup-gear-13.tup-align-dark  { border-color: #c0392b; }
+.tup-gear-13.tup-align-neutral { border-color: #6c757d; }
+
+/* Portrait image fills the frame */
+.tup-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+    cursor: pointer;
+}
+.tup-img-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #6c757d;
+    background: #e9ecef;
+}
+
+/* Stars — positioned absolutely relative to .tup-frame */
+/* Each .tup-star is centred on its (left, top) coordinate */
+.tup-star {
+    position: absolute;
+    font-size: 10px;
+    line-height: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    color: #adb5bd;
+    text-shadow: 0 0 1px rgba(0,0,0,0.6);
+    z-index: 2;
+}
+.tup-star-filled {
+    color: #f9c823;
+    text-shadow: 0 0 2px rgba(0,0,0,0.7);
+}
+
+/* Relic label below the frame */
+.tup-relic {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #495057;
+    background: #e9ecef;
+    border-radius: 3px;
+    padding: 1px 5px;
+    text-align: center;
+}
+
+/* Farm square stars — slightly bigger than team half-moon stars */
+.tup-star-sq {
+    font-size: 11px;
+}
+
+/* Farm portrait wrap must allow star overflow */
+.farm-unit-portrait-wrap {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+}
+
+/* Farm frame sizing matches the old portrait cell */
+.farm-unit-slot .tup-frame {
+    width: 60px;
+    height: 60px;
+}
+
+
+.farm-card {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    background: white;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.15s;
+    flex-shrink: 0;
+}
+.farm-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+.farm-card-dragging { opacity: 0.4; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.farm-card-drag-over { border: 2px dashed #339af0; background: rgba(51,154,240,0.04); }
+
+.farm-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%);
+    color: white;
+    cursor: grab;
+    user-select: none;
+}
+.farm-card-header:active { cursor: grabbing; }
+.farm-card-priority {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+}
+.farm-card-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.farm-card-actions {
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.farm-card:hover .farm-card-actions { opacity: 1; }
+.farm-card-edit-btn, .farm-card-promote-btn {
+    height: 26px;
+    border-radius: 5px;
+    border: none;
+    font-size: 0.82rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 8px;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.farm-card-edit-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+.farm-card-edit-btn:hover { background: rgba(255,255,255,0.3); }
+.farm-card-promote-btn {
+    background: rgba(255,255,255,0.9);
+    color: #2d6a4f;
+    font-weight: 700;
+}
+.farm-card-promote-btn:hover { background: white; }
+
+/* Farm unit strip — single horizontal row of slots */
+.farm-unit-strip {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    padding: 10px 14px;
+    align-items: flex-start;
+    border-bottom: 1px solid #f1f3f5;
+    overflow-x: auto;
+}
+.farm-unit-slot {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 80px;
+    border-right: 1px solid #f1f3f5;
+    padding: 0 8px 0 0;
+    margin-right: 8px;
+}
+.farm-unit-slot:last-child { border-right: none; margin-right: 0; }
+.farm-unit-slot:hover .farm-unit-portrait { border-color: #339af0; }
+.farm-unit-portrait-wrap {
+    position: relative;
+    display: inline-block;
+}
+.farm-unit-portrait {
+    width: 46px; height: 46px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+    display: block;
+    transition: border-color 0.15s;
+}
+.farm-unit-portrait-placeholder {
+    width: 46px; height: 46px;
+    border-radius: 6px;
+    background: #e9ecef;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+.farm-unit-table-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #212529;
+    text-align: left;
+    padding: 0 0 3px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 72px;
+}
+.stat-xy {
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.stat-xy.stars { background: #fff3cd; color: #856404; }
+.stat-xy.gear  { background: #d1ecf1; color: #0c5460; }
+.stat-xy.relic { background: #f8d7da; color: #721c24; }
+.stat-xy.met   { background: #d4edda; color: #155724; }
+
+/* Farm summary row */
+.farm-summary {
+    border-top: 1px solid #dee2e6;
+    padding: 8px 14px;
+    background: #f8f9fa;
+    font-size: 0.8rem;
+    min-width: 180px;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+.farm-summary-header {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 6px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+.farm-summary-header::-webkit-details-marker { display: none; }
+.farm-mat-details[open] .farm-summary-header { margin-bottom: 6px; }
+.farm-mat-details .farm-mat-table { margin-top: 4px; }
+.farm-mat-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.farm-mat-row { vertical-align: middle; }
+.farm-mat-row + .farm-mat-row td { padding-top: 3px; }
+.farm-mat-icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+.farm-mat-name {
+    font-size: 0.7rem;
+    color: #212529;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+.farm-mat-qty {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #495057;
+    text-align: right;
+}
+
+/* ===================================================
+   FLEET CARD (Fleet tab)
+   =================================================== */
+.fleet-card {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    background: white;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.15s;
+    flex-shrink: 0;
+}
+.fleet-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+.fleet-card-dragging { opacity: 0.4; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.fleet-card-drag-over { border: 2px dashed #339af0; background: rgba(51,154,240,0.04); }
+
+.fleet-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    cursor: grab;
+    user-select: none;
+}
+.fleet-card-header:active { cursor: grabbing; }
+.fleet-card-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.fleet-card-edit-btn {
+    width: 26px; height: 26px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+}
+.fleet-card:hover .fleet-card-edit-btn { opacity: 1; }
+.fleet-card-edit-btn:hover { background: rgba(255,255,255,0.3); }
+
+.fleet-section { padding: 10px 14px; border-bottom: 1px solid #f1f3f5; }
+.fleet-section:last-child { border-bottom: none; }
+.fleet-section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+.fleet-unit-strip {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.fleet-capital-section {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f3f5;
+    background: linear-gradient(90deg, rgba(26,26,46,0.06) 0%, transparent 100%);
+}
+.fleet-capital-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
+
+/* ===================================================
+   TEAM/FLEET/FARM EDITOR MODAL CARD
+   (shares .je-* form styles; only the outer card differs)
+   =================================================== */
+.team-editor-card {
+    max-width: 640px;
+    width: 95vw;
+    max-height: 90vh;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(ellipse at top left, #1e2d40 0%, #151d2b 60%, #0e1520 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+    overflow: hidden;
+}
+
+/* Unit rows inside the editor */
+.fe-unit-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 4px; }
+.fe-unit-row {
+    display: grid;
+    grid-template-columns: 26px 20px 1fr 10px 48px 10px 48px 10px 48px 48px;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 0.85em;
+    color: #d0d0d0;
+}
+.fe-unit-row img {
+    width: 26px; height: 26px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+}
+.fe-unit-row input[type="number"] {
+    width: 48px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 5px;
+    color: #e0e0e0;
+    padding: 4px 6px;
+    font-size: 0.85em;
+    text-align: center;
+}
+.fe-unit-row input[type="number"]:focus { outline: none; border-color: #339af0; }
+.fe-unit-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem; }
+.fe-unit-leader-tag {
+    font-size: 1rem;
+    font-weight: 700;
+    background: #ffc107;
+    color: #000;
+    border-radius: 2px;
+    padding: 0 3px;
+    line-height: 1.5;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+.fe-unit-remove {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.25);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color 0.15s;
+}
+.fe-unit-remove:hover { color: #ff6b6b; }
+.je-req-label { font-size: 1rem; color: rgba(255,255,255,0.35); text-align: center; display: block; }
+.sync-unit-id { font-size: 0.75em; color: #868e96; font-family: monospace; }

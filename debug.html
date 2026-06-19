@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWGOH Debug - Category Fetcher</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #000;
+            padding: 15px;
+            border: 1px solid #0f0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .success { color: #0f0; }
+        .error { color: #f00; }
+        .warning { color: #ff0; }
+    </style>
+</head>
+<body>
+    <h1>SWGOH API Debug Tool</h1>
+    <p>This will fetch data and show you exactly what's being retrieved and merged.</p>
+
+    <button onclick="testFetch()">Test Fetch & Merge</button>
+
+    <div id="output"></div>
+
+    <script>
+        async function testFetch() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<p class="warning">Fetching data...</p>';
+
+            const allyCode = '881241752';
+
+            try {
+                // Fetch both APIs
+                output.innerHTML += '<p class="success">Fetching player API...</p>';
+                const playerResponse = await fetch(`https://swgoh.gg/api/player/${allyCode}/`);
+                const playerData = await playerResponse.json();
+
+                output.innerHTML += '<p class="success">Fetching characters API...</p>';
+                const charsResponse = await fetch('https://swgoh.gg/api/characters/');
+                const baseChars = await charsResponse.json();
+
+                // Create lookup map
+                const baseCharMap = {};
+                baseChars.forEach(char => {
+                    baseCharMap[char.base_id] = char;
+                });
+
+                output.innerHTML += `<p class="success">✓ Fetched ${playerData.units.length} units from player API</p>`;
+                output.innerHTML += `<p class="success">✓ Fetched ${baseChars.length} characters from base API</p>`;
+
+                // Get first 5 characters
+                const characters = playerData.units.filter(u => u.data.combat_type === 1).slice(0, 5);
+
+                output.innerHTML += '<h2>Testing First 5 Characters:</h2>';
+
+                characters.forEach((char, i) => {
+                    const baseChar = baseCharMap[char.data.base_id];
+
+                    output.innerHTML += `<pre>
+Character #${i + 1}: ${char.data.name} (${char.data.base_id})
+  Player API has categories? ${char.data.categories ? 'YES' : 'NO'}
+  Base API has categories? ${baseChar && baseChar.categories ? 'YES' : 'NO'}
+  Base API categories: ${baseChar && baseChar.categories ? JSON.stringify(baseChar.categories) : 'NONE'}
+
+  After merge: ${baseChar && baseChar.categories ? JSON.stringify(baseChar.categories) : 'NONE'}
+</pre>`;
+
+                    // Test the merge
+                    if (baseChar && baseChar.categories) {
+                        char.data.categories = baseChar.categories;
+                        output.innerHTML += `<p class="success">  ✓ Merged categories for ${char.data.name}</p>`;
+                    } else {
+                        output.innerHTML += `<p class="error">  ✗ No categories found for ${char.data.name}</p>`;
+                    }
+                });
+
+                // Show tag extraction
+                output.innerHTML += '<h2>Extracting All Tags:</h2>';
+                const allChars = playerData.units
+                    .filter(u => u.data.combat_type === 1)
+                    .map(u => {
+                        const baseChar = baseCharMap[u.data.base_id];
+                        if (baseChar && baseChar.categories) {
+                            u.data.categories = baseChar.categories;
+                        }
+                        return u;
+                    });
+
+                const tagSet = new Set();
+                allChars.forEach(char => {
+                    if (char.data.categories && Array.isArray(char.data.categories)) {
+                        char.data.categories.forEach(tag => tagSet.add(tag));
+                    }
+                });
+
+                const tags = Array.from(tagSet).sort();
+                output.innerHTML += `<pre>Found ${tags.length} unique tags:
+${tags.join(', ')}</pre>`;
+
+                output.innerHTML += '<p class="success">✓ Test completed successfully!</p>';
+
+            } catch (error) {
+                output.innerHTML += `<p class="error">✗ Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

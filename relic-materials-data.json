@@ -1,0 +1,94 @@
+{
+  "materials": [
+    {
+      "id": "carbonite_circuit_board",
+      "name": "Carbonite Circuit Board",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_carbonitecicuitboard.png",
+      "byRelic": { "1": 40, "2": 30, "3": 30, "4": 30, "5": 30, "6": 20, "7": 20 }
+    },
+    {
+      "id": "bronzium_wiring",
+      "name": "Bronzium Wiring",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_bronsiumwiring.png",
+      "byRelic": { "2": 40, "3": 40, "4": 40, "5": 40, "6": 30, "7": 30 }
+    },
+    {
+      "id": "chromium_transistor",
+      "name": "Chromium Transistor",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_chromiumtransisters.png",
+      "byRelic": { "3": 20, "4": 40, "5": 30, "6": 30, "7": 20, "8": 20 }
+    },
+    {
+      "id": "aurodium_heatsink",
+      "name": "Aurodium Heatsink",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_aurodiumheatsink.png",
+      "byRelic": { "5": 20, "6": 20, "7": 20, "8": 20 }
+    },
+    {
+      "id": "electrium_conductor",
+      "name": "Electrium Conductor",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_electriumconductors.png",
+      "byRelic": { "6": 20, "7": 20, "8": 20, "9": 20 }
+    },
+    {
+      "id": "zinbiddle_card",
+      "name": "Zinbiddle Card",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_zinbiddlecard.png",
+      "byRelic": { "7": 10, "8": 20, "9": 20 }
+    },
+    {
+      "id": "impulse_detector",
+      "name": "Impulse Detector",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_impulsedetector.png",
+      "byRelic": { "8": 20, "9": 20, "10": 20 }
+    },
+    {
+      "id": "aeromagnifier",
+      "name": "Aeromagnifier",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_aeromagnifier.png",
+      "byRelic": { "8": 20, "9": 20, "10": 20 }
+    },
+    {
+      "id": "gyrda_keypad",
+      "name": "Gyrda Keypad",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_gyrdakeypad.png",
+      "byRelic": { "9": 20, "10": 20 }
+    },
+    {
+      "id": "droid_brain",
+      "name": "Droid Brain",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_droidbrain.png",
+      "byRelic": { "9": 20, "10": 20 }
+    },
+    {
+      "id": "coaxial_servomotor",
+      "name": "Coaxial Servomotor",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_servomotor.png",
+      "byRelic": { "10": 20 }
+    },
+    {
+      "id": "fragmented_signal_data",
+      "name": "Fragmented Signal Data",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_data01.png",
+      "byRelic": { "2": 15, "3": 20, "4": 20, "5": 20, "6": 20, "7": 20, "8": 20 }
+    },
+    {
+      "id": "incomplete_signal_data",
+      "name": "Incomplete Signal Data",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_data02.png",
+      "byRelic": { "3": 15, "4": 25, "5": 25, "6": 25, "7": 25, "8": 25, "9": 30, "10": 25 }
+    },
+    {
+      "id": "flawed_signal_data",
+      "name": "Flawed Signal Data",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_data03.png",
+      "byRelic": { "5": 15, "6": 25, "7": 35, "8": 45, "9": 55, "10": 45 }
+    },
+    {
+      "id": "corrupted_signal_data",
+      "name": "Corrupted Signal Data",
+      "image": "https://game-assets.swgoh.gg/textures/tex.scavenger_data04.png",
+      "byRelic": { "10": 15 }
+    }
+  ]
+}

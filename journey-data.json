@@ -1,0 +1,2517 @@
+[
+  {
+    "slug": "emperors_demise",
+    "name": "Emperor's Demise",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "Emperor Palpatine",
+    "reward_base_id": "EMPERORPALPATINE",
+    "faction_req": {
+      "faction": "Rebel",
+      "count": 5,
+      "stars": 7,
+      "gear": 8,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_lukebespin.png"
+    }
+  },
+  {
+    "slug": "grand_masters_training",
+    "name": "Grand Master's Training",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "Grand Master Yoda",
+    "reward_base_id": "GRANDMASTERYODA",
+    "faction_req": {
+      "faction": "Jedi",
+      "count": 5,
+      "stars": 7,
+      "gear": 8,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_yodagrandmaster.png"
+    }
+  },
+  {
+    "slug": "daring_droid",
+    "name": "Daring Droid",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "R2-D2",
+    "reward_base_id": "R2D2_LEGENDARY",
+    "faction_req": {
+      "faction": "Empire",
+      "count": 5,
+      "stars": 7,
+      "gear": 8,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_vader.png"
+    }
+  },
+  {
+    "slug": "artist_of_war",
+    "name": "Artist of War",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "Grand Admiral Thrawn",
+    "reward_base_id": "GRANDADMIRALTHRAWN",
+    "faction_req": {
+      "faction": "Phoenix",
+      "count": 5,
+      "stars": 7,
+      "gear": 8,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_ezra_s3.png"
+    }
+  },
+  {
+    "slug": "aggressive_negotiations",
+    "name": "Aggressive Negotiations",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "Padmé Amidala",
+    "reward_base_id": "PADMEAMIDALA",
+    "faction_req": {
+      "faction": "Separatist",
+      "count": 5,
+      "stars": 7,
+      "gear": 12,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_grievous.png"
+    }
+  },
+  {
+    "slug": "pieces_and_plans",
+    "name": "Pieces and Plans",
+    "tier": "Tier 1",
+    "type": "Legendary",
+    "reward_name": "BB-8",
+    "reward_base_id": "BB8",
+    "faction_req": {
+      "faction": "First Order",
+      "count": 5,
+      "stars": 7,
+      "gear": 8,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_kylo_unmasked.png"
+    }
+  },
+  {
+    "slug": "luke_skywalker_heros_journey",
+    "name": "Luke Skywalker Hero's Journey",
+    "tier": "Tier 2",
+    "type": "Hero's Journey",
+    "reward_name": "Commander Luke Skywalker",
+    "reward_base_id": "COMMANDERLUKESKYWALKER",
+    "requirements": [
+      {
+        "name": "Luke Skywalker (Farmboy)",
+        "base_id": "LUKESKYWALKER",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Obi-Wan Kenobi (Old Ben)",
+        "base_id": "OLDBENKENOBI",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "R2-D2",
+        "base_id": "R2D2_LEGENDARY",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Stormtrooper Han",
+        "base_id": "STORMTROOPERHAN",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Princess Leia",
+        "base_id": "PRINCESSLEIA",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "one_famous_wookiee",
+    "name": "One Famous Wookiee",
+    "tier": "Tier 2",
+    "type": "Legendary",
+    "reward_name": "Chewbacca",
+    "reward_base_id": "CHEWBACCALEGENDARY",
+    "faction_req": {
+      "faction": "Bounty Hunter",
+      "count": 5,
+      "stars": 7,
+      "gear": 12,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_bobafett.png"
+    }
+  },
+  {
+    "slug": "contact_protocol",
+    "name": "Contact Protocol",
+    "tier": "Tier 2",
+    "type": "Legendary",
+    "reward_name": "C-3PO",
+    "reward_base_id": "C3POLEGENDARY",
+    "faction_req": {
+      "faction": "Ewok",
+      "count": 5,
+      "stars": 7,
+      "gear": 11,
+      "relic": null,
+      "faction_image": "https://game-assets.swgoh.gg/textures/tex.charui_ewok_wicket.png"
+    }
+  },
+  {
+    "slug": "rey_heros_journey",
+    "name": "Rey Hero's Journey",
+    "tier": "Tier 2",
+    "type": "Hero's Journey",
+    "reward_name": "Rey (Jedi Training)",
+    "reward_base_id": "REYJEDITRAINING",
+    "requirements": [
+      {
+        "name": "Rey (Scavenger)",
+        "base_id": "REY",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Finn",
+        "base_id": "FINN",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "BB-8",
+        "base_id": "BB8",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Veteran Smuggler Han Solo",
+        "base_id": "SMUGGLERHAN",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      },
+      {
+        "name": "Veteran Smuggler Chewbacca",
+        "base_id": "SMUGGLERCHEWBACCA",
+        "stars": 7,
+        "gear": 11,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "the_mandalorian_heros_journey",
+    "name": "The Mandalorian Hero's Journey",
+    "tier": "Tier 2",
+    "type": "Hero's Journey",
+    "reward_name": "The Mandalorian (Beskar Armor)",
+    "reward_base_id": "THEMANDALORIANBESKARARMOR",
+    "requirements": [
+      {
+        "name": "The Mandalorian",
+        "base_id": "THEMANDALORIAN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Greef Karga",
+        "base_id": "GREEFKARGA",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Kuiil",
+        "base_id": "KUIIL",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Cara Dune",
+        "base_id": "CARADUNE",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "IG-11",
+        "base_id": "IG11",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "jedi_knight_cal_kestis_heros_journey",
+    "name": "Jedi Knight Cal Kestis Hero's Journey",
+    "tier": "Tier 2",
+    "type": "Hero's Journey",
+    "reward_name": "Jedi Knight Cal Kestis",
+    "reward_base_id": "JEDIKNIGHTCAL",
+    "requirements": [
+      {
+        "name": "Cal Kestis",
+        "base_id": "JEDIKNIGHTCAL",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Cere Junda",
+        "base_id": "CEREJUNDA",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Merrin",
+        "base_id": "MERRIN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Tarfful",
+        "base_id": "TARFFUL",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Saw Gerrera",
+        "base_id": "SAWGERRERA",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "legend_of_the_old_republic",
+    "name": "Legend of the Old Republic",
+    "tier": "Tier 2",
+    "type": "Legendary",
+    "reward_name": "Jedi Knight Revan",
+    "reward_base_id": "JEDIKNIGHTREVAN",
+    "requirements": [
+      {
+        "name": "Bastila Shan",
+        "base_id": "BASTILASHAN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Jolee Bindo",
+        "base_id": "JOLEEBINDO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "T3-M4",
+        "base_id": "T3_M4",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Zaalbar",
+        "base_id": "ZAALBAR",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Mission Vao",
+        "base_id": "MISSIONVAO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "scourge_of_the_old_republic",
+    "name": "Scourge of the Old Republic",
+    "tier": "Tier 2",
+    "type": "Legendary",
+    "reward_name": "Darth Revan",
+    "reward_base_id": "DARTHREVAN",
+    "requirements": [
+      {
+        "name": "Bastila Shan (Fallen)",
+        "base_id": "BASTILASHANDARK",
+        "stars": 7,
+        "gear": 10,
+        "relic": null
+      },
+      {
+        "name": "Canderous Ordo",
+        "base_id": "CANDEROUSORDO",
+        "stars": 7,
+        "gear": 10,
+        "relic": null
+      },
+      {
+        "name": "Carth Onasi",
+        "base_id": "CARTHONASI",
+        "stars": 7,
+        "gear": 10,
+        "relic": null
+      },
+      {
+        "name": "HK-47",
+        "base_id": "HK47",
+        "stars": 7,
+        "gear": 10,
+        "relic": null
+      },
+      {
+        "name": "Juhani",
+        "base_id": "JUHANI",
+        "stars": 7,
+        "gear": 10,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "imperial_chimera",
+    "name": "Imperial Chimera",
+    "tier": "Tier 2",
+    "type": "Ship",
+    "reward_name": "Chimaera",
+    "reward_base_id": "CAPITALCHIMAERA",
+    "requirements": [
+      {
+        "name": "Home One",
+        "base_id": "CAPITALMONCALAMARICRUISER",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Ghost",
+        "base_id": "GHOST",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Phantom II",
+        "base_id": "PHANTOM2",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "beset_on_all_sides",
+    "name": "Beset on All Sides",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Jedi Master Mace Windu",
+    "reward_base_id": "JEDIMASTERMACEWINDU",
+    "requirements": [
+      {
+        "name": "CC-1119 \"Appo\"",
+        "base_id": "APPO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "CX-2",
+        "base_id": "OPERATIVE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Disguised Clone Trooper",
+        "base_id": "DISGUISEDCLONETROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "RC-1262 \"Scorch\"",
+        "base_id": "SCORCH",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Temple Guard",
+        "base_id": "VANGUARDTEMPLEGUARD",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Depa Billaba",
+        "base_id": "DEPABILLABA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ]
+  },
+  {
+    "slug": "bombad_general",
+    "name": "Bombad General",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Jar Jar Binks",
+    "reward_base_id": "JARJARBINKS",
+    "requirements": [
+      {
+        "name": "Boss Nass",
+        "base_id": "BOSSNASS",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Captain Tarpals",
+        "base_id": "CAPTAINTARPALS",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Gungan Boomadier",
+        "base_id": "BOOMADIER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Gungan Phalanx",
+        "base_id": "GUNGANPHALANX",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ]
+  },
+  {
+    "slug": "rogue_archaeologist",
+    "name": "Rogue Archaeologist",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Doctor Aphra",
+    "reward_base_id": "DOCTORAPHRA",
+    "requirements": [
+      {
+        "name": "Hondo Ohnaka",
+        "base_id": "HONDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "BT-1",
+        "base_id": "BT1",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "0-0-0",
+        "base_id": "TRIPLEZERO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Sana Starros",
+        "base_id": "SANASTARROS",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ]
+  },
+  {
+    "slug": "dark_times",
+    "name": "Dark Times",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Grand Inquisitor",
+    "reward_base_id": "GRANDINQUISITOR",
+    "requirements": [
+      {
+        "name": "Second Sister",
+        "base_id": "SECONDSISTER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Ninth Sister",
+        "base_id": "NINTHSISTER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Seventh Sister",
+        "base_id": "SEVENTHSISTER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Eighth Brother",
+        "base_id": "EIGHTHBROTHER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Fifth Brother",
+        "base_id": "FIFTHBROTHER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ]
+  },
+  {
+    "slug": "the_force_unleashed",
+    "name": "The Force Unleashed",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Starkiller",
+    "reward_base_id": "STARKILLER",
+    "requirements": [
+      {
+        "name": "Mara Jade",
+        "base_id": "MARAJADE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Darth Talon",
+        "base_id": "DARTHTALON",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Dash Rendar",
+        "base_id": "DASHRENDAR",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Kyle Katarn",
+        "base_id": "KYLEKATARN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ]
+  },
+  {
+    "slug": "star_forge_showdown",
+    "name": "Star Forge Showdown",
+    "tier": "Tier 3",
+    "type": "Legendary",
+    "reward_name": "Darth Malak",
+    "reward_base_id": "DARTHMALAK",
+    "requirements": [
+      {
+        "name": "Jedi Knight Revan",
+        "base_id": "JEDIKNIGHTREVAN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Bastila Shan",
+        "base_id": "BASTILASHAN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Jolee Bindo",
+        "base_id": "JOLEEBINDO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Mission Vao",
+        "base_id": "MISSIONVAO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Zaalbar",
+        "base_id": "ZAALBAR",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "T3-M4",
+        "base_id": "T3_M4",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Darth Revan",
+        "base_id": "DARTHREVAN",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Bastila Shan (Fallen)",
+        "base_id": "BASTILASHANDARK",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Carth Onasi",
+        "base_id": "CARTHONASI",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Juhani",
+        "base_id": "JUHANI",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "HK-47",
+        "base_id": "HK47",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Canderous Ordo",
+        "base_id": "CANDEROUSORDO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "flight_of_the_falcon",
+    "name": "Flight of the Falcon",
+    "tier": "Tier 3",
+    "type": "Ship",
+    "reward_name": "Han's Millennium Falcon",
+    "reward_base_id": "MILLENNIUMFALCON",
+    "requirements": [
+      {
+        "name": "Slave I",
+        "base_id": "SLAVE1",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Hound's Tooth",
+        "base_id": "HOUNDSTOOTH",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "IG-2000",
+        "base_id": "IG2000",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Xanadu Blood",
+        "base_id": "XANADUBLOOD",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "the_price_of_hope",
+    "name": "The Price of Hope",
+    "tier": "Tier 4",
+    "type": "Unavailable",
+    "reward_name": "Cassian Andor (Undercover)",
+    "reward_base_id": "CASSIANUNDERCOVER",
+    "requirements": [
+      {
+        "name": "Cinta Kaz",
+        "base_id": "CINTA",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Kleya Marki",
+        "base_id": "KLEYA",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Vel Sartha",
+        "base_id": "VEL",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Dedra Meero",
+        "base_id": "DEDRAMEERO",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Major Partagaz",
+        "base_id": "MAJORPARTAGAZ",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "KX Security Droid",
+        "base_id": "KXSECURITYDROID",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "web_of_hate",
+    "name": "Web of Hate",
+    "tier": "Tier 4",
+    "type": "Legendary",
+    "reward_name": "Maul (Hate-Fueled)",
+    "reward_base_id": "MAULHATEFUELED",
+    "requirements": [
+      {
+        "name": "Stormtrooper Luke",
+        "base_id": "STORMTROOPERLUKE",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "IG-90",
+        "base_id": "IG90",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Yoda & Chewie",
+        "base_id": "YODACHEWBACCA",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Asajj Ventress (Dark Disciple)",
+        "base_id": "ASAJJDARKDISCIPLE",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Inquisitor Barriss",
+        "base_id": "INQUISITORBARRISS",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Darth Vader (Duel's End)",
+        "base_id": "VADERDUELSEND",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      }
+    ]
+  },
+  {
+    "slug": "clash_on_kamino",
+    "name": "Clash on Kamino",
+    "tier": "Tier 4",
+    "type": "Legendary",
+    "reward_name": "General Skywalker",
+    "reward_base_id": "GENERALSKYWALKER",
+    "requirements": [
+      {
+        "name": "Ahsoka Tano (Snips)",
+        "base_id": "AHSOKATANO",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "C-3PO",
+        "base_id": "C3POLEGENDARY",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "General Kenobi",
+        "base_id": "GENERALKENOBI",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Padmé Amidala",
+        "base_id": "PADMEAMIDALA",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Shaak Ti",
+        "base_id": "SHAAKTI",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Asajj Ventress",
+        "base_id": "ASAJVENTRESS",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "B1 Battle Droid",
+        "base_id": "B1BATTLEDROIDV2",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "B2 Super Battle Droid",
+        "base_id": "B2SUPERBATTLEDROID",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "Droideka",
+        "base_id": "DROIDEKA",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      },
+      {
+        "name": "IG-100 MagnaGuard",
+        "base_id": "MAGNAGUARD",
+        "stars": 7,
+        "gear": 12,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "champion_of_the_pit",
+    "name": "Champion of the Pit",
+    "tier": "Tier 4",
+    "type": "Colosseum",
+    "reward_name": "Rotta the Hutt",
+    "reward_base_id": "RACCOON",
+    "requirements": [
+      {
+        "name": "Carson Teva",
+        "base_id": "CARSONTEVA",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "R5-D4",
+        "base_id": "R5D4",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Colonel Ward",
+        "base_id": "BISHOP",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Grogu & Anzellans",
+        "base_id": "GOPHERANTS",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Zeb Orrelios (New Republic Pilot)",
+        "base_id": "RANGERZEB",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "luke_skywalker_the_journey_continues",
+    "name": "Luke Skywalker: The Journey Continues",
+    "tier": "Tier 5",
+    "type": "Hero's Journey",
+    "reward_name": "Jedi Knight Luke Skywalker",
+    "reward_base_id": "JEDIKNIGHTLUKE",
+    "requirements": [
+      {
+        "name": "Wampa",
+        "base_id": "WAMPA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Commander Luke Skywalker",
+        "base_id": "COMMANDERLUKESKYWALKER",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "C-3PO",
+        "base_id": "C3POLEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Captain Han Solo",
+        "base_id": "HOTHHAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Chewbacca",
+        "base_id": "CHEWBACCALEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Rebel Officer Leia Organa",
+        "base_id": "HOTHLEIA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Lando Calrissian",
+        "base_id": "ADMINISTRATORLANDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Hermit Yoda",
+        "base_id": "HERMITYODA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      }
+    ]
+  },
+  {
+    "slug": "battle_for_mandalore",
+    "name": "Battle For Mandalore",
+    "tier": "Tier 5",
+    "type": "Legendary",
+    "reward_name": "Bo-Katan (Mand'alor)",
+    "reward_base_id": "MANDALORBOKATAN",
+    "requirements": [
+      {
+        "name": "Kelleran Beq",
+        "base_id": "KELLERANBEQ",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Paz Vizsla",
+        "base_id": "PAZVIZSLA",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "IG-12 & Grogu",
+        "base_id": "IG12",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "The Mandalorian (Beskar)",
+        "base_id": "THEMANDALORIANBESKARARMOR",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      }
+    ]
+  },
+  {
+    "slug": "one_must_destroy_in_order_to_create",
+    "name": "One Must Destroy in Order to Create",
+    "tier": "Tier 5",
+    "type": "Legendary",
+    "reward_name": "Baylan Skoll",
+    "reward_base_id": "BAYLANSKOLL",
+    "requirements": [
+      {
+        "name": "Shin Hati",
+        "base_id": "SHINHATI",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Marrok",
+        "base_id": "MARROK",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Morgan Elsbeth",
+        "base_id": "MORGANELSBETH",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Great Mothers",
+        "base_id": "GREATMOTHERS",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Grand Admiral Thrawn",
+        "base_id": "GRANDADMIRALTHRAWN",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      }
+    ]
+  },
+  {
+    "slug": "dark_sovereign",
+    "name": "Dark Sovereign",
+    "tier": "Tier 5",
+    "type": "Ship",
+    "reward_name": "Leviathan",
+    "reward_base_id": "CAPITALLEVIATHAN",
+    "requirements": [
+      {
+        "name": "Darth Revan",
+        "base_id": "DARTHREVAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Darth Malak",
+        "base_id": "DARTHMALAK",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Sith Empire Trooper",
+        "base_id": "SITHTROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Sith Trooper",
+        "base_id": "FOSITHTROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Darth Maul",
+        "base_id": "MAUL",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "HK-47",
+        "base_id": "HK47",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Bastila Shan",
+        "base_id": "BASTILASHAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Sith Assassin",
+        "base_id": "SITHASSASSIN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "50R-T",
+        "base_id": "50RT",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Fury-class Interceptor",
+        "base_id": "FURYCLASSINTERCEPTOR",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Mark VI Interceptor",
+        "base_id": "SITHSUPREMACYCLASS",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "TIE Dagger",
+        "base_id": "TIEDAGGER",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "B-28 Extinction-class Bomber",
+        "base_id": "SITHBOMBER",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Scimitar",
+        "base_id": "SITHINFILTRATOR",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Sith Fighter",
+        "base_id": "SITHFIGHTER",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      },
+      {
+        "name": "Ebon Hawk",
+        "base_id": "EBONHAWK",
+        "stars": 4,
+        "gear": null,
+        "relic": null
+      }
+    ],
+    "reward_image": "https://game-assets.swgoh.gg/textures/tex.charui_leviathan.png"
+  },
+  {
+    "slug": "stardust_transmission",
+    "name": "Stardust Transmission",
+    "tier": "Tier 5",
+    "type": "Ship",
+    "reward_name": "Profundity",
+    "reward_base_id": "CAPITALPROFUNDITY",
+    "requirements": [
+      {
+        "name": "Admiral Raddus",
+        "base_id": "ADMIRALRADDUS",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Cassian Andor",
+        "base_id": "CASSIANANDOR",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Dash Rendar",
+        "base_id": "DASHRENDAR",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Mon Mothma",
+        "base_id": "MONMOTHMA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Bistan",
+        "base_id": "BISTAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Jyn Erso",
+        "base_id": "JYNERSO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Hera Syndulla",
+        "base_id": "HERASYNDULLAS3",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ],
+    "reward_image": "https://game-assets.swgoh.gg/textures/tex.charui_profundity.png"
+  },
+  {
+    "slug": "discarded_doctrine",
+    "name": "Discarded Doctrine",
+    "tier": "Tier 5",
+    "type": "Ship",
+    "reward_name": "Executor",
+    "reward_base_id": "CAPITALEXECUTOR",
+    "requirements": [
+      {
+        "name": "Admiral Piett",
+        "base_id": "ADMIRALPIETT",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Boba Fett",
+        "base_id": "BOBAFETT",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Darth Vader",
+        "base_id": "VADER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Dengar",
+        "base_id": "DENGAR",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "IG-88",
+        "base_id": "IG88",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Bossk",
+        "base_id": "BOSSK",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "TIE Fighter Pilot",
+        "base_id": "TIEFIGHTERPILOT",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      }
+    ],
+    "reward_image": "https://game-assets.swgoh.gg/textures/tex.charui_executor.png"
+  },
+  {
+    "slug": "tales_of_the_pirate_king",
+    "name": "Tales of the Pirate King",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Pirate King Hondo",
+    "reward_base_id": "GLHONDO",
+    "requirements": [
+      {
+        "name": "Captain Ithano",
+        "base_id": "ITHANO",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Hondo Ohnaka",
+        "base_id": "HONDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Veteran Smuggler Chewbacca",
+        "base_id": "SMUGGLERCHEWBACCA",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Ezra Bridger",
+        "base_id": "EZRABRIDGERS3",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Quiggold",
+        "base_id": "QUIGGOLD",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Kix",
+        "base_id": "KIX",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "General Skywalker",
+        "base_id": "GENERALSKYWALKER",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Rey (Scavenger)",
+        "base_id": "REY",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Brutus",
+        "base_id": "BRUTUS",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Vane",
+        "base_id": "VANE",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "General Kenobi",
+        "base_id": "GENERALKENOBI",
+        "stars": 7,
+        "gear": null,
+        "relic": 9
+      },
+      {
+        "name": "Chirrut Îmwe",
+        "base_id": "CHIRRUTIMWE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Captain Silvo",
+        "base_id": "CAPTAINSILVO",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Count Dooku",
+        "base_id": "COUNTDOOKU",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Bossk",
+        "base_id": "BOSSK",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Rey's Millennium Falcon",
+        "base_id": "MILLENNIUMFALCONEP7",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "i_am_no_jedi",
+    "name": "I am no Jedi",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Ahsoka Tano",
+    "reward_base_id": "GLAHSOKATANO",
+    "requirements": [
+      {
+        "name": "Ahsoka Tano (Snips)",
+        "base_id": "AHSOKATANO",
+        "stars": 7,
+        "gear": 13,
+        "relic": 9
+      },
+      {
+        "name": "General Skywalker",
+        "base_id": "GENERALSKYWALKER",
+        "stars": 7,
+        "gear": 13,
+        "relic": 8
+      },
+      {
+        "name": "Asajj Ventress",
+        "base_id": "ASAJVENTRESS",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Night Trooper",
+        "base_id": "NIGHTTROOPER",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Commander Ahsoka Tano",
+        "base_id": "COMMANDERAHSOKA",
+        "stars": 7,
+        "gear": 13,
+        "relic": 9
+      },
+      {
+        "name": "Captain Enoch",
+        "base_id": "CAPTAINENOCH",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Death Trooper (Peridea)",
+        "base_id": "DEATHTROOPERPERIDEA",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Ezra Bridger",
+        "base_id": "EZRABRIDGERS3",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Ahsoka Tano (Fulcrum)",
+        "base_id": "FULCRUMAHSOKA",
+        "stars": 7,
+        "gear": 13,
+        "relic": 9
+      },
+      {
+        "name": "CT-7567 \"Rex\"",
+        "base_id": "CT7567",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Barriss Offee",
+        "base_id": "BARRISSOFFEE",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Padawan Sabine Wren",
+        "base_id": "PADAWANSABINE",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "General Syndulla",
+        "base_id": "GENERALSYNDULLA",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Plo Koon",
+        "base_id": "PLOKOON",
+        "stars": 7,
+        "gear": 13,
+        "relic": 8
+      },
+      {
+        "name": "Huyang",
+        "base_id": "HUYANG",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Ahsoka Tano's Jedi Starfighter",
+        "base_id": "JEDISTARFIGHTERAHSOKATANO",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "rebel_with_a_cause",
+    "name": "Rebel with a Cause",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Leia Organa",
+    "reward_base_id": "GLLEIA",
+    "requirements": [
+      {
+        "name": "Captain Rex",
+        "base_id": "CAPTAINREX",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Princess Kneesaa",
+        "base_id": "PRINCESSKNEESAA",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Wicket",
+        "base_id": "WICKET",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Lando Calrissian",
+        "base_id": "ADMINISTRATORLANDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Admiral Ackbar",
+        "base_id": "ADMIRALACKBAR",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Scout Trooper",
+        "base_id": "SCOUTTROOPER_V3",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "R2-D2",
+        "base_id": "R2D2_LEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Captain Han Solo",
+        "base_id": "HOTHHAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Rebel Officer Leia Organa",
+        "base_id": "HOTHLEIA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Chief Chirpa",
+        "base_id": "CHIEFCHIRPA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Captain Drogan",
+        "base_id": "CAPTAINDROGAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Commander Luke Skywalker",
+        "base_id": "COMMANDERLUKESKYWALKER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Boushh (Leia Organa)",
+        "base_id": "BOUSHH",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Threepio & Chewie",
+        "base_id": "C3POCHEWBACCA",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Lobot",
+        "base_id": "LOBOT",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      }
+    ]
+  },
+  {
+    "slug": "greetings_exalted_one",
+    "name": "Greetings, Exalted One",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Jabba the Hutt",
+    "reward_base_id": "JABBATHEHUTT",
+    "requirements": [
+      {
+        "name": "Han Solo",
+        "base_id": "HANSOLO",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Greedo",
+        "base_id": "GREEDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Krrsantan",
+        "base_id": "KRRSANTAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Gamorrean Guard",
+        "base_id": "GAMORREANGUARD",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Jedi Knight Luke Skywalker",
+        "base_id": "JEDIKNIGHTLUKE",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "C-3PO",
+        "base_id": "C3POLEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Skiff Guard (Lando)",
+        "base_id": "ADMINISTRATORLANDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "URoRRuR'R'R",
+        "base_id": "URORRURRR",
+        "stars": 7,
+        "gear": null,
+        "relic": 4
+      },
+      {
+        "name": "Jawa",
+        "base_id": "JAWA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Fennec Shand",
+        "base_id": "FENNECSHAND",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Boba Fett",
+        "base_id": "BOBAFETT",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Aurra Sing",
+        "base_id": "AURRA_SING",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Boushh (Leia Organa)",
+        "base_id": "BOUSHH",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Mob Enforcer",
+        "base_id": "HUMANTHUG",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      }
+    ]
+  },
+  {
+    "slug": "lord_vader_heros_fall",
+    "name": "Lord Vader Hero's Fall",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Lord Vader",
+    "reward_base_id": "LORDVADER",
+    "requirements": [
+      {
+        "name": "Padmé Amidala",
+        "base_id": "PADMEAMIDALA",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Tusken Raider",
+        "base_id": "TUSKENRAIDER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Hunter",
+        "base_id": "BADBATCHHUNTER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Wrecker",
+        "base_id": "BADBATCHWRECKER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Tech",
+        "base_id": "BADBATCHTECH",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Count Dooku",
+        "base_id": "COUNTDOOKU",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Zam Wesell",
+        "base_id": "ZAMWESELL",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Echo (ARC Trooper)",
+        "base_id": "CT210408",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Embo",
+        "base_id": "EMBO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "General Skywalker",
+        "base_id": "GENERALSKYWALKER",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "ARC Trooper",
+        "base_id": "ARCTROOPER501ST",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Grand Moff Tarkin",
+        "base_id": "GRANDMOFFTARKIN",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Nute Gunray",
+        "base_id": "NUTEGUNRAY",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "BTL-B Y-wing Starfighter",
+        "base_id": "YWINGCLONEWARS",
+        "stars": 7,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "what_must_be_done",
+    "name": "What Must Be Done",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Jedi Master Kenobi",
+    "reward_base_id": "JEDIMASTERKENOBI",
+    "requirements": [
+      {
+        "name": "General Kenobi",
+        "base_id": "GENERALKENOBI",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Bo-Katan Kryze",
+        "base_id": "BOKATAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Aayla Secura",
+        "base_id": "AAYLASECURA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Mace Windu",
+        "base_id": "MACEWINDU",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "General Grievous",
+        "base_id": "GRIEVOUS",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Wat Tambor",
+        "base_id": "WATTAMBOR",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "IG-100 MagnaGuard",
+        "base_id": "MAGNAGUARD",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Clone Sergeant - Phase I",
+        "base_id": "CLONESERGEANTPHASEI",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Qui-Gon Jinn",
+        "base_id": "QUIGONJINN",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Grand Master Yoda",
+        "base_id": "GRANDMASTERYODA",
+        "stars": 7,
+        "gear": null,
+        "relic": 8
+      },
+      {
+        "name": "Jango Fett",
+        "base_id": "JANGOFETT",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Shaak Ti",
+        "base_id": "SHAAKTI",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Cad Bane",
+        "base_id": "CADBANE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "CC-2224 \"Cody\"",
+        "base_id": "CC2224",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Negotiator",
+        "base_id": "CAPITALNEGOTIATOR",
+        "stars": 6,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "the_journeys_end",
+    "name": "The Journey's End",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Jedi Master Luke Skywalker",
+    "reward_base_id": "GRANDMASTERLUKE",
+    "requirements": [
+      {
+        "name": "Rey (Jedi Training)",
+        "base_id": "REYJEDITRAINING",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Mon Mothma",
+        "base_id": "MONMOTHMA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Threepio & Chewie",
+        "base_id": "C3POCHEWBACCA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Obi-Wan Kenobi (Old Ben)",
+        "base_id": "OLDBENKENOBI",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "C-3PO",
+        "base_id": "C3POLEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "R2-D2",
+        "base_id": "R2D2_LEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Jedi Knight Luke Skywalker",
+        "base_id": "JEDIKNIGHTLUKE",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Han Solo",
+        "base_id": "HANSOLO",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Chewbacca",
+        "base_id": "CHEWBACCALEGENDARY",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Hermit Yoda",
+        "base_id": "HERMITYODA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Lando Calrissian",
+        "base_id": "ADMINISTRATORLANDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Princess Leia",
+        "base_id": "PRINCESSLEIA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Wedge Antilles",
+        "base_id": "WEDGEANTILLES",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Biggs Darklighter",
+        "base_id": "BIGGSDARKLIGHTER",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Rebel Y-wing",
+        "base_id": "YWINGREBEL",
+        "stars": 6,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "the_final_order",
+    "name": "The Final Order",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Sith Eternal Emperor",
+    "reward_base_id": "SITHPALPATINE",
+    "requirements": [
+      {
+        "name": "Emperor Palpatine",
+        "base_id": "EMPERORPALPATINE",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Darth Vader",
+        "base_id": "VADER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Darth Sidious",
+        "base_id": "DARTHSIDIOUS",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Sith Marauder",
+        "base_id": "SITHMARAUDER",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Jedi Knight Anakin",
+        "base_id": "ANAKINKNIGHT",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Grand Admiral Thrawn",
+        "base_id": "GRANDADMIRALTHRAWN",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Count Dooku",
+        "base_id": "COUNTDOOKU",
+        "stars": 7,
+        "gear": null,
+        "relic": 6
+      },
+      {
+        "name": "Admiral Piett",
+        "base_id": "ADMIRALPIETT",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Director Krennic",
+        "base_id": "DIRECTORKRENNIC",
+        "stars": 7,
+        "gear": null,
+        "relic": 4
+      },
+      {
+        "name": "Darth Maul",
+        "base_id": "MAUL",
+        "stars": 7,
+        "gear": null,
+        "relic": 4
+      },
+      {
+        "name": "Royal Guard",
+        "base_id": "ROYALGUARD",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Grand Moff Tarkin",
+        "base_id": "GRANDMOFFTARKIN",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Colonel Starck",
+        "base_id": "COLONELSTARCK",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "General Veers",
+        "base_id": "VEERS",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Imperial TIE Bomber",
+        "base_id": "TIEBOMBERIMPERIAL",
+        "stars": 6,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "heir_to_the_dark_side",
+    "name": "Heir to the Dark Side",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Supreme Leader Kylo Ren",
+    "reward_base_id": "SUPREMELEADERKYLOREN",
+    "requirements": [
+      {
+        "name": "Kylo Ren (Unmasked)",
+        "base_id": "KYLORENUNMASKED",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "First Order Stormtrooper",
+        "base_id": "FIRSTORDERTROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "First Order Officer",
+        "base_id": "FIRSTORDEROFFICERMALE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Kylo Ren",
+        "base_id": "KYLOREN",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Captain Phasma",
+        "base_id": "PHASMA",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "First Order Executioner",
+        "base_id": "FIRSTORDEREXECUTIONER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Veteran Smuggler Han Solo",
+        "base_id": "SMUGGLERHAN",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Sith Trooper",
+        "base_id": "SITHTROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "First Order SF TIE Pilot",
+        "base_id": "FIRSTORDERSPECIALFORCESPILOT",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "General Hux",
+        "base_id": "GENERALHUX",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "First Order TIE Pilot",
+        "base_id": "FIRSTORDERTIEPILOT",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Emperor Palpatine",
+        "base_id": "EMPERORPALPATINE",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Finalizer",
+        "base_id": "CAPITALFINALIZER",
+        "stars": 5,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  },
+  {
+    "slug": "heir_to_the_light_side",
+    "name": "Heir to the Light Side",
+    "tier": "Galactic Legend",
+    "type": "Galactic Legend",
+    "reward_name": "Rey",
+    "reward_base_id": "GLREY",
+    "requirements": [
+      {
+        "name": "Rey (Jedi Training)",
+        "base_id": "REYJEDITRAINING",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Finn",
+        "base_id": "FINN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Resistance Trooper",
+        "base_id": "RESISTANCETROOPER",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Rey (Scavenger)",
+        "base_id": "REY",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Poe Dameron",
+        "base_id": "POE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Resistance Pilot",
+        "base_id": "RESISTANCEPILOT",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Resistance Hero Finn",
+        "base_id": "EPIXFINN",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Amilyn Holdo",
+        "base_id": "AMILYNHOLDO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Rose Tico",
+        "base_id": "ROSETICO",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "BB-8",
+        "base_id": "BB8",
+        "stars": 7,
+        "gear": null,
+        "relic": 7
+      },
+      {
+        "name": "Resistance Hero Poe",
+        "base_id": "EPIXPOE",
+        "stars": 7,
+        "gear": null,
+        "relic": 5
+      },
+      {
+        "name": "Veteran Smuggler Chewbacca",
+        "base_id": "SMUGGLERCHEWBACCA",
+        "stars": 7,
+        "gear": null,
+        "relic": 3
+      },
+      {
+        "name": "Raddus",
+        "base_id": "CAPITALRADDUS",
+        "stars": 5,
+        "gear": null,
+        "relic": null
+      }
+    ]
+  }
+]

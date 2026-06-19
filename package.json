@@ -1,0 +1,10 @@
+{
+  "name": "swgoh-roster-viewer",
+  "version": "1.0.0",
+  "description": "SWGOH Roster Viewer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}

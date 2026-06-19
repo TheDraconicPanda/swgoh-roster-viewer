@@ -1,0 +1,170 @@
+[
+  {
+    "id": "cls",
+    "name": "CLS",
+    "units": [
+      {
+        "base_id": "COMMANDERLUKESKYWALKER",
+        "name": "Commander Luke Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_lukebespin.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "C3POLEGENDARY",
+        "name": "C-3PO",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_c3p0.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "C3POCHEWBACCA",
+        "name": "Threepio & Chewie",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_c3po.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "CHEWBACCALEGENDARY",
+        "name": "Chewbacca",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_ot.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "HANSOLO",
+        "name": "Han Solo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_han.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 8
+      }
+    ]
+  },
+  {
+    "id": "lestrange",
+    "name": "Lestrange",
+    "units": [
+      {
+        "base_id": "STRANGER",
+        "name": "The Stranger",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_stranger.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "MAULS7",
+        "name": "Maul",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_maul_cyborg.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "STARKILLER",
+        "name": "Starkiller",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_starkiller.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "CALKESTIS",
+        "name": "Cal Kestis",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_calkestis.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "GENERALKENOBI",
+        "name": "General Kenobi",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_obiwangeneral.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      }
+    ]
+  },
+  {
+    "id": "zombros",
+    "name": "Zombros",
+    "units": [
+      {
+        "base_id": "CAPTAINENOCH",
+        "name": "Captain Enoch",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_captainenoch.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      },
+      {
+        "base_id": "NIGHTTROOPER",
+        "name": "Night Trooper",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_nighttrooper_a.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      },
+      {
+        "base_id": "DEATHTROOPERPERIDEA",
+        "name": "Death Trooper (Peridea)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_deathtrooperperidea.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      }
+    ]
+  },
+  {
+    "id": "gas",
+    "name": "GAS",
+    "units": [
+      {
+        "base_id": "GENERALSKYWALKER",
+        "name": "General Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_generalanakin.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      },
+      {
+        "base_id": "CT5555",
+        "name": "CT-5555 \"Fives\"",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_trooperclone_fives.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "CT7567",
+        "name": "CT-7567 \"Rex\"",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_trooperclone_rex.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "AHSOKATANO",
+        "name": "Ahsoka Tano (Snips)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_ahsoka.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 9
+      },
+      {
+        "base_id": "ARCTROOPER501ST",
+        "name": "ARC Trooper",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_trooperclone_arc.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 8
+      }
+    ]
+  }
+]

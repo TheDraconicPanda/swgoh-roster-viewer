@@ -1,0 +1,33 @@
+[
+  {
+    "id": "slkr",
+    "name": "SLKR",
+    "units": [
+      {
+        "base_id": "SUPREMELEADERKYLOREN",
+        "name": "Supreme Leader Kylo Ren",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_kyloren_tros.png"
+      },
+      {
+        "base_id": "DARKREY",
+        "name": "Rey (Dark Side Vision)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_darkrey.png"
+      },
+      {
+        "base_id": "KYLORENUNMASKED",
+        "name": "Kylo Ren (Unmasked)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_kylo_unmasked.png"
+      },
+      {
+        "base_id": "GENERALHUX",
+        "name": "General Hux",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_generalhux.png"
+      },
+      {
+        "base_id": "FIRSTORDEROFFICERMALE",
+        "name": "First Order Officer",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_firstorderofficer.png"
+      }
+    ]
+  }
+]

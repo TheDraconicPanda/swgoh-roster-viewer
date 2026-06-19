@@ -1,0 +1,7 @@
+node_modules/
+swgoh_data.json
+swgoh_full_roster.txt
+swgoh_characters.csv
+swgoh_ships.csv
+tmp_ships.json
+jango_fett.json
