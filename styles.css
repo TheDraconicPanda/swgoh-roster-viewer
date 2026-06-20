@@ -132,6 +132,10 @@ body {
     color: #ff8a80;
     text-decoration-color: rgba(255, 138, 128, 0.4);
 }
+.link-btn-github {
+    color: #69db7c;
+    text-decoration-color: rgba(105, 219, 124, 0.4);
+}
 .link-btn:hover { color: #fff; text-decoration-color: #ffd54f; }
 
 

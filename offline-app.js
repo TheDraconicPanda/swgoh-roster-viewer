@@ -45,8 +45,6 @@ let farmsData = [];
 let relicMaterials = [];  // loaded from relic-materials-data.json
 
 // DOM elements
-const fetchBtn = document.getElementById('fetchBtn');
-const allyCodeInput = document.getElementById('allyCode');
 const loadingDiv = document.getElementById('loading');
 const errorDiv = document.getElementById('error');
 const playerInfoDiv = document.getElementById('playerInfoLeft');
@@ -61,21 +59,30 @@ const cacheStatus = document.getElementById('cacheStatus');
 const unitModal = document.getElementById('unitModal');
 const modalContent = document.getElementById('modalContent');
 
-// Event listeners
-fetchBtn.addEventListener('click', fetchRoster);
-allyCodeInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') fetchRoster();
-});
+// ── Offline localStorage save ─────────────────────────────────────────────────
+// Replaces server POST /save-* calls. Priority on load: localStorage → repo file.
+const OFFLINE_LS_KEYS = {
+    farms:   'swgoh_offline_farms',
+    teams:   'swgoh_offline_teams',
+    fleets:  'swgoh_offline_fleets',
+    journey: 'swgoh_offline_journey',
+};
 
-// Restore ally code and auto-fetch if we came from a cache clear
-const savedAllyCode = localStorage.getItem('swgoh_saved_ally_code');
-if (savedAllyCode) {
-    allyCodeInput.value = savedAllyCode;
-    fetchRoster();
+function saveOffline(type, data) {
+    localStorage.setItem(OFFLINE_LS_KEYS[type], JSON.stringify(data));
 }
 
-// Show cache status on load
-updateCacheStatus();
+function downloadJson(data, filename) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+// Auto-load data on page load
+loadOfflineData();
 
 // Modal close handlers
 document.getElementById('modalClose').addEventListener('click', closeModal);
@@ -229,212 +236,97 @@ async function loadCachedDataset({ cacheKey, apiUrl, localFile, label, emptyValu
     return emptyValue;
 }
 
-async function fetchRoster() {
-    const allyCode = allyCodeInput.value.trim().replace(/-/g, '');
-
-    if (!allyCode || allyCode.length < 9) {
-        showError('Please enter a valid ally code');
-        return;
-    }
-
-    localStorage.setItem('swgoh_saved_ally_code', allyCode);
-
-    // Clear all cached data so every fetch starts fresh (preserve user preferences)
-    const PRESERVE_KEYS = new Set(['swgoh_saved_ally_code']);
-    Object.keys(localStorage)
-        .filter(k => k.startsWith('swgoh_') && !PRESERVE_KEYS.has(k))
-        .forEach(k => localStorage.removeItem(k));
-
-    // Show loading
+async function loadOfflineData() {
     loadingDiv.style.display = 'block';
     errorDiv.style.display = 'none';
-    playerInfoDiv.style.display = 'none';
-    filterSection.style.display = 'none';
-    tabsDiv.style.display = 'none';
 
     try {
-        // Fetch player data first
-        const playerResponse = await fetch(`https://swgoh.gg/api/player/${allyCode}/`);
+        // ── Player roster snapshot (saved by online version via GitHub API) ──────
+        let rosterSnapshot = null;
+        try {
+            const res = await fetch('player-roster.json');
+            if (res.ok) rosterSnapshot = await res.json();
+        } catch (e) { /* file not present yet */ }
 
-        if (!playerResponse.ok) {
-            throw new Error(`Failed to fetch player data: ${playerResponse.status} ${playerResponse.statusText}`);
+        const hasRoster = rosterSnapshot && rosterSnapshot._saved_at && rosterSnapshot.data;
+
+        // Stale-data banner (>7 days old)
+        const staleBanner = document.getElementById('staleDataBanner');
+        const noRosterBanner = document.getElementById('noRosterBanner');
+        if (!hasRoster) {
+            if (noRosterBanner) noRosterBanner.style.display = 'block';
+        } else {
+            if (noRosterBanner) noRosterBanner.style.display = 'none';
+            const savedAt = new Date(rosterSnapshot._saved_at);
+            const daysOld = Math.floor((Date.now() - savedAt) / (1000 * 60 * 60 * 24));
+            if (daysOld >= 7 && staleBanner) {
+                staleBanner.textContent = `Roster data is ${daysOld} day${daysOld !== 1 ? 's' : ''} old. Visit the online version to refresh.`;
+                staleBanner.style.display = 'block';
+            }
         }
 
-        const data = await playerResponse.json();
-
-        // Load base character data (for categories, alignment, role, image, etc.)
-        // Same cache chain as gear: localStorage → API → expired cache → bundled file.
-        const baseCharacters = await loadCachedDataset({
-            cacheKey: 'swgoh_character_data_v2',
-            apiUrl: 'https://swgoh.gg/api/characters/',
-            localFile: 'characters-data.json',
-            label: 'Character definitions',
-        });
-
-        // Create a lookup map for base character data (assign to global for journey guide access)
+        // ── Static game data ──────────────────────────────────────────────────────
+        const baseCharacters = await fetch('characters-data.json').then(r => r.json()).catch(() => []);
         baseCharMap = {};
-        baseCharacters.forEach(char => {
-            baseCharMap[char.base_id] = char;
-        });
+        baseCharacters.forEach(c => { baseCharMap[c.base_id] = c; });
 
-        // Always patch baseCharMap with the bundled file to fill gaps the API/cache may omit.
-        // Uncommon units (Gamorrean Guard, ARC Trooper, 0-0-0, etc.) may not appear in the
-        // swgoh.gg API response but are present in the bundled characters-data.json.
-        // We never overwrite existing entries — API data wins if present.
-        try {
-            const res = await fetch('characters-data.json');
-            if (res.ok) {
-                const bundled = await res.json();
-                bundled.forEach(char => {
-                    if (!baseCharMap[char.base_id]) baseCharMap[char.base_id] = char;
-                });
-            }
-        } catch (e) { /* bundled patch failed — portrait fallback will show ? */ }
+        const gearData = await fetch('gear-data.json').then(r => r.json()).catch(() => []);
+        gearMap = {};
+        gearData.forEach(g => { gearMap[g.base_id] = g; });
 
-        // Load gear definitions (icons, names) — same cache chain as characters
-        try {
-            const gearData = await loadCachedDataset({
-                cacheKey: 'swgoh_gear_data',
-                apiUrl: 'https://swgoh.gg/api/gear/',
-                localFile: 'gear-data.json',
-                label: 'Gear definitions',
-            });
-            gearMap = {};
-            gearData.forEach(g => { gearMap[g.base_id] = g; });
-            console.log(`✓ Built gear map with ${Object.keys(gearMap).length} entries`);
-        } catch (e) {
-            console.error('Failed to load gear definitions:', e);
-            gearMap = {};
+        const abilitiesBundle = await fetch('abilities-data.json').then(r => r.json()).catch(() => ({ units: {} }));
+        abilitiesMap = abilitiesBundle.units || {};
+
+        // Journey: localStorage (offline edits) > repo file
+        const journeyLs = localStorage.getItem(OFFLINE_LS_KEYS.journey);
+        journeyData = journeyLs ? JSON.parse(journeyLs) : await fetch('journey-data.json').then(r => r.json()).catch(() => []);
+
+        const rmJson = await fetch('relic-materials-data.json').then(r => r.json()).catch(() => ({ materials: [] }));
+        relicMaterials = rmJson.materials || [];
+
+        // ── Farms / Teams / Fleets: localStorage > repo file ──────────────────────
+        const farmsLs  = localStorage.getItem(OFFLINE_LS_KEYS.farms);
+        const teamsLs  = localStorage.getItem(OFFLINE_LS_KEYS.teams);
+        const fleetsLs = localStorage.getItem(OFFLINE_LS_KEYS.fleets);
+        farmsData = farmsLs  ? JSON.parse(farmsLs)  : await fetch('farms-data.json').then(r => r.json()).catch(() => []);
+        teamsData = teamsLs  ? JSON.parse(teamsLs)  : await fetch('teams-data.json').then(r => r.json()).catch(() => []);
+        fleetData = fleetsLs ? JSON.parse(fleetsLs) : await fetch('fleets-data.json').then(r => r.json()).catch(() => []);
+
+        // ── Roster units ──────────────────────────────────────────────────────────
+        if (hasRoster) {
+            playerData = rosterSnapshot.data;
+            const units = rosterSnapshot.units || [];
+            allCharacters = units
+                .filter(u => u.data.combat_type === 1)
+                .map(u => {
+                    const base = baseCharMap[u.data.base_id];
+                    if (base) {
+                        u.data.categories = base.categories || [];
+                        u.data.alignment  = base.alignment;
+                        u.data.role       = base.role;
+                        u.data.image      = base.image;
+                        u.data.description = base.description;
+                        u.data.gear_levels = base.gear_levels;
+                        u.data.ability_classes = base.ability_classes;
+                        u.data.activate_shard_count = base.activate_shard_count;
+                        u.data.url = base.url;
+                    } else {
+                        u.data.categories = [];
+                    }
+                    return u;
+                })
+                .sort((a, b) => a.data.name.localeCompare(b.data.name));
+            allShips = units
+                .filter(u => u.data.combat_type === 2)
+                .sort((a, b) => (b.data.power || 0) - (a.data.power || 0));
         }
 
-        // Load abilities bundle — locally scraped (no live API), object-shaped {_meta, units}.
-        // Cache + bundled-file fallback only. Re-run scrape-abilities.user.js to refresh.
-        try {
-            const abilitiesBundle = await loadCachedDataset({
-                cacheKey: 'swgoh_abilities_data',
-                apiUrl: null,                       // no live API — bundle-only
-                localFile: 'abilities-data.json',
-                label: 'Abilities',
-                emptyValue: { _meta: {}, units: {} },
-            });
-            abilitiesMap = abilitiesBundle.units || {};
-            console.log(`✓ Built abilities map with ${Object.keys(abilitiesMap).length} units`);
-        } catch (e) {
-            console.error('Failed to load abilities bundle:', e);
-            abilitiesMap = {};
-        }
-
-        // Load journey guide data — static file, never changes.
-        try {
-            journeyData = await loadCachedDataset({
-                cacheKey: 'swgoh_journey_data_v4',
-                apiUrl: null,
-                localFile: 'journey-data.json',
-                label: 'Journey Guide',
-                emptyValue: [],
-            });
-            console.log(`✓ Loaded ${journeyData.length} journey events`);
-        } catch (e) {
-            console.error('Failed to load journey data:', e);
-            journeyData = [];
-        }
-
-        // Store data
-        playerData = data.data;
-
-        // Separate characters and ships, and merge with base data
-        allCharacters = data.units
-            .filter(u => u.data.combat_type === 1)
-            .map(u => {
-                // Merge definition data from base character data
-                const baseChar = baseCharMap[u.data.base_id];
-                if (baseChar) {
-                    u.data.categories = baseChar.categories || [];
-                    u.data.alignment = baseChar.alignment;
-                    u.data.role = baseChar.role;
-                    u.data.image = baseChar.image;
-                    u.data.description = baseChar.description;
-                    u.data.gear_levels = baseChar.gear_levels;
-                    u.data.ability_classes = baseChar.ability_classes;
-                    u.data.activate_shard_count = baseChar.activate_shard_count;
-                    u.data.url = baseChar.url;
-                } else {
-                    u.data.categories = [];
-                }
-                return u;
-            })
-            .sort((a, b) => a.data.name.localeCompare(b.data.name));
-
-        console.log(`✓ Processed ${allCharacters.length} characters`);
-
-        // Count characters with categories
-        const withCategories = allCharacters.filter(c => c.data.categories && c.data.categories.length > 0).length;
-        console.log(`✓ ${withCategories} characters have categories`);
-        if (withCategories === 0) {
-            console.warn('⚠ No categories loaded - tag filter will be empty');
-        }
-
-        // Sanity check: are any of the player's characters missing from the abilities
-        // bundle? Happens when new units release after the last scrape — those units
-        // fall back to player-payload-only rendering (no descriptions). One-line
-        // warning so the user knows to re-run scrape-abilities.user.js.
-        if (Object.keys(abilitiesMap).length > 0) {
-            const missing = allCharacters
-                .filter(c => !abilitiesMap[c.data.base_id])
-                .map(c => c.data.base_id);
-            if (missing.length > 0) {
-                console.warn(
-                    `⚠ ${missing.length} of your units are missing from the abilities bundle ` +
-                    `(${missing.slice(0, 5).join(', ')}${missing.length > 5 ? ', …' : ''}). ` +
-                    `Re-run scrape-abilities.user.js on swgoh.gg to refresh.`
-                );
-            } else {
-                console.log(`✓ All ${allCharacters.length} of your units have ability data in the bundle`);
-            }
-        }
-
-        // Build the keyword index from the full bundled-character list (not just
-        // owned). Same data swgoh.gg uses for its /characters/?ac=<slug> filter.
-        // Owned flag tells the renderer which rows are clickable.
         buildKeywordsIndex(baseCharacters, allCharacters);
-
-        // Build the status index by walking every ability description's callouts
-        // (the "Blight: ..." pattern). Independent of keywords — different shape
-        // (per-unit definitions) and source (description prose, not curated tags).
         buildStatusIndex(abilitiesMap, allCharacters, baseCharMap);
-
-        // Build required_at lookup: highest journey requirement per base_id.
         buildRequiredAtMap(journeyData);
 
-        // Load teams / fleet / farms data
-        try {
-            teamsData = await loadCachedDataset({ cacheKey: 'swgoh_teams_data', apiUrl: null, localFile: 'teams-data.json', label: 'Teams', emptyValue: [] });
-            fleetData = await loadCachedDataset({ cacheKey: 'swgoh_fleet_data', apiUrl: null, localFile: 'fleets-data.json', label: 'Fleet', emptyValue: [] });
-            farmsData = await loadCachedDataset({ cacheKey: 'swgoh_farms_data', apiUrl: null, localFile: 'farms-data.json', label: 'Farms', emptyValue: [] });
-        } catch (e) {
-            console.error('Failed to load teams/fleet/farms:', e);
-        }
-
-        // Load relic materials table (static reference data, never cached)
-        try {
-            const rmRes = await fetch('relic-materials-data.json');
-            const rmJson = await rmRes.json();
-            relicMaterials = rmJson.materials || [];
-        } catch (e) {
-            console.error('Failed to load relic materials:', e);
-        }
-
-        allShips = data.units
-            .filter(u => u.data.combat_type === 2)
-            .sort((a, b) => b.data.power - a.data.power);
-
-        // Display player info
-        displayPlayerInfo();
-
-        // Populate tag filters
+        if (hasRoster) displayPlayerInfo();
         populateTagFilters();
-
-        // Display rosters
         displayCharacters(allCharacters);
         displayShips(allShips);
         displayKeywords(Object.entries(keywordsIndex).sort((a, b) => a[1].label.localeCompare(b[1].label)));
@@ -444,20 +336,28 @@ async function fetchRoster() {
         displayFleet(fleetData);
         displayFarms(farmsData);
 
-        // Show UI elements
         loadingDiv.style.display = 'none';
-        playerInfoDiv.style.display = 'block';
+        if (hasRoster) playerInfoDiv.style.display = 'block';
         filterSection.style.display = 'flex';
         tabsDiv.style.display = 'flex';
-        const _saveBtn = document.getElementById('saveToGitHubBtn');
-        if (_saveBtn) _saveBtn.style.display = 'inline-block';
 
-    } catch (error) {
-        console.error('Error fetching roster:', error);
-        showError(`Error: ${error.message}. Make sure the ally code is correct and the player profile is public.`);
+        // Wire up download buttons
+        document.getElementById('downloadFarmsBtn')?.addEventListener('click', () => downloadJson(farmsData, 'farms-data.json'));
+        document.getElementById('downloadTeamsBtn')?.addEventListener('click', () => downloadJson(teamsData, 'teams-data.json'));
+        document.getElementById('downloadFleetsBtn')?.addEventListener('click', () => downloadJson(fleetData, 'fleets-data.json'));
+        document.getElementById('downloadAllBtn')?.addEventListener('click', () => {
+            downloadJson(farmsData, 'farms-data.json');
+            downloadJson(teamsData, 'teams-data.json');
+            downloadJson(fleetData, 'fleets-data.json');
+        });
+
+    } catch (err) {
+        console.error('Offline load error:', err);
+        showError('Failed to load data: ' + err.message);
         loadingDiv.style.display = 'none';
     }
 }
+
 
 function displayPlayerInfo() {
     document.getElementById('playerName').textContent = playerData.name;
@@ -2931,13 +2831,7 @@ async function jeSaveEvent() {
     jeStatus.textContent = 'Saving…';
     jeStatus.className = 'je-status';
     try {
-        const res = await fetch('/save-journey', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
+        saveOffline('journey', data);
         journeyData = data;
         jeStatus.textContent = 'Saved!';
         jeStatus.className = 'je-status ok';
@@ -2957,13 +2851,7 @@ async function jeDeleteEvent() {
     const data = (journeyData || []).filter(e => e.slug !== jeEditingSlug);
     jeStatus.textContent = 'Deleting…';
     try {
-        const res = await fetch('/save-journey', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Delete failed');
+        saveOffline('journey', data);
         journeyData = data;
         displayJourneyGuide(journeyData);
         jeClose();
@@ -3396,12 +3284,9 @@ function enableDragReorder(container, cardSelector, idAttr, dataArr, idKey, endp
             if (fromIdx === -1 || toIdx === -1) return;
             const [item] = dataArr.splice(fromIdx, 1);
             dataArr.splice(toIdx, 0, item);
-            // Save immediately
-            fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataArr),
-            }).catch(err => console.error('Reorder save failed:', err));
+            // Save immediately to localStorage (offline mode — no server)
+            const offlineType = endpoint.replace('/save-', '').replace('fleets', 'fleets').replace('teams', 'teams').replace('farms', 'farms').replace('journey', 'journey');
+            try { saveOffline(offlineType, dataArr); } catch (e) { console.error('Reorder save failed:', e); }
             onRedraw();
         });
     });
@@ -3480,10 +3365,8 @@ async function promoteFarmToTeam(farm) {
     const newFarms = farmsData.filter(f => f.id !== farm.id);
 
     try {
-        await Promise.all([
-            fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newTeams) }),
-            fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newFarms) }),
-        ]);
+        saveOffline('teams', newTeams);
+        saveOffline('farms', newFarms);
         teamsData = newTeams;
         farmsData = newFarms;
         displayTeams(teamsData);
@@ -3579,9 +3462,7 @@ async function teSaveTeam() {
     teStatusEl.textContent = 'Saving…';
     teStatusEl.className = 'je-status';
     try {
-        const res = await fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
+        saveOffline('teams', data);
         teamsData = data;
         displayTeams(teamsData);
         teStatusEl.textContent = 'Saved!';
@@ -3598,9 +3479,7 @@ async function teDeleteTeam() {
     if (!confirm(`Delete "${teTeamName.value.trim()}"?`)) return;
     const data = teamsData.filter(t => t.id !== teEditingId);
     try {
-        const res = await fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
+        saveOffline('teams', data);
         teamsData = data;
         displayTeams(teamsData);
         teClose();
@@ -3727,9 +3606,7 @@ async function fleSaveFleet() {
     fleStatusEl.textContent = 'Saving…';
     fleStatusEl.className = 'je-status';
     try {
-        const res = await fetch('/save-fleets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
+        saveOffline('fleets', data);
         fleetData = data;
         displayFleet(fleetData);
         fleStatusEl.textContent = 'Saved!';
@@ -3746,9 +3623,7 @@ async function fleDeleteFleet() {
     if (!confirm(`Delete "${fleFleetName.value.trim()}"?`)) return;
     const data = fleetData.filter(f => f.id !== fleEditingId);
     try {
-        const res = await fetch('/save-fleets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
+        saveOffline('fleets', data);
         fleetData = data;
         displayFleet(fleetData);
         fleClose();
@@ -3870,9 +3745,7 @@ async function feSaveFarm() {
     feStatusEl.textContent = 'Saving…';
     feStatusEl.className = 'je-status';
     try {
-        const res = await fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
+        saveOffline('farms', data);
         farmsData = data;
         displayFarms(farmsData);
         feStatusEl.textContent = 'Saved!';
@@ -3889,9 +3762,7 @@ async function feDeleteFarm() {
     if (!confirm(`Delete "${feFarmName.value.trim()}"?`)) return;
     const data = farmsData.filter(f => f.id !== feEditingId);
     try {
-        const res = await fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
+        saveOffline('farms', data);
         farmsData = data;
         displayFarms(farmsData);
         feClose();
@@ -3909,119 +3780,5 @@ document.getElementById('farmsAddBtn')?.addEventListener('click', () => feOpen(n
 
 // ─── GitHub save-to-repo feature ─────────────────────────────────────────────
 
-const saveToGitHubBtn    = document.getElementById('saveToGitHubBtn');
-const githubTokenModal   = document.getElementById('githubTokenModal');
-const ghTokenModalClose  = document.getElementById('githubTokenModalClose');
-const ghTokenSaveBtn     = document.getElementById('ghTokenSaveBtn');
-const ghTokenCancelBtn   = document.getElementById('ghTokenCancelBtn');
-const ghRepoInput        = document.getElementById('ghRepo');
-const ghTokenInput       = document.getElementById('ghToken');
-const ghTokenStatusEl    = document.getElementById('ghTokenStatus');
-const ghToast            = document.getElementById('ghToast');
-
-let ghToastTimer = null;
-function showGhToast(msg, isError = false) {
-    ghToast.textContent = msg;
-    ghToast.style.background = isError ? '#c92a2a' : '#2b8a3e';
-    ghToast.style.display = 'block';
-    if (ghToastTimer) clearTimeout(ghToastTimer);
-    ghToastTimer = setTimeout(() => { ghToast.style.display = 'none'; }, 4000);
-}
-
-async function ghGetSha(repo, filename, token) {
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
-    });
-    if (res.status === 404) return undefined;
-    if (!res.ok) throw new Error(`SHA fetch failed (${res.status})`);
-    return (await res.json()).sha;
-}
-
-async function saveFileToGitHub(repo, token, filename, data) {
-    const sha = await ghGetSha(repo, filename, token);
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-        method: 'PUT',
-        headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: `Update ${filename} via SWGOH app`,
-            content,
-            ...(sha !== undefined && { sha }),
-        }),
-    });
-    if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.message || `HTTP ${res.status}`);
-    }
-}
-
-async function pushSnapshotToGitHub(repo, token) {
-    const snapshot = {
-        _saved_at: new Date().toISOString(),
-        data: playerData,
-        units: [...allCharacters, ...allShips],
-    };
-    const files = [
-        { name: 'player-roster.json', data: snapshot },
-        { name: 'farms-data.json',    data: farmsData },
-        { name: 'teams-data.json',    data: teamsData },
-        { name: 'fleets-data.json',   data: fleetData },
-    ];
-    for (const f of files) {
-        await saveFileToGitHub(repo, token, f.name, f.data);
-    }
-}
-
-saveToGitHubBtn?.addEventListener('click', async () => {
-    const token = localStorage.getItem('swgoh_github_token');
-    const repo  = localStorage.getItem('swgoh_github_repo');
-    if (!token || !repo) {
-        ghRepoInput.value  = repo  || 'I853368/swgoh-roster-viewer';
-        ghTokenInput.value = token || '';
-        ghTokenStatusEl.textContent = '';
-        githubTokenModal.style.display = 'flex';
-        return;
-    }
-    saveToGitHubBtn.disabled = true;
-    saveToGitHubBtn.textContent = '☁ Saving…';
-    try {
-        await pushSnapshotToGitHub(repo, token);
-        showGhToast('Saved to GitHub ✓');
-    } catch (err) {
-        showGhToast('Save failed: ' + err.message, true);
-        console.error('GitHub save error:', err);
-    } finally {
-        saveToGitHubBtn.disabled = false;
-        saveToGitHubBtn.textContent = '☁ Save to GitHub';
-    }
-});
-
-ghTokenSaveBtn?.addEventListener('click', async () => {
-    const repo  = ghRepoInput.value.trim();
-    const token = ghTokenInput.value.trim();
-    if (!repo || !token) {
-        ghTokenStatusEl.textContent = 'Both fields are required.';
-        ghTokenStatusEl.className = 'je-status err';
-        return;
-    }
-    ghTokenStatusEl.textContent = 'Saving…';
-    ghTokenStatusEl.className = 'je-status';
-    ghTokenSaveBtn.disabled = true;
-    try {
-        await pushSnapshotToGitHub(repo, token);
-        localStorage.setItem('swgoh_github_repo', repo);
-        localStorage.setItem('swgoh_github_token', token);
-        githubTokenModal.style.display = 'none';
-        showGhToast('Saved to GitHub ✓');
-    } catch (err) {
-        ghTokenStatusEl.textContent = 'Error: ' + err.message;
-        ghTokenStatusEl.className = 'je-status err';
-    } finally {
-        ghTokenSaveBtn.disabled = false;
-    }
-});
-
-ghTokenModalClose?.addEventListener('click', () => { githubTokenModal.style.display = 'none'; });
-ghTokenCancelBtn?.addEventListener('click',  () => { githubTokenModal.style.display = 'none'; });
-githubTokenModal?.addEventListener('click', e => { if (e.target === githubTokenModal) githubTokenModal.style.display = 'none'; });
+// (offline version — no GitHub save feature; data is downloaded via the ⬇ buttons)
 
