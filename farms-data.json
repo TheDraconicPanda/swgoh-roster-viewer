@@ -1,47 +1,93 @@
 [
   {
-    "id": "cls",
-    "name": "CLS",
+    "id": "jabba_requirements",
+    "name": "Jabba requirements",
     "units": [
       {
-        "base_id": "COMMANDERLUKESKYWALKER",
-        "name": "Commander Luke Skywalker",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_lukebespin.png",
+        "base_id": "KRRSANTAN",
+        "name": "Krrsantan",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_krrsantan.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "GREEDO",
+        "name": "Greedo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_greedo.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 6
+      },
+      {
+        "base_id": "JAWA",
+        "name": "Jawa",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_jawa_jawa.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      },
+      {
+        "base_id": "FENNECSHAND",
+        "name": "Fennec Shand",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_fennec.png",
         "target_stars": 7,
         "target_gear": 13,
         "target_relic": 7
       },
       {
-        "base_id": "C3POLEGENDARY",
-        "name": "C-3PO",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_c3p0.png",
+        "base_id": "JEDIKNIGHTLUKE",
+        "name": "Jedi Knight Luke Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_luke_jediknight.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      }
+    ]
+  },
+  {
+    "id": "jabba",
+    "name": "Jabba",
+    "units": [
+      {
+        "base_id": "JABBATHEHUTT",
+        "name": "Jabba the Hutt",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_jabbathehutt.png",
         "target_stars": 7,
         "target_gear": 13,
         "target_relic": 7
       },
       {
-        "base_id": "C3POCHEWBACCA",
-        "name": "Threepio & Chewie",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_c3po.png",
+        "base_id": "BOUSHH",
+        "name": "Boushh (Leia Organa)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_boushh.png",
         "target_stars": 7,
         "target_gear": 13,
         "target_relic": 7
       },
       {
-        "base_id": "CHEWBACCALEGENDARY",
-        "name": "Chewbacca",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_ot.png",
+        "base_id": "KRRSANTAN",
+        "name": "Krrsantan",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_krrsantan.png",
         "target_stars": 7,
         "target_gear": 13,
         "target_relic": 7
       },
       {
-        "base_id": "HANSOLO",
-        "name": "Han Solo",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_han.png",
+        "base_id": "UNDERCOVERLANDO",
+        "name": "Skiff Guard (Lando Calrissian)",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_undercoverlando.png",
         "target_stars": 7,
         "target_gear": 13,
-        "target_relic": 8
+        "target_relic": 7
+      },
+      {
+        "base_id": "EMBO",
+        "name": "Embo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_embo.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
       }
     ]
   },
@@ -150,12 +196,12 @@
         "target_relic": 7
       },
       {
-        "base_id": "AHSOKATANO",
-        "name": "Ahsoka Tano (Snips)",
-        "image": "https://game-assets.swgoh.gg/textures/tex.charui_ahsoka.png",
+        "base_id": "CT210408",
+        "name": "CT-21-0408 \"Echo\"",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_trooperclone_echo.png",
         "target_stars": 7,
         "target_gear": 13,
-        "target_relic": 9
+        "target_relic": 7
       },
       {
         "base_id": "ARCTROOPER501ST",
@@ -164,6 +210,204 @@
         "target_stars": 7,
         "target_gear": 13,
         "target_relic": 8
+      }
+    ]
+  },
+  {
+    "id": "shakk_clones",
+    "name": "Shakk Clones",
+    "units": [
+      {
+        "base_id": "SHAAKTI",
+        "name": "Shaak Ti",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_shaakti.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "BADBATCHHUNTER",
+        "name": "Hunter",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_bb_hunter.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "BADBATCHWRECKER",
+        "name": "Wrecker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_bb_wrecker.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "BADBATCHECHO",
+        "name": "Echo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_bb_echo.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "BADBATCHTECH",
+        "name": "Tech",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_bb_tech.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      }
+    ]
+  },
+  {
+    "id": "jedi_luke",
+    "name": "Jedi Luke",
+    "units": [
+      {
+        "base_id": "GRANDMASTERLUKE",
+        "name": "Jedi Master Luke Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_luke_jml.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "JEDIKNIGHTLUKE",
+        "name": "Jedi Knight Luke Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_luke_jediknight.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "JEDIKNIGHTCAL",
+        "name": "Jedi Knight Cal Kestis",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_jediknightcal.png",
+        "target_stars": 7,
+        "target_gear": 12,
+        "target_relic": 7
+      },
+      {
+        "base_id": "HERMITYODA",
+        "name": "Hermit Yoda",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_yodahermit.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      }
+    ]
+  },
+  {
+    "id": "see_requirements",
+    "name": "SEE requirements",
+    "units": [
+      {
+        "base_id": "ROYALGUARD",
+        "name": "Royal Guard",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_royalguard.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      },
+      {
+        "base_id": "DIRECTORKRENNIC",
+        "name": "Director Krennic",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_krennic.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 4
+      },
+      {
+        "base_id": "GRANDADMIRALTHRAWN",
+        "name": "Grand Admiral Thrawn",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_thrawn.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "VEERS",
+        "name": "General Veers",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_veers.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      },
+      {
+        "base_id": "COLONELSTARCK",
+        "name": "Colonel Starck",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_colonel_stark.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      }
+    ]
+  },
+  {
+    "id": "see_requirements",
+    "name": "SEE requirements",
+    "units": [
+      {
+        "base_id": "DARTHSIDIOUS",
+        "name": "Darth Sidious",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_sidious.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "COUNTDOOKU",
+        "name": "Count Dooku",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_dooku.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 8
+      }
+    ]
+  },
+  {
+    "id": "pkhondo_ls_pirates",
+    "name": "Pirates",
+    "units": [
+      {
+        "base_id": "ITHANO",
+        "name": "Captain Ithano",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_ithano.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      },
+      {
+        "base_id": "QUIGGOLD",
+        "name": "Quiggold",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_quiggold.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "VANE",
+        "name": "Vane",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_vane.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "CAPTAINSILVO",
+        "name": "Captain Silvo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_captainsilvo.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
+      },
+      {
+        "base_id": "BRUTUS",
+        "name": "Brutus",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_brutus.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 7
       }
     ]
   }

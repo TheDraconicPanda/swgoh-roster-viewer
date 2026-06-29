@@ -367,6 +367,20 @@
                         <label>Farm Name</label>
                         <input type="text" id="feFarmName" placeholder="e.g. 501st Clones">
                     </div>
+                    <details class="fe-tag-filter-details" id="feTagFilterDetails">
+                        <summary class="fe-tag-filter-summary">
+                            <span class="fe-tag-filter-label">Filter by tags</span>
+                            <span class="fe-tag-active-count" id="feTagActiveCount" style="display:none;"></span>
+                        </summary>
+                        <div class="fe-tag-grid" id="feTagGrid"></div>
+                    </details>
+                    <details class="fe-tag-filter-details" id="feJourneyFilterDetails">
+                        <summary class="fe-tag-filter-summary">
+                            <span class="fe-tag-filter-label">Filter by Journey</span>
+                            <span class="fe-tag-active-count" id="feJourneyActiveCount" style="display:none;"></span>
+                        </summary>
+                        <div class="fe-journey-grid" id="feJourneyGrid"></div>
+                    </details>
                     <div class="je-section-label">Units (up to 5 · first unit is leader)</div>
                     <div id="feUnitList" class="fe-unit-list"></div>
                     <div class="je-unit-search-wrap je-add-req-wrap" id="feAddUnitWrap">

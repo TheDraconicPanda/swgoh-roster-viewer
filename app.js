@@ -2762,12 +2762,10 @@ jeRewardSearch.addEventListener('input', () => {
 jeRewardSearch.addEventListener('blur', () => setTimeout(() => jeRewardDropdown.classList.remove('open'), 150));
 
 function jeRenderReqRows() {
+    const last = jeRequirements.length - 1;
     jeReqList.innerHTML = jeRequirements.map((req, i) => {
         const unit   = jeAllUnits().find(u => u.base_id === req.base_id);
         const img    = (unit && unit.image) ? `<img src="${unit.image}" loading="lazy" onerror="this.style.display='none'">` : '<div style="width:24px"></div>';
-        // A requirement is ship-only (stars only, no gear/relic) when the unit is
-        // explicitly a ship. Freshly-added characters start with gear/relic null but
-        // are NOT ships — check combat_type instead of inferring from null values.
         const isShip = unit ? (unit.combat_type === 2) : false;
         return `
         <div class="je-req-row" data-idx="${i}">
@@ -2785,6 +2783,10 @@ function jeRenderReqRows() {
                 <span class="je-req-label">Relic</span>
                 <input type="number" class="je-req-relic" min="1" max="9" value="${req.relic ?? ''}" placeholder="—" data-idx="${i}" ${isShip ? 'disabled' : ''}>
             </div>
+            <div class="je-req-move">
+                <button class="je-req-up" data-idx="${i}" title="Move up" ${i === 0 ? 'disabled' : ''}>▲</button>
+                <button class="je-req-dn" data-idx="${i}" title="Move down" ${i === last ? 'disabled' : ''}>▼</button>
+            </div>
             <button class="je-req-remove" data-idx="${i}" title="Remove">✕</button>
         </div>`;
     }).join('');
@@ -2792,6 +2794,22 @@ function jeRenderReqRows() {
     jeReqList.querySelectorAll('.je-req-remove').forEach(btn => {
         btn.addEventListener('click', () => {
             jeRequirements.splice(Number(btn.dataset.idx), 1);
+            jeRenderReqRows();
+        });
+    });
+    jeReqList.querySelectorAll('.je-req-up').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const i = Number(btn.dataset.idx);
+            if (i === 0) return;
+            [jeRequirements[i - 1], jeRequirements[i]] = [jeRequirements[i], jeRequirements[i - 1]];
+            jeRenderReqRows();
+        });
+    });
+    jeReqList.querySelectorAll('.je-req-dn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const i = Number(btn.dataset.idx);
+            if (i >= jeRequirements.length - 1) return;
+            [jeRequirements[i], jeRequirements[i + 1]] = [jeRequirements[i + 1], jeRequirements[i]];
             jeRenderReqRows();
         });
     });
@@ -3296,14 +3314,14 @@ function renderFarmCard(farm, index) {
             ? `<img class="tup-img" src="${escapeHtml(img)}" alt="" data-base-id="${escapeHtml(u.base_id)}" loading="lazy">`
             : `<div class="tup-img tup-img-placeholder">${escapeHtml((u.name || '?')[0])}</div>`;
 
-        const starHtml  = cur ? buildStarArcSquare(curStars) : '';
+        const starHtml  = buildStarArcSquare(curStars);
 
         return `
             <div class="farm-unit-slot" data-base-id="${escapeHtml(u.base_id)}">
                 <span class="farm-unit-table-name">${escapeHtml(u.name || u.base_id)}</span>
                 <div class="farm-unit-portrait-wrap">
                     <div class="${frameClass}">${imgEl}${starHtml}</div>
-                    ${(cur && tgtRelic > 0) ? `<span class="stat-xy relic${relicMet ? ' met' : ''}">R${curRelic}/${tgtRelic}</span>` : ''}
+                    ${tgtRelic > 0 ? `<span class="stat-xy relic${relicMet ? ' met' : ''}">R${curRelic}/${tgtRelic}</span>` : ''}
                 </div>
             </div>`;
     }).join('');
@@ -3780,16 +3798,144 @@ const feStatusEl      = document.getElementById('feStatus');
 
 let feEditingId = null;
 let feUnits = [];  // { base_id, name, image, target_stars, target_gear, target_relic }
+let feActiveTags = new Set();
+let feActiveJourneys = new Set();  // selected journey slugs (OR logic)
+
+function feGetCategories(base_id) {
+    const owned = allCharacters.find(c => c.data.base_id === base_id);
+    if (owned) return owned.data.categories || [];
+    return baseCharMap[base_id]?.categories || [];
+}
+
+function feRenderTagPanel() {
+    const grid = document.getElementById('feTagGrid');
+    const countEl = document.getElementById('feTagActiveCount');
+    if (!grid) return;
+
+    // Collect all tags from the full character pool (excluding ships)
+    const tagSet = new Set();
+    teAllChars().forEach(u => {
+        feGetCategories(u.base_id).forEach(t => tagSet.add(t));
+    });
+    const tags = Array.from(tagSet).sort();
+
+    grid.innerHTML = tags.map(tag => {
+        const active = feActiveTags.has(tag);
+        return `<button class="fe-tag-chip${active ? ' active' : ''}" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`;
+    }).join('');
+
+    grid.querySelectorAll('.fe-tag-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tag = btn.dataset.tag;
+            if (feActiveTags.has(tag)) feActiveTags.delete(tag);
+            else feActiveTags.add(tag);
+            feRenderTagPanel();
+            // Re-run search with updated tag filter
+            const results = feFilterUnits(feUnitSearch.value);
+            jeRenderDropdown(feUnitDropdown, results, feHandleUnitSelect);
+            if (results.length > 0) feUnitDropdown.classList.add('open');
+            else feUnitDropdown.classList.remove('open');
+        });
+    });
+
+    if (feActiveTags.size > 0) {
+        countEl.textContent = feActiveTags.size;
+        countEl.style.display = 'inline-flex';
+    } else {
+        countEl.style.display = 'none';
+    }
+}
+
+function feRenderJourneyPanel() {
+    const grid = document.getElementById('feJourneyGrid');
+    const countEl = document.getElementById('feJourneyActiveCount');
+    if (!grid) return;
+
+    // Only journeys with individual unit requirements
+    const journeys = (journeyData || []).filter(j => j.requirements && j.requirements.length > 0);
+
+    grid.innerHTML = journeys.map(j => {
+        const active = feActiveJourneys.has(j.slug);
+        const img = j.reward_image || baseCharMap[j.reward_base_id]?.image || SHIP_IMAGE_MAP[j.reward_base_id] || '';
+        const portrait = img ? `<img src="${escapeHtml(img)}" alt="" loading="lazy">` : '';
+        return `<button class="fe-journey-chip${active ? ' active' : ''}" data-slug="${escapeHtml(j.slug)}" title="${escapeHtml(j.name)}">
+            ${portrait}<span>${escapeHtml(j.reward_name)}</span>
+        </button>`;
+    }).join('');
+
+    grid.querySelectorAll('.fe-journey-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const slug = btn.dataset.slug;
+            if (feActiveJourneys.has(slug)) feActiveJourneys.delete(slug);
+            else feActiveJourneys.add(slug);
+            feRenderJourneyPanel();
+            const results = feFilterUnits(feUnitSearch.value);
+            jeRenderDropdown(feUnitDropdown, results, feHandleUnitSelect);
+            if (results.length > 0) feUnitDropdown.classList.add('open');
+            else feUnitDropdown.classList.remove('open');
+        });
+    });
+
+    if (feActiveJourneys.size > 0) {
+        countEl.textContent = feActiveJourneys.size;
+        countEl.style.display = 'inline-flex';
+    } else {
+        countEl.style.display = 'none';
+    }
+}
+
+function feFilterUnits(query) {
+    const q = (query || '').toLowerCase().trim();
+    const selectedIds = new Set(feUnits.map(u => u.base_id));
+    const all = teAllChars().filter(u => !selectedIds.has(u.base_id));
+    // Filter by active tags (AND logic — unit must have ALL selected tags)
+    const tagFiltered = feActiveTags.size === 0 ? all : all.filter(u => {
+        const cats = feGetCategories(u.base_id);
+        return [...feActiveTags].every(t => cats.includes(t));
+    });
+    // Filter by journey (OR logic — unit must appear in at least one selected journey)
+    const journeyFiltered = feActiveJourneys.size === 0 ? tagFiltered : tagFiltered.filter(u => {
+        const entries = requiredAtMap[u.base_id] || [];
+        return entries.some(e => feActiveJourneys.has(e.journeySlug));
+    });
+    const anyFilter = feActiveTags.size > 0 || feActiveJourneys.size > 0;
+    // Then filter by name query
+    if (!q || q.length < 1) {
+        return anyFilter ? journeyFiltered.slice(0, 30) : [];
+    }
+    return journeyFiltered.filter(u => u.name && u.name.toLowerCase().includes(q)).slice(0, 20);
+}
+
+function feHandleUnitSelect(base_id, name) {
+    const base = baseCharMap[base_id];
+    const ownedUnit = allCharacters.find(c => c.data.base_id === base_id);
+    const image = ownedUnit?.data.image || base?.image || null;
+    if (feUnits.length < 5 && !feUnits.find(u => u.base_id === base_id)) {
+        const reqEntries = requiredAtMap[base_id] || [];
+        const top = reqEntries[0] || null;
+        const defaultRelic = top && top.pri === 2 ? top.val : 7;
+        const defaultGear  = top && top.pri === 1 ? top.val : 13;
+        const defaultStars = top && top.pri === 0 ? top.val : 7;
+        feUnits.push({ base_id, name, image, target_stars: defaultStars, target_gear: defaultGear, target_relic: defaultRelic });
+        feRenderUnitRows();
+    }
+    feUnitSearch.value = '';
+    feUnitDropdown.classList.remove('open');
+}
 
 function feOpen(existingFarm) {
     feEditingId = existingFarm ? existingFarm.id : null;
     feFarmName.value = existingFarm ? existingFarm.name : '';
     feUnits = existingFarm ? existingFarm.units.map(u => ({ ...u })) : [];
+    feActiveTags.clear();
+    feActiveJourneys.clear();
     feStatusEl.textContent = '';
     feStatusEl.className = 'je-status';
     feDeleteBtn.style.display = existingFarm ? 'flex' : 'none';
     document.getElementById('farmEditorTitle').textContent = existingFarm ? 'Edit Farm' : 'Add Farm';
     feRenderUnitRows();
+    feRenderTagPanel();
+    feRenderJourneyPanel();
     farmEditorModal.style.display = 'flex';
 }
 
@@ -3797,6 +3943,8 @@ function feClose() {
     farmEditorModal.style.display = 'none';
     feEditingId = null;
     feUnits = [];
+    feActiveTags.clear();
+    feActiveJourneys.clear();
     feUnitSearch.value = '';
     feUnitDropdown.classList.remove('open');
 }
@@ -3827,29 +3975,21 @@ function feRenderUnitRows() {
         btn.addEventListener('click', () => {
             feUnits.splice(parseInt(btn.dataset.feIdx), 1);
             feRenderUnitRows();
+            // Refresh dropdown so removed unit reappears in results
+            const results = feFilterUnits(feUnitSearch.value);
+            jeRenderDropdown(feUnitDropdown, results, feHandleUnitSelect);
+            if (results.length > 0) feUnitDropdown.classList.add('open');
+            else feUnitDropdown.classList.remove('open');
         });
     });
     document.getElementById('feAddUnitWrap').style.display = feUnits.length >= 5 ? 'none' : 'block';
 }
 
 feUnitSearch?.addEventListener('input', () => {
-    const results = teFilterUnits(feUnitSearch.value);
-    jeRenderDropdown(feUnitDropdown, results, (base_id, name) => {
-        const base = baseCharMap[base_id];
-        const ownedUnit = allCharacters.find(c => c.data.base_id === base_id);
-        const image = ownedUnit?.data.image || base?.image || null;
-        if (feUnits.length < 5 && !feUnits.find(u => u.base_id === base_id)) {
-            // Default targets: use highest journey requirement for this unit, or fallback 7/13/7
-            const reqEntries = requiredAtMap[base_id] || [];
-            const top = reqEntries[0] || null;
-            const defaultRelic = top && top.pri === 2 ? top.val : 7;
-            const defaultGear  = top && top.pri === 1 ? top.val : 13;
-            const defaultStars = top && top.pri === 0 ? top.val : 7;
-            feUnits.push({ base_id, name, image, target_stars: defaultStars, target_gear: defaultGear, target_relic: defaultRelic });
-            feRenderUnitRows();
-        }
-        feUnitSearch.value = '';
-    });
+    const results = feFilterUnits(feUnitSearch.value);
+    jeRenderDropdown(feUnitDropdown, results, feHandleUnitSelect);
+    if (results.length > 0) feUnitDropdown.classList.add('open');
+    else feUnitDropdown.classList.remove('open');
 });
 
 async function feSaveFarm() {

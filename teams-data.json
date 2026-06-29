@@ -29,5 +29,36 @@
         "image": "https://game-assets.swgoh.gg/textures/tex.charui_firstorderofficer.png"
       }
     ]
+  },
+  {
+    "id": "cls",
+    "name": "CLS",
+    "units": [
+      {
+        "base_id": "COMMANDERLUKESKYWALKER",
+        "name": "Commander Luke Skywalker",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_lukebespin.png"
+      },
+      {
+        "base_id": "C3POLEGENDARY",
+        "name": "C-3PO",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_c3p0.png"
+      },
+      {
+        "base_id": "C3POCHEWBACCA",
+        "name": "Threepio & Chewie",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_c3po.png"
+      },
+      {
+        "base_id": "CHEWBACCALEGENDARY",
+        "name": "Chewbacca",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_chewbacca_ot.png"
+      },
+      {
+        "base_id": "HANSOLO",
+        "name": "Han Solo",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_han.png"
+      }
+    ]
   }
 ]

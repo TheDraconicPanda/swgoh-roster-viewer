@@ -1868,94 +1868,101 @@
     "reward_base_id": "LORDVADER",
     "requirements": [
       {
-        "name": "Padmé Amidala",
-        "base_id": "PADMEAMIDALA",
-        "stars": 7,
-        "gear": null,
-        "relic": 8
-      },
-      {
-        "name": "Tusken Raider",
-        "base_id": "TUSKENRAIDER",
-        "stars": 7,
-        "gear": null,
-        "relic": 5
-      },
-      {
         "name": "Hunter",
         "base_id": "BADBATCHHUNTER",
         "stars": 7,
-        "gear": null,
-        "relic": 5
-      },
-      {
-        "name": "Wrecker",
-        "base_id": "BADBATCHWRECKER",
-        "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 5
       },
       {
         "name": "Tech",
         "base_id": "BADBATCHTECH",
         "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 5
       },
       {
-        "name": "Count Dooku",
-        "base_id": "COUNTDOOKU",
+        "name": "Wrecker",
+        "base_id": "BADBATCHWRECKER",
         "stars": 7,
-        "gear": null,
-        "relic": 8
+        "gear": 13,
+        "relic": 5
       },
       {
-        "name": "Zam Wesell",
-        "base_id": "ZAMWESELL",
+        "name": "Echo",
+        "base_id": "BADBATCHECHO",
         "stars": 7,
-        "gear": null,
-        "relic": 7
-      },
-      {
-        "name": "Echo (ARC Trooper)",
-        "base_id": "CT210408",
-        "stars": 7,
-        "gear": null,
-        "relic": 7
-      },
-      {
-        "name": "Embo",
-        "base_id": "EMBO",
-        "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 5
       },
       {
         "name": "General Skywalker",
         "base_id": "GENERALSKYWALKER",
         "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 8
+      },
+      {
+        "name": "CT-21-0408 \"Echo\"",
+        "base_id": "CT210408",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
       },
       {
         "name": "ARC Trooper",
         "base_id": "ARCTROOPER501ST",
         "stars": 7,
-        "gear": null,
+        "gear": 13,
+        "relic": 8
+      },
+      {
+        "name": "Embo",
+        "base_id": "EMBO",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Zam Wesell",
+        "base_id": "ZAMWESELL",
+        "stars": 7,
+        "gear": 13,
+        "relic": 7
+      },
+      {
+        "name": "Tusken Raider",
+        "base_id": "TUSKENRAIDER",
+        "stars": 7,
+        "gear": 13,
+        "relic": 5
+      },
+      {
+        "name": "Padmé Amidala",
+        "base_id": "PADMEAMIDALA",
+        "stars": 7,
+        "gear": 13,
+        "relic": 8
+      },
+      {
+        "name": "Count Dooku",
+        "base_id": "COUNTDOOKU",
+        "stars": 7,
+        "gear": 13,
         "relic": 8
       },
       {
         "name": "Grand Moff Tarkin",
         "base_id": "GRANDMOFFTARKIN",
         "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 7
       },
       {
         "name": "Nute Gunray",
         "base_id": "NUTEGUNRAY",
         "stars": 7,
-        "gear": null,
+        "gear": 13,
         "relic": 7
       },
       {
