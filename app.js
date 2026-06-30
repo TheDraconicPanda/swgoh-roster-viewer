@@ -20,6 +20,7 @@ let baseCharMap = {};    // base_id -> full character definition (all game units
 // "Heal", with word boundaries so "Heal" doesn't match "Health".
 let keywordRegex = null;
 let keywordLabelToSlug = {};   // 'Gain Turn Meter' -> 'gain_turn_meter'
+const RUN_TOGETHER_FIX_RE = /([a-z])([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?:\s+[A-Z\-+])/g;
 
 // Status index — built from in-description callouts (the "Blight: ..." pattern
 // extracted via splitDescriptionForCallouts). Each entry has the canonical
@@ -1754,11 +1755,6 @@ function highlightKeywordsInDescription(escapedText) {
 //
 // Returns: { main: string, callouts: [{name, definition}] }  — both raw text.
 const STATUS_NAME_RE = /(?:^|[.!?)]\s*)([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?):\s+(?=[A-Z\-+])/g;
-
-// Pre-process: insert a period at run-together boundaries that *look like*
-// missing sentence ends followed by a status-name callout. Conservative
-// heuristic — only fires when the trailing word group ends in ":".
-const RUN_TOGETHER_FIX_RE = /([a-z])([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?:\s+[A-Z\-+])/g;
 
 function preProcessDescription(rawText) {
     return String(rawText || '').replace(RUN_TOGETHER_FIX_RE, '$1. $2');
