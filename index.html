@@ -10,25 +10,12 @@
     <div class="container">
 
         <div id="playerInfo" class="player-info">
-            <div class="player-info-left" id="playerInfoLeft" style="display: none;">
-                <h2 id="playerName"></h2>
+            <div class="player-info-left" id="playerInfoLeft">
+                <h2 id="playerName">SWGOH Roster</h2>
                 <div class="player-stats">
                     <span id="playerGP"></span>
                     <span id="playerGuild"></span>
                     <span id="playerLeague"></span>
-                </div>
-            </div>
-            <div class="player-info-right">
-                <div class="player-controls-top">
-                    <input type="text" id="allyCode" placeholder="Ally Code" value="881241752">
-                    <button id="fetchBtn">Fetch</button>
-                    <div id="cacheStatus" class="cache-status"></div>
-                </div>
-                <div class="player-controls-bottom">
-                    <button id="syncNewUnitsBtn" class="link-btn" type="button">⬇ Sync new units</button>
-                    <button id="refreshAbilitiesBtn" class="link-btn" type="button">↻ Refresh abilities</button>
-                    <button id="saveToGitHubBtn" class="link-btn link-btn-github" type="button" style="display:none;" title="Save roster snapshot + farms/teams/fleets to GitHub">☁ Save to GitHub</button>
-                    <button id="clearCacheBtn" class="link-btn link-btn-danger" type="button">✕ Clear cache</button>
                 </div>
             </div>
         </div>
@@ -74,15 +61,14 @@
             <button id="clearFilters" class="clear-btn">Clear Filters</button>
         </div>
 
-        <div class="tabs" id="tabs" style="display: none;">
-            <button class="tab-btn active" data-tab="farms">Current Farms</button>
-            <button class="tab-btn" data-tab="teams">Teams</button>
-            <button class="tab-btn" data-tab="fleet">Fleet</button>
+        <div class="tabs" id="tabs">
+            <button class="tab-btn active" data-tab="farms">Farms</button>
             <button class="tab-btn" data-tab="characters">Characters</button>
             <button class="tab-btn" data-tab="ships">Ships</button>
             <button class="tab-btn" data-tab="keywords">Keywords</button>
             <button class="tab-btn" data-tab="statuses">Status</button>
-            <button class="tab-btn" data-tab="journeyguide">Journey Guide</button>
+            <button class="tab-btn" data-tab="journeyguide">Journey</button>
+            <button class="tab-btn" data-tab="manage">Manage</button>
         </div>
 
         <div class="tab-content">
@@ -93,28 +79,6 @@
                     <button class="farms-add-btn" id="farmsAddBtn" title="Add new farm">+</button>
                 </div>
                 <div class="farms-list" id="farmsList">
-                    <p class="placeholder">Click "Fetch Roster" to load data</p>
-                </div>
-            </div>
-
-            <!-- Teams -->
-            <div id="teams" class="tab-pane">
-                <div class="teams-header">
-                    <div class="stats-summary" id="teamsStats"></div>
-                    <button class="teams-add-btn" id="teamsAddBtn" title="Add new team">+</button>
-                </div>
-                <div class="teams-list" id="teamsList">
-                    <p class="placeholder">Click "Fetch Roster" to load data</p>
-                </div>
-            </div>
-
-            <!-- Fleet -->
-            <div id="fleet" class="tab-pane">
-                <div class="fleet-header">
-                    <div class="stats-summary" id="fleetTabStats"></div>
-                    <button class="fleet-add-btn" id="fleetAddBtn" title="Add new fleet">+</button>
-                </div>
-                <div class="fleet-list" id="fleetList">
                     <p class="placeholder">Click "Fetch Roster" to load data</p>
                 </div>
             </div>
@@ -163,7 +127,36 @@
                     <button class="journey-add-btn" id="journeyAddBtn" title="Add new event">+</button>
                 </div>
                 <div class="journey-list" id="journeyList">
-                    <p class="placeholder">Click "Fetch Roster" to load journey data</p>
+                    <p class="placeholder">Loading journey data…</p>
+                </div>
+            </div>
+
+            <div id="manage" class="tab-pane">
+                <div class="manage-section">
+                    <h3 class="manage-section-title">Roster</h3>
+                    <div class="manage-row">
+                        <label for="allyCode">Ally Code</label>
+                        <input type="text" id="allyCode" placeholder="e.g. 881241752" value="881241752">
+                    </div>
+                    <div class="manage-row">
+                        <button id="fetchBtn" class="manage-btn">⬇ Fetch Roster</button>
+                        <div id="cacheStatus" class="cache-status"></div>
+                    </div>
+                </div>
+                <div class="manage-section">
+                    <h3 class="manage-section-title">Data</h3>
+                    <div class="manage-row">
+                        <button id="syncNewUnitsBtn" class="manage-btn" type="button">⬇ Sync new units</button>
+                        <p class="manage-hint">Add newly released characters/ships to the local database.</p>
+                    </div>
+                    <div class="manage-row">
+                        <button id="refreshAbilitiesBtn" class="manage-btn" type="button">↻ Refresh abilities</button>
+                        <p class="manage-hint">Update ability descriptions for buff/debuff lookup.</p>
+                    </div>
+                    <div class="manage-row">
+                        <button id="clearCacheBtn" class="manage-btn manage-btn-danger" type="button">✕ Clear cache</button>
+                        <p class="manage-hint">Clears all cached roster and game data from localStorage.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -392,106 +385,6 @@
         </div>
     </div>
 
-    <!-- Team editor modal -->
-    <div id="teamEditorModal" class="modal-overlay" style="display:none;">
-        <div class="team-editor-card">
-            <div class="je-header">
-                <span class="je-title" id="teamEditorTitle">Add Team</span>
-                <div class="je-header-actions">
-                    <button class="je-btn-save" id="teSave" title="Save team">💾</button>
-                    <button class="je-btn-delete" id="teDelete" title="Delete team" style="display:none;">🗑</button>
-                    <button class="je-btn-cancel" id="teCancel" title="Cancel">✕</button>
-                </div>
-            </div>
-            <div class="je-status" id="teStatus"></div>
-            <div class="je-body">
-                <div class="je-form">
-                    <div class="je-row">
-                        <label>Team Name</label>
-                        <input type="text" id="teTeamName" placeholder="e.g. 501st Clone Troopers">
-                    </div>
-                    <div class="je-section-label">Units (up to 5 · first unit is leader)</div>
-                    <div id="teUnitList" class="fe-unit-list"></div>
-                    <div class="je-unit-search-wrap je-add-req-wrap" id="teAddUnitWrap">
-                        <input type="text" id="teUnitSearch" placeholder="Search character to add…" autocomplete="off">
-                        <div class="je-unit-dropdown" id="teUnitDropdown"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Fleet editor modal -->
-    <div id="fleetEditorModal" class="modal-overlay" style="display:none;">
-        <div class="team-editor-card">
-            <div class="je-header">
-                <span class="je-title" id="fleetEditorTitle">Add Fleet</span>
-                <div class="je-header-actions">
-                    <button class="je-btn-save" id="fleSave" title="Save fleet">💾</button>
-                    <button class="je-btn-delete" id="fleDelete" title="Delete fleet" style="display:none;">🗑</button>
-                    <button class="je-btn-cancel" id="fleCancel" title="Cancel">✕</button>
-                </div>
-            </div>
-            <div class="je-status" id="fleStatus"></div>
-            <div class="je-body">
-                <div class="je-form">
-                    <div class="je-row">
-                        <label>Fleet Name</label>
-                        <input type="text" id="fleFleetName" placeholder="e.g. First Order Fleet">
-                    </div>
-                    <div class="je-section-label">Capital Ship</div>
-                    <div id="fleCapitalSlot" class="fe-unit-list"></div>
-                    <div class="je-unit-search-wrap je-add-req-wrap" id="fleCapitalSearchWrap">
-                        <input type="text" id="fleCapitalSearch" placeholder="Search capital ship…" autocomplete="off">
-                        <div class="je-unit-dropdown" id="fleCapitalDropdown"></div>
-                    </div>
-                    <div class="je-section-label">Deployed (up to 3)</div>
-                    <div id="fleDeployedList" class="fe-unit-list"></div>
-                    <div class="je-unit-search-wrap je-add-req-wrap" id="fleDeployedSearchWrap">
-                        <input type="text" id="fleDeployedSearch" placeholder="Search ship…" autocomplete="off">
-                        <div class="je-unit-dropdown" id="fleDeployedDropdown"></div>
-                    </div>
-                    <div class="je-section-label">Reinforcement (up to 4)</div>
-                    <div id="fleReinforcementList" class="fe-unit-list"></div>
-                    <div class="je-unit-search-wrap je-add-req-wrap" id="fleReinforcementSearchWrap">
-                        <input type="text" id="fleReinforcementSearch" placeholder="Search ship…" autocomplete="off">
-                        <div class="je-unit-dropdown" id="fleReinforcementDropdown"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="app.js?v=1781805000"></script>
-
-    <!-- GitHub token setup modal -->
-    <div id="githubTokenModal" class="modal-overlay" style="display:none;">
-        <div class="modal-card refresh-card">
-            <button class="modal-close" id="githubTokenModalClose">&times;</button>
-            <div class="refresh-header">
-                <div class="modal-title">Connect to GitHub</div>
-                <p class="refresh-sub">A Personal Access Token (PAT) is needed to write files to your repo. It is stored only in your browser's localStorage — never committed anywhere.</p>
-            </div>
-            <div class="je-form" style="padding:16px 24px 24px;">
-                <div class="je-row">
-                    <label>Repository (owner/repo)</label>
-                    <input type="text" id="ghRepo" placeholder="e.g. I853368/swgoh-roster-viewer" style="width:100%;box-sizing:border-box;">
-                </div>
-                <div class="je-row" style="margin-top:12px;">
-                    <label>Personal Access Token</label>
-                    <input type="password" id="ghToken" placeholder="ghp_…" style="width:100%;box-sizing:border-box;">
-                    <p class="refresh-step-hint" style="margin-top:6px;">Create one at <strong>github.com → Settings → Developer settings → Tokens (classic)</strong> with the <code>repo</code> scope. For github.tools.sap use your enterprise instance settings.</p>
-                </div>
-                <div id="ghTokenStatus" class="je-status" style="margin-top:8px;"></div>
-                <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
-                    <button id="ghTokenSaveBtn" class="refresh-action-btn">Save &amp; push now</button>
-                    <button id="ghTokenCancelBtn" class="link-btn">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- GitHub save progress toast -->
-    <div id="ghToast" style="display:none;position:fixed;bottom:24px;right:24px;background:#2b8a3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 2px 12px rgba(0,0,0,0.3);"></div>
 </body>
 </html>

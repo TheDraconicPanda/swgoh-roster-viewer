@@ -39,8 +39,6 @@ let charViewMode = 'all';  // 'all' | 'factions'
 let charSortMode = 'alpha-asc';  // 'alpha-asc' | 'alpha-desc' | 'gp-desc' | 'gp-asc'
 
 // Teams / Fleet / Farms data
-let teamsData = [];
-let fleetData = [];
 let farmsData = [];
 let relicMaterials = [];  // loaded from relic-materials-data.json
 
@@ -57,7 +55,6 @@ const rarityFilter = document.getElementById('rarityFilter');
 const gearFilter = document.getElementById('gearFilter');
 const relicFilter = document.getElementById('relicFilter');
 const clearFiltersBtn = document.getElementById('clearFilters');
-const cacheStatus = document.getElementById('cacheStatus');
 const unitModal = document.getElementById('unitModal');
 const modalContent = document.getElementById('modalContent');
 
@@ -72,6 +69,8 @@ const savedAllyCode = localStorage.getItem('swgoh_saved_ally_code');
 if (savedAllyCode) {
     allyCodeInput.value = savedAllyCode;
     fetchRoster();
+} else {
+    switchTab('manage');
 }
 
 // Show cache status on load
@@ -153,7 +152,7 @@ function switchTab(tabName) {
         gearFilter.style.display = 'none';
         relicFilter.style.display = 'none';
         if (tagFilterWrap) tagFilterWrap.style.display = 'none';
-    } else { // farms, teams, fleet, keywords, statuses, journeyguide
+    } else { // farms, keywords, statuses, journeyguide, manage
         rarityFilter.style.display = 'none';
         gearFilter.style.display = 'none';
         relicFilter.style.display = 'none';
@@ -248,9 +247,7 @@ async function fetchRoster() {
     // Show loading
     loadingDiv.style.display = 'block';
     errorDiv.style.display = 'none';
-    playerInfoDiv.style.display = 'none';
     filterSection.style.display = 'none';
-    tabsDiv.style.display = 'none';
 
     try {
         // Fetch player data first
@@ -406,13 +403,12 @@ async function fetchRoster() {
         // Build required_at lookup: highest journey requirement per base_id.
         buildRequiredAtMap(journeyData);
 
-        // Load teams / fleet / farms data
+        // Load farms data from localStorage
         try {
-            teamsData = await loadCachedDataset({ cacheKey: 'swgoh_teams_data', apiUrl: null, localFile: 'teams-data.json', label: 'Teams', emptyValue: [] });
-            fleetData = await loadCachedDataset({ cacheKey: 'swgoh_fleet_data', apiUrl: null, localFile: 'fleets-data.json', label: 'Fleet', emptyValue: [] });
-            farmsData = await loadCachedDataset({ cacheKey: 'swgoh_farms_data', apiUrl: null, localFile: 'farms-data.json', label: 'Farms', emptyValue: [] });
+            const stored = localStorage.getItem('swgoh_farms_data');
+            farmsData = stored ? JSON.parse(stored) : await loadCachedDataset({ cacheKey: 'swgoh_farms_data', apiUrl: null, localFile: 'farms-data.json', label: 'Farms', emptyValue: [] });
         } catch (e) {
-            console.error('Failed to load teams/fleet/farms:', e);
+            console.error('Failed to load farms:', e);
         }
 
         // Load relic materials table (static reference data, never cached)
@@ -440,17 +436,12 @@ async function fetchRoster() {
         displayKeywords(Object.entries(keywordsIndex).sort((a, b) => a[1].label.localeCompare(b[1].label)));
         displayStatuses(Object.entries(statusIndex));
         displayJourneyGuide(journeyData);
-        displayTeams(teamsData);
-        displayFleet(fleetData);
         displayFarms(farmsData);
 
         // Show UI elements
         loadingDiv.style.display = 'none';
-        playerInfoDiv.style.display = 'block';
         filterSection.style.display = 'flex';
-        tabsDiv.style.display = 'flex';
-        const _saveBtn = document.getElementById('saveToGitHubBtn');
-        if (_saveBtn) _saveBtn.style.display = 'inline-block';
+        switchTab('farms');
 
     } catch (error) {
         console.error('Error fetching roster:', error);
@@ -2949,13 +2940,7 @@ async function jeSaveEvent() {
     jeStatus.textContent = 'Saving…';
     jeStatus.className = 'je-status';
     try {
-        const res = await fetch('/save-journey', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
+        saveJourneyData(data);
         journeyData = data;
         jeStatus.textContent = 'Saved!';
         jeStatus.className = 'je-status ok';
@@ -2975,13 +2960,7 @@ async function jeDeleteEvent() {
     const data = (journeyData || []).filter(e => e.slug !== jeEditingSlug);
     jeStatus.textContent = 'Deleting…';
     try {
-        const res = await fetch('/save-journey', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Delete failed');
+        saveJourneyData(data);
         journeyData = data;
         displayJourneyGuide(journeyData);
         jeClose();
@@ -3021,7 +3000,7 @@ document.addEventListener('click', e => {
 });
 
 // ===================================================
-// TEAMS TAB
+// SHARED UNIT HELPERS (used by farm editor)
 // ===================================================
 
 function teAllChars() {
@@ -3035,31 +3014,6 @@ function teAllChars() {
         seen.add(u.base_id);
         return true;
     }).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-}
-
-function teFilterUnits(query) {
-    if (!query || query.length < 2) return [];
-    const q = query.toLowerCase();
-    return teAllChars().filter(u => u.name && u.name.toLowerCase().includes(q)).slice(0, 20);
-}
-
-function teAllShips() {
-    const owned = allShips.map(s => ({ name: s.data.name, base_id: s.data.base_id, image: SHIP_IMAGE_MAP[s.data.base_id] || null, is_capital: false }));
-    const base  = Object.values(baseCharMap)
-        .filter(u => u.combat_type === 2)
-        .map(u => ({ name: u.name, base_id: u.base_id, image: SHIP_IMAGE_MAP[u.base_id] || u.image || null, is_capital: false }));
-    const seen = new Set();
-    return [...owned, ...base].filter(u => {
-        if (!u.base_id || seen.has(u.base_id)) return false;
-        seen.add(u.base_id);
-        return true;
-    }).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-}
-
-function teFilterShips(query) {
-    if (!query || query.length < 2) return [];
-    const q = query.toLowerCase();
-    return teAllShips().filter(u => u.name && u.name.toLowerCase().includes(q)).slice(0, 20);
 }
 
 function slugify(str) {
@@ -3096,148 +3050,6 @@ function buildStarArcSquare(count) {
     return STAR_ARC_SQUARE.slice(0, count).map(([x, y]) =>
         `<span class="tup-star tup-star-filled tup-star-sq" style="left:${x}px;top:${y}px;">★</span>`
     ).join('');
-}
-
-// --- renderTeamCard ---
-// Star arc positions: half-moon at bottom of portrait frame.
-// deg=0 → bottom center; positive → right; negative → left
-const STAR_ARC = [
-    { deg: 0   },  // 1 star  — bottom center
-    { deg: 25  },  // 2 stars — right of 1
-    { deg: -25 },  // 3 stars — left of 1
-    { deg: 50  },  // 4 stars — right of 2
-    { deg: -50 },  // 5 stars — left of 3
-    { deg: 75  },  // 6 stars — upper right
-    { deg: -75 },  // 7 stars — upper left
-];
-
-function buildStarArc(count) {
-    if (!count) return '';
-    const R = 30; // px from center; frame is 60×60 so this puts stars on the edge
-    const cx = 30, cy = 30;
-    return STAR_ARC.slice(0, count).map((s, idx) => {
-        const rad = (s.deg + 90) * Math.PI / 180; // +90: 0deg points down
-        const x = Math.round(cx + R * Math.cos(rad));
-        const y = Math.round(cy + R * Math.sin(rad));
-        return `<span class="tup-star tup-star-filled" style="left:${x}px;top:${y}px;">★</span>`;
-    }).join('');
-}
-
-function gearBorderClass(gear) {
-    if (gear >= 13) return 'tup-gear-13';
-    if (gear >= 12) return 'tup-gear-12';
-    if (gear >= 7)  return 'tup-gear-7';
-    return 'tup-gear-low';
-}
-
-function renderTeamCard(team, index) {
-    const unitSlots = (team.units || []).map((u, i) => {
-        const cur = lookupCurrentStats(u.base_id);
-        const gear  = cur ? cur.gear  : 0;
-        const stars = cur ? cur.stars : 0;
-        const relic = cur ? cur.relic : 0;
-        const align = cur ? cur.alignment : 'Neutral';
-
-        const borderClass = gearBorderClass(gear);
-        const alignClass  = align === 'Dark Side' ? 'tup-align-dark' : align === 'Light Side' ? 'tup-align-light' : 'tup-align-neutral';
-        const frameClass  = `tup-frame ${borderClass} ${gear === 13 ? alignClass : ''}`;
-
-        const imgEl = u.image
-            ? `<img class="tup-img" src="${escapeHtml(u.image)}" alt="" data-base-id="${escapeHtml(u.base_id)}" loading="lazy">`
-            : `<div class="tup-img tup-img-placeholder">${escapeHtml((u.name || '?')[0])}</div>`;
-
-        const starHtml = cur ? buildStarArcSquare(stars) : '';
-
-        return `
-            <div class="team-unit-slot">
-                <span class="team-unit-name">${escapeHtml(u.name || u.base_id)}</span>
-                <div class="team-unit-portrait-wrap">
-                    <div class="${frameClass}">
-                        ${imgEl}
-                        ${starHtml}
-                    </div>
-                    ${(cur && relic > 0) ? `<span class="stat-xy relic met">R${relic}</span>` : ''}
-                </div>
-            </div>`;
-    }).join('');
-
-    return `
-        <div class="team-card" data-team-id="${escapeHtml(team.id)}" draggable="true">
-            <div class="team-card-header">
-                <span class="team-card-priority">#${(index + 1)}</span>
-                <span class="team-card-name">${escapeHtml(team.name)}</span>
-                <button class="team-card-edit-btn" data-edit-team-id="${escapeHtml(team.id)}" title="Edit team">✏</button>
-            </div>
-            <div class="team-unit-strip">${unitSlots}</div>
-        </div>`;
-}
-
-function displayTeams(teams) {
-    const list = document.getElementById('teamsList');
-    const stats = document.getElementById('teamsStats');
-    if (!list) return;
-    if (!teams || teams.length === 0) {
-        list.innerHTML = '<p class="placeholder">No teams yet — click + to add one</p>';
-        if (stats) stats.innerHTML = '';
-        return;
-    }
-    if (stats) stats.innerHTML = `<strong>Teams:</strong> ${teams.length}`;
-    list.innerHTML = teams.map((t, i) => renderTeamCard(t, i)).join('');
-    enableDragReorder(list, '.team-card', 'data-team-id', teamsData, 'id', '/save-teams', () => displayTeams(teamsData));
-}
-
-// --- renderFleetCard ---
-function renderShipSlot(u) {
-    const portrait = u.image
-        ? `<img class="team-unit-portrait" src="${escapeHtml(u.image)}" alt="" loading="lazy">`
-        : `<div class="team-unit-portrait-placeholder">${escapeHtml((u.name || '?')[0])}</div>`;
-    return `
-        <div class="team-unit-slot">
-            ${portrait}
-            <span class="team-unit-name">${escapeHtml(u.name || u.base_id)}</span>
-        </div>`;
-}
-
-function renderFleetCard(fleet, index) {
-    const capitalHtml = fleet.capital
-        ? renderShipSlot(fleet.capital)
-        : `<div class="team-unit-portrait-placeholder">?</div>`;
-    const deployedHtml = (fleet.deployed || []).map(renderShipSlot).join('');
-    const reinforcementHtml = (fleet.reinforcement || []).map(renderShipSlot).join('');
-
-    return `
-        <div class="fleet-card" data-fleet-id="${escapeHtml(fleet.id)}" draggable="true">
-            <div class="fleet-card-header">
-                <span class="team-card-name">${escapeHtml(fleet.name)}</span>
-                <button class="fleet-card-edit-btn" data-edit-fleet-id="${escapeHtml(fleet.id)}" title="Edit fleet">✏</button>
-            </div>
-            <div class="fleet-capital-section">
-                <div class="fleet-capital-label">Capital Ship</div>
-                <div class="fleet-unit-strip">${capitalHtml}</div>
-            </div>
-            <div class="fleet-section">
-                <div class="fleet-section-label">Deployed (${(fleet.deployed||[]).length}/3)</div>
-                <div class="fleet-unit-strip">${deployedHtml}</div>
-            </div>
-            <div class="fleet-section">
-                <div class="fleet-section-label">Reinforcement (${(fleet.reinforcement||[]).length}/4)</div>
-                <div class="fleet-unit-strip">${reinforcementHtml}</div>
-            </div>
-        </div>`;
-}
-
-function displayFleet(fleets) {
-    const list = document.getElementById('fleetList');
-    const stats = document.getElementById('fleetTabStats');
-    if (!list) return;
-    if (!fleets || fleets.length === 0) {
-        list.innerHTML = '<p class="placeholder">No fleets yet — click + to add one</p>';
-        if (stats) stats.innerHTML = '';
-        return;
-    }
-    if (stats) stats.innerHTML = `<strong>Fleets:</strong> ${fleets.length}`;
-    list.innerHTML = fleets.map((f, i) => renderFleetCard(f, i)).join('');
-    enableDragReorder(list, '.fleet-card', 'data-fleet-id', fleetData, 'id', '/save-fleets', () => displayFleet(fleetData));
 }
 
 // ===================================================
@@ -3359,11 +3171,18 @@ function renderFarmCard(farm, index) {
                 <span class="farm-card-name">${escapeHtml(farm.name)}</span>
                 <div class="farm-card-actions">
                     <button class="farm-card-edit-btn" data-edit-farm-id="${escapeHtml(farm.id)}" title="Edit farm">✏</button>
-                    <button class="farm-card-promote-btn" data-promote-farm-id="${escapeHtml(farm.id)}" title="Promote to team">→ Team</button>
                 </div>
             </div>
             <div class="farm-unit-strip">${unitSlots}${summaryHtml}</div>
         </div>`;
+}
+
+function saveFarms(data) {
+    localStorage.setItem('swgoh_farms_data', JSON.stringify(data));
+}
+
+function saveJourneyData(data) {
+    localStorage.setItem('swgoh_journey_data_v4', JSON.stringify(data));
 }
 
 function displayFarms(farms) {
@@ -3377,32 +3196,32 @@ function displayFarms(farms) {
     }
     if (stats) stats.innerHTML = `<strong>Active Farms:</strong> ${farms.length}`;
     list.innerHTML = farms.map((f, i) => renderFarmCard(f, i)).join('');
-    enableDragReorder(list, '.farm-card', 'data-farm-id', farmsData, 'id', '/save-farms', () => displayFarms(farmsData));
+    enableDragReorder(list, '.farm-card', 'data-farm-id', farmsData, 'id', saveFarms, () => displayFarms(farmsData));
 }
 
 // ===================================================
 // DRAG-TO-REORDER (generic)
 // ===================================================
 
-function enableDragReorder(container, cardSelector, idAttr, dataArr, idKey, endpoint, onRedraw) {
+function enableDragReorder(container, cardSelector, idAttr, dataArr, idKey, onSave, onRedraw) {
     let draggedId = null;
     container.querySelectorAll(cardSelector).forEach(card => {
         card.addEventListener('dragstart', e => {
             draggedId = card.getAttribute(idAttr);
             e.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => card.classList.add('team-card-dragging', 'farm-card-dragging', 'fleet-card-dragging'), 0);
+            setTimeout(() => card.classList.add('farm-card-dragging'), 0);
         });
         card.addEventListener('dragend', () => {
-            card.classList.remove('team-card-dragging', 'farm-card-dragging', 'fleet-card-dragging');
-            container.querySelectorAll(cardSelector).forEach(c => c.classList.remove('team-card-drag-over', 'farm-card-drag-over', 'fleet-card-drag-over'));
+            card.classList.remove('farm-card-dragging');
+            container.querySelectorAll(cardSelector).forEach(c => c.classList.remove('farm-card-drag-over'));
         });
         card.addEventListener('dragover', e => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
             const targetId = card.getAttribute(idAttr);
             if (targetId !== draggedId) {
-                container.querySelectorAll(cardSelector).forEach(c => c.classList.remove('team-card-drag-over', 'farm-card-drag-over', 'fleet-card-drag-over'));
-                card.classList.add('team-card-drag-over', 'farm-card-drag-over', 'fleet-card-drag-over');
+                container.querySelectorAll(cardSelector).forEach(c => c.classList.remove('farm-card-drag-over'));
+                card.classList.add('farm-card-drag-over');
             }
         });
         card.addEventListener('drop', e => {
@@ -3414,12 +3233,7 @@ function enableDragReorder(container, cardSelector, idAttr, dataArr, idKey, endp
             if (fromIdx === -1 || toIdx === -1) return;
             const [item] = dataArr.splice(fromIdx, 1);
             dataArr.splice(toIdx, 0, item);
-            // Save immediately
-            fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataArr),
-            }).catch(err => console.error('Reorder save failed:', err));
+            onSave(dataArr);
             onRedraw();
         });
     });
@@ -3429,7 +3243,7 @@ function enableDragReorder(container, cardSelector, idAttr, dataArr, idKey, endp
 document.addEventListener('click', e => {
     const row = e.target.closest('.farm-unit-slot');
     if (!row) return;
-    if (e.target.closest('.farm-card-edit-btn') || e.target.closest('.farm-card-promote-btn')) return;
+    if (e.target.closest('.farm-card-edit-btn')) return;
     const baseId = row.dataset.baseId;
     if (!baseId) return;
     const unit = allCharacters.find(c => c.data.base_id === baseId);
@@ -3446,24 +3260,6 @@ document.addEventListener('click', e => {
     if (unit) openUnitDetail(unit, 'character');
 });
 
-// Team card edit button
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.team-card-edit-btn');
-    if (!btn) return;
-    const id = btn.dataset.editTeamId;
-    const team = teamsData.find(t => t.id === id);
-    if (team) teOpen(team);
-});
-
-// Fleet card edit button
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.fleet-card-edit-btn');
-    if (!btn) return;
-    const id = btn.dataset.editFleetId;
-    const fleet = fleetData.find(f => f.id === id);
-    if (fleet) fleOpen(fleet);
-});
-
 // Farm card edit button
 document.addEventListener('click', e => {
     const btn = e.target.closest('.farm-card-edit-btn');
@@ -3472,315 +3268,6 @@ document.addEventListener('click', e => {
     const farm = farmsData.find(f => f.id === id);
     if (farm) feOpen(farm);
 });
-
-// Farm promote → Team
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.farm-card-promote-btn');
-    if (!btn) return;
-    const id = btn.dataset.promoteFarmId;
-    const farm = farmsData.find(f => f.id === id);
-    if (!farm) return;
-    if (!confirm(`Promote "${farm.name}" to a Team? The farm will be removed.`)) return;
-    promoteFarmToTeam(farm);
-});
-
-async function promoteFarmToTeam(farm) {
-    // Build team from farm (strip target_* fields)
-    const newTeam = {
-        id: farm.id,
-        name: farm.name,
-        units: (farm.units || []).map(u => ({ base_id: u.base_id, name: u.name, image: u.image })),
-    };
-    // Avoid id collision
-    if (teamsData.find(t => t.id === newTeam.id)) newTeam.id = newTeam.id + '_' + Date.now();
-
-    const newTeams = [...teamsData, newTeam];
-    const newFarms = farmsData.filter(f => f.id !== farm.id);
-
-    try {
-        await Promise.all([
-            fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newTeams) }),
-            fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newFarms) }),
-        ]);
-        teamsData = newTeams;
-        farmsData = newFarms;
-        displayTeams(teamsData);
-        displayFarms(farmsData);
-    } catch (err) {
-        alert('Failed to promote farm: ' + err.message);
-    }
-}
-
-// ===================================================
-// TEAM EDITOR MODAL
-// ===================================================
-
-const teamEditorModal = document.getElementById('teamEditorModal');
-const teTeamName      = document.getElementById('teTeamName');
-const teUnitList      = document.getElementById('teUnitList');
-const teUnitSearch    = document.getElementById('teUnitSearch');
-const teUnitDropdown  = document.getElementById('teUnitDropdown');
-const teSaveBtn       = document.getElementById('teSave');
-const teDeleteBtn     = document.getElementById('teDelete');
-const teCancelBtn     = document.getElementById('teCancel');
-const teStatusEl      = document.getElementById('teStatus');
-
-let teEditingId = null;
-let teUnits = [];
-
-function teOpen(existingTeam) {
-    teEditingId = existingTeam ? existingTeam.id : null;
-    teTeamName.value = existingTeam ? existingTeam.name : '';
-    teUnits = existingTeam ? existingTeam.units.map(u => ({ ...u })) : [];
-    teStatusEl.textContent = '';
-    teStatusEl.className = 'je-status';
-    teDeleteBtn.style.display = existingTeam ? 'flex' : 'none';
-    document.getElementById('teamEditorTitle').textContent = existingTeam ? 'Edit Team' : 'Add Team';
-    teRenderUnitRows();
-    teamEditorModal.style.display = 'flex';
-}
-
-function teClose() {
-    teamEditorModal.style.display = 'none';
-    teEditingId = null;
-    teUnits = [];
-    teUnitSearch.value = '';
-    teUnitDropdown.classList.remove('open');
-}
-
-function teRenderUnitRows() {
-    teUnitList.innerHTML = teUnits.map((u, i) => `
-        <div class="fe-unit-row">
-            ${u.image ? `<img src="${escapeHtml(u.image)}" alt="" loading="lazy">` : '<div style="width:26px;height:26px;background:#333;border-radius:4px;"></div>'}
-            ${i === 0 ? '<span class="fe-unit-leader-tag">L</span>' : '<span></span>'}
-            <span class="fe-unit-name">${escapeHtml(u.name || u.base_id)}</span>
-            <button class="fe-unit-remove" data-te-idx="${i}">✕</button>
-        </div>`).join('');
-    teUnitList.querySelectorAll('.fe-unit-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-            teUnits.splice(parseInt(btn.dataset.teIdx), 1);
-            teRenderUnitRows();
-        });
-    });
-    document.getElementById('teAddUnitWrap').style.display = teUnits.length >= 5 ? 'none' : 'block';
-}
-
-teUnitSearch?.addEventListener('input', () => {
-    const results = teFilterUnits(teUnitSearch.value);
-    jeRenderDropdown(teUnitDropdown, results, (base_id, name) => {
-        const base = baseCharMap[base_id];
-        const ownedUnit = allCharacters.find(c => c.data.base_id === base_id);
-        const image = ownedUnit?.data.image || base?.image || null;
-        if (teUnits.length < 5 && !teUnits.find(u => u.base_id === base_id)) {
-            teUnits.push({ base_id, name, image });
-            teRenderUnitRows();
-        }
-        teUnitSearch.value = '';
-    });
-});
-
-async function teSaveTeam() {
-    const name = teTeamName.value.trim();
-    if (!name) { teStatusEl.textContent = 'Team name is required.'; teStatusEl.className = 'je-status err'; return; }
-    if (teUnits.length === 0) { teStatusEl.textContent = 'Add at least one unit.'; teStatusEl.className = 'je-status err'; return; }
-
-    const id = teEditingId || slugify(name) || ('team_' + Date.now());
-    const newTeam = { id, name, units: teUnits };
-    let data = teamsData.filter(t => t.id !== teEditingId);
-    if (teEditingId) {
-        const idx = teamsData.findIndex(t => t.id === teEditingId);
-        data.splice(idx, 0, newTeam);
-    } else {
-        data.push(newTeam);
-    }
-
-    teStatusEl.textContent = 'Saving…';
-    teStatusEl.className = 'je-status';
-    try {
-        const res = await fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
-        teamsData = data;
-        displayTeams(teamsData);
-        teStatusEl.textContent = 'Saved!';
-        teStatusEl.className = 'je-status ok';
-        setTimeout(teClose, 800);
-    } catch (err) {
-        teStatusEl.textContent = 'Error: ' + err.message;
-        teStatusEl.className = 'je-status err';
-    }
-}
-
-async function teDeleteTeam() {
-    if (!teEditingId) return;
-    if (!confirm(`Delete "${teTeamName.value.trim()}"?`)) return;
-    const data = teamsData.filter(t => t.id !== teEditingId);
-    try {
-        const res = await fetch('/save-teams', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
-        teamsData = data;
-        displayTeams(teamsData);
-        teClose();
-    } catch (err) {
-        teStatusEl.textContent = 'Error: ' + err.message;
-        teStatusEl.className = 'je-status err';
-    }
-}
-
-teSaveBtn?.addEventListener('click', teSaveTeam);
-teDeleteBtn?.addEventListener('click', teDeleteTeam);
-teCancelBtn?.addEventListener('click', teClose);
-teamEditorModal?.addEventListener('click', e => { if (e.target === teamEditorModal) teClose(); });
-document.getElementById('teamsAddBtn')?.addEventListener('click', () => teOpen(null));
-
-// ===================================================
-// FLEET EDITOR MODAL
-// ===================================================
-
-const fleetEditorModal   = document.getElementById('fleetEditorModal');
-const fleFleetName       = document.getElementById('fleFleetName');
-const fleCapitalSlot     = document.getElementById('fleCapitalSlot');
-const fleCapitalSearch   = document.getElementById('fleCapitalSearch');
-const fleCapitalDropdown = document.getElementById('fleCapitalDropdown');
-const fleDeployedList    = document.getElementById('fleDeployedList');
-const fleDeployedSearch  = document.getElementById('fleDeployedSearch');
-const fleDeployedDropdown= document.getElementById('fleDeployedDropdown');
-const fleReinList        = document.getElementById('fleReinforcementList');
-const fleReinSearch      = document.getElementById('fleReinforcementSearch');
-const fleReinDropdown    = document.getElementById('fleReinforcementDropdown');
-const fleSaveBtn         = document.getElementById('fleSave');
-const fleDeleteBtn       = document.getElementById('fleDelete');
-const fleCancelBtn       = document.getElementById('fleCancel');
-const fleStatusEl        = document.getElementById('fleStatus');
-
-let fleEditingId = null;
-let fleCapital = null;
-let fleDeployed = [];
-let fleReinforcement = [];
-
-function fleOpen(existingFleet) {
-    fleEditingId = existingFleet ? existingFleet.id : null;
-    fleFleetName.value = existingFleet ? existingFleet.name : '';
-    fleCapital       = existingFleet?.capital       ? { ...existingFleet.capital } : null;
-    fleDeployed      = existingFleet?.deployed      ? existingFleet.deployed.map(u => ({ ...u })) : [];
-    fleReinforcement = existingFleet?.reinforcement ? existingFleet.reinforcement.map(u => ({ ...u })) : [];
-    fleStatusEl.textContent = '';
-    fleStatusEl.className = 'je-status';
-    fleDeleteBtn.style.display = existingFleet ? 'flex' : 'none';
-    document.getElementById('fleetEditorTitle').textContent = existingFleet ? 'Edit Fleet' : 'Add Fleet';
-    fleRenderAll();
-    fleetEditorModal.style.display = 'flex';
-}
-
-function fleClose() {
-    fleetEditorModal.style.display = 'none';
-    fleEditingId = null; fleCapital = null; fleDeployed = []; fleReinforcement = [];
-    [fleCapitalSearch, fleDeployedSearch, fleReinSearch].forEach(el => { if (el) el.value = ''; });
-    [fleCapitalDropdown, fleDeployedDropdown, fleReinDropdown].forEach(el => el?.classList.remove('open'));
-}
-
-function fleRenderSlots(container, arr, maxLen, removePrefix) {
-    if (!container) return;
-    container.innerHTML = arr.map((u, i) => `
-        <div class="fe-unit-row">
-            ${u.image ? `<img src="${escapeHtml(u.image)}" alt="" loading="lazy">` : '<div style="width:26px;height:26px;background:#333;border-radius:4px;"></div>'}
-            <span class="fe-unit-name">${escapeHtml(u.name || u.base_id)}</span>
-            <button class="fe-unit-remove" data-fle-prefix="${removePrefix}" data-fle-idx="${i}">✕</button>
-        </div>`).join('');
-    container.querySelectorAll('.fe-unit-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const idx = parseInt(btn.dataset.fleIdx);
-            if (btn.dataset.flePrefix === 'capital') { fleCapital = null; }
-            else if (btn.dataset.flePrefix === 'deployed') { fleDeployed.splice(idx, 1); }
-            else if (btn.dataset.flePrefix === 'reinforcement') { fleReinforcement.splice(idx, 1); }
-            fleRenderAll();
-        });
-    });
-}
-
-function fleRenderAll() {
-    fleRenderSlots(fleCapitalSlot, fleCapital ? [fleCapital] : [], 1, 'capital');
-    fleRenderSlots(fleDeployedList, fleDeployed, 3, 'deployed');
-    fleRenderSlots(fleReinList, fleReinforcement, 4, 'reinforcement');
-    if (fleCapitalSearch) document.getElementById('fleCapitalSearchWrap').style.display = fleCapital ? 'none' : 'block';
-    if (fleDeployedSearch) document.getElementById('fleDeployedSearchWrap').style.display = fleDeployed.length >= 3 ? 'none' : 'block';
-    if (fleReinSearch) document.getElementById('fleReinforcementSearchWrap').style.display = fleReinforcement.length >= 4 ? 'none' : 'block';
-}
-
-function fleAddShip(base_id, name, slot) {
-    const img = SHIP_IMAGE_MAP[base_id] || baseCharMap[base_id]?.image || null;
-    const entry = { base_id, name, image: img };
-    if (slot === 'capital') { fleCapital = entry; }
-    else if (slot === 'deployed' && fleDeployed.length < 3) fleDeployed.push(entry);
-    else if (slot === 'reinforcement' && fleReinforcement.length < 4) fleReinforcement.push(entry);
-    fleRenderAll();
-}
-
-fleCapitalSearch?.addEventListener('input', () => {
-    const results = teFilterShips(fleCapitalSearch.value);
-    jeRenderDropdown(fleCapitalDropdown, results, (id, name) => { fleAddShip(id, name, 'capital'); fleCapitalSearch.value = ''; });
-});
-fleDeployedSearch?.addEventListener('input', () => {
-    const results = teFilterShips(fleDeployedSearch.value);
-    jeRenderDropdown(fleDeployedDropdown, results, (id, name) => { fleAddShip(id, name, 'deployed'); fleDeployedSearch.value = ''; });
-});
-fleReinSearch?.addEventListener('input', () => {
-    const results = teFilterShips(fleReinSearch.value);
-    jeRenderDropdown(fleReinDropdown, results, (id, name) => { fleAddShip(id, name, 'reinforcement'); fleReinSearch.value = ''; });
-});
-
-async function fleSaveFleet() {
-    const name = fleFleetName.value.trim();
-    if (!name) { fleStatusEl.textContent = 'Fleet name required.'; fleStatusEl.className = 'je-status err'; return; }
-    const id = fleEditingId || slugify(name) || ('fleet_' + Date.now());
-    const newFleet = { id, name, capital: fleCapital, deployed: fleDeployed, reinforcement: fleReinforcement };
-    let data = fleetData.filter(f => f.id !== fleEditingId);
-    if (fleEditingId) {
-        const idx = fleetData.findIndex(f => f.id === fleEditingId);
-        data.splice(Math.max(idx, 0), 0, newFleet);
-    } else {
-        data.push(newFleet);
-    }
-    fleStatusEl.textContent = 'Saving…';
-    fleStatusEl.className = 'je-status';
-    try {
-        const res = await fetch('/save-fleets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
-        fleetData = data;
-        displayFleet(fleetData);
-        fleStatusEl.textContent = 'Saved!';
-        fleStatusEl.className = 'je-status ok';
-        setTimeout(fleClose, 800);
-    } catch (err) {
-        fleStatusEl.textContent = 'Error: ' + err.message;
-        fleStatusEl.className = 'je-status err';
-    }
-}
-
-async function fleDeleteFleet() {
-    if (!fleEditingId) return;
-    if (!confirm(`Delete "${fleFleetName.value.trim()}"?`)) return;
-    const data = fleetData.filter(f => f.id !== fleEditingId);
-    try {
-        const res = await fetch('/save-fleets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
-        fleetData = data;
-        displayFleet(fleetData);
-        fleClose();
-    } catch (err) {
-        fleStatusEl.textContent = 'Error: ' + err.message;
-        fleStatusEl.className = 'je-status err';
-    }
-}
-
-fleSaveBtn?.addEventListener('click', fleSaveFleet);
-fleDeleteBtn?.addEventListener('click', fleDeleteFleet);
-fleCancelBtn?.addEventListener('click', fleClose);
-fleetEditorModal?.addEventListener('click', e => { if (e.target === fleetEditorModal) fleClose(); });
-document.getElementById('fleetAddBtn')?.addEventListener('click', () => fleOpen(null));
 
 // ===================================================
 // FARM EDITOR MODAL
@@ -3912,10 +3399,12 @@ function feHandleUnitSelect(base_id, name) {
     const image = ownedUnit?.data.image || base?.image || null;
     if (feUnits.length < 5 && !feUnits.find(u => u.base_id === base_id)) {
         const reqEntries = requiredAtMap[base_id] || [];
-        const top = reqEntries[0] || null;
-        const defaultRelic = top && top.pri === 2 ? top.val : 7;
-        const defaultGear  = top && top.pri === 1 ? top.val : 13;
-        const defaultStars = top && top.pri === 0 ? top.val : 7;
+        const topRelic = reqEntries.find(e => e.pri === 2);
+        const topGear  = reqEntries.find(e => e.pri === 1);
+        const topStars = reqEntries.find(e => e.pri === 0);
+        const defaultRelic = topRelic ? topRelic.val : 0;
+        const defaultGear  = topGear  ? topGear.val  : (reqEntries.length ? 13 : 13);
+        const defaultStars = topStars ? topStars.val : 7;
         feUnits.push({ base_id, name, image, target_stars: defaultStars, target_gear: defaultGear, target_relic: defaultRelic });
         feRenderUnitRows();
     }
@@ -4010,9 +3499,7 @@ async function feSaveFarm() {
     feStatusEl.textContent = 'Saving…';
     feStatusEl.className = 'je-status';
     try {
-        const res = await fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || 'Save failed');
+        saveFarms(data);
         farmsData = data;
         displayFarms(farmsData);
         feStatusEl.textContent = 'Saved!';
@@ -4029,9 +3516,7 @@ async function feDeleteFarm() {
     if (!confirm(`Delete "${feFarmName.value.trim()}"?`)) return;
     const data = farmsData.filter(f => f.id !== feEditingId);
     try {
-        const res = await fetch('/save-farms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error);
+        saveFarms(data);
         farmsData = data;
         displayFarms(farmsData);
         feClose();
@@ -4046,122 +3531,4 @@ feDeleteBtn?.addEventListener('click', feDeleteFarm);
 feCancelBtn?.addEventListener('click', feClose);
 farmEditorModal?.addEventListener('click', e => { if (e.target === farmEditorModal) feClose(); });
 document.getElementById('farmsAddBtn')?.addEventListener('click', () => feOpen(null));
-
-// ─── GitHub save-to-repo feature ─────────────────────────────────────────────
-
-const saveToGitHubBtn    = document.getElementById('saveToGitHubBtn');
-const githubTokenModal   = document.getElementById('githubTokenModal');
-const ghTokenModalClose  = document.getElementById('githubTokenModalClose');
-const ghTokenSaveBtn     = document.getElementById('ghTokenSaveBtn');
-const ghTokenCancelBtn   = document.getElementById('ghTokenCancelBtn');
-const ghRepoInput        = document.getElementById('ghRepo');
-const ghTokenInput       = document.getElementById('ghToken');
-const ghTokenStatusEl    = document.getElementById('ghTokenStatus');
-const ghToast            = document.getElementById('ghToast');
-
-let ghToastTimer = null;
-function showGhToast(msg, isError = false) {
-    ghToast.textContent = msg;
-    ghToast.style.background = isError ? '#c92a2a' : '#2b8a3e';
-    ghToast.style.display = 'block';
-    if (ghToastTimer) clearTimeout(ghToastTimer);
-    ghToastTimer = setTimeout(() => { ghToast.style.display = 'none'; }, 4000);
-}
-
-async function ghGetSha(repo, filename, token) {
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
-    });
-    if (res.status === 404) return undefined;
-    if (!res.ok) throw new Error(`SHA fetch failed (${res.status})`);
-    return (await res.json()).sha;
-}
-
-async function saveFileToGitHub(repo, token, filename, data) {
-    const sha = await ghGetSha(repo, filename, token);
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-        method: 'PUT',
-        headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: `Update ${filename} via SWGOH app`,
-            content,
-            ...(sha !== undefined && { sha }),
-        }),
-    });
-    if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.message || `HTTP ${res.status}`);
-    }
-}
-
-async function pushSnapshotToGitHub(repo, token) {
-    const snapshot = {
-        _saved_at: new Date().toISOString(),
-        data: playerData,
-        units: [...allCharacters, ...allShips],
-    };
-    const files = [
-        { name: 'player-roster.json', data: snapshot },
-        { name: 'farms-data.json',    data: farmsData },
-        { name: 'teams-data.json',    data: teamsData },
-        { name: 'fleets-data.json',   data: fleetData },
-    ];
-    for (const f of files) {
-        await saveFileToGitHub(repo, token, f.name, f.data);
-    }
-}
-
-saveToGitHubBtn?.addEventListener('click', async () => {
-    const token = localStorage.getItem('swgoh_github_token');
-    const repo  = localStorage.getItem('swgoh_github_repo');
-    if (!token || !repo) {
-        ghRepoInput.value  = repo  || 'I853368/swgoh-roster-viewer';
-        ghTokenInput.value = token || '';
-        ghTokenStatusEl.textContent = '';
-        githubTokenModal.style.display = 'flex';
-        return;
-    }
-    saveToGitHubBtn.disabled = true;
-    saveToGitHubBtn.textContent = '☁ Saving…';
-    try {
-        await pushSnapshotToGitHub(repo, token);
-        showGhToast('Saved to GitHub ✓');
-    } catch (err) {
-        showGhToast('Save failed: ' + err.message, true);
-        console.error('GitHub save error:', err);
-    } finally {
-        saveToGitHubBtn.disabled = false;
-        saveToGitHubBtn.textContent = '☁ Save to GitHub';
-    }
-});
-
-ghTokenSaveBtn?.addEventListener('click', async () => {
-    const repo  = ghRepoInput.value.trim();
-    const token = ghTokenInput.value.trim();
-    if (!repo || !token) {
-        ghTokenStatusEl.textContent = 'Both fields are required.';
-        ghTokenStatusEl.className = 'je-status err';
-        return;
-    }
-    ghTokenStatusEl.textContent = 'Saving…';
-    ghTokenStatusEl.className = 'je-status';
-    ghTokenSaveBtn.disabled = true;
-    try {
-        await pushSnapshotToGitHub(repo, token);
-        localStorage.setItem('swgoh_github_repo', repo);
-        localStorage.setItem('swgoh_github_token', token);
-        githubTokenModal.style.display = 'none';
-        showGhToast('Saved to GitHub ✓');
-    } catch (err) {
-        ghTokenStatusEl.textContent = 'Error: ' + err.message;
-        ghTokenStatusEl.className = 'je-status err';
-    } finally {
-        ghTokenSaveBtn.disabled = false;
-    }
-});
-
-ghTokenModalClose?.addEventListener('click', () => { githubTokenModal.style.display = 'none'; });
-ghTokenCancelBtn?.addEventListener('click',  () => { githubTokenModal.style.display = 'none'; });
-githubTokenModal?.addEventListener('click', e => { if (e.target === githubTokenModal) githubTokenModal.style.display = 'none'; });
 
