@@ -3097,6 +3097,13 @@ function computeFarmSummary(farm) {
     return { totalRelicLevels, kyroMk9, kyroMk7, anyMissing, materialTotals };
 }
 
+function gearBorderClass(gear) {
+    if (gear >= 13) return 'tup-gear-13';
+    if (gear === 12) return 'tup-gear-12';
+    if (gear >= 7)  return 'tup-gear-7';
+    return 'tup-gear-low';
+}
+
 function renderFarmCard(farm, index) {
     const unitSlots = (farm.units || []).map((u, i) => {
         const cur = lookupCurrentStats(u.base_id);
