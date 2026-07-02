@@ -21,6 +21,88 @@ let baseCharMap = {};    // base_id -> full character definition (all game units
 let keywordRegex = null;
 let keywordLabelToSlug = {};   // 'Gain Turn Meter' -> 'gain_turn_meter'
 const RUN_TOGETHER_FIX_RE = /([a-z])([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?:\s+[A-Z\-+])/g;
+const STATUS_NAME_RE = /(?:^|[.!?)]\s*)([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?):\s+(?=[A-Z\-+])/g;
+const CDN      = 'https://game-assets.swgoh.gg/textures/';
+const WIKI_SHIP = 'https://swgoh.wiki/images/thumb/';
+const ICON_ZETA     = `<img src="icons/zeta.png"     alt="Zeta"     class="ability-icon-img">`;
+const ICON_OMEGA    = `<img src="icons/omega.png"    alt="Omega"    class="ability-icon-img">`;
+const ICON_OMICRON  = `<img src="icons/omicron.png"  alt="Omicron"  class="ability-icon-img">`;
+const ICON_ULTIMATE = `<img src="icons/ultimate.png" alt="Ultimate" class="ability-icon-img">`;
+const SHIP_IMAGE_MAP = {
+    // Capital ships
+    CAPITALLEVIATHAN:     CDN  + 'tex.charui_leviathan.png',
+    CAPITALPROFUNDITY:    CDN  + 'tex.charui_profundity.png',
+    CAPITALEXECUTOR:      CDN  + 'tex.charui_executor.png',
+    CAPITALNEGOTIATOR:    CDN  + 'tex.charui_negotiator.png',
+    CAPITALFINALIZER:     CDN  + 'tex.charui_finalizer.png',
+    CAPITALRADDUS:        CDN  + 'tex.charui_raddus.png',
+    CAPITALCHIMAERA:      CDN  + 'tex.charui_chimaera.png',
+    CAPITALSTARDESTROYER: CDN  + 'tex.charui_stardestroyer.png',
+    CAPITALMONCALAMARICRUISER: WIKI_SHIP + 'd/db/Unit-Ship-Home_One-portrait.png/107px-Unit-Ship-Home_One-portrait.png',
+    CAPITALJEDICRUISER:   WIKI_SHIP + '1/1d/Unit-Ship-Endurance-portrait.png/107px-Unit-Ship-Endurance-portrait.png',
+    // Millennium Falcons
+    MILLENNIUMFALCON:     WIKI_SHIP + "2/29/Unit-Ship-Han%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Han%27s_Millennium_Falcon-portrait.png",
+    MILLENNIUMFALCONPRISTINE: WIKI_SHIP + "e/e1/Unit-Ship-Lando%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Lando%27s_Millennium_Falcon-portrait.png",
+    MILLENNIUMFALCONEP7:  WIKI_SHIP + "1/1d/Unit-Ship-Rey%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Rey%27s_Millennium_Falcon-portrait.png",
+    // CDN hits — base_id lowercased
+    FIRSTORDERTIEECHELON: CDN  + 'tex.charui_firstordertieechelon.png',
+    SITHINFILTRATOR:      CDN  + 'tex.charui_sithinfiltrator.png',
+    HOUNDSTOOTH:          CDN  + 'tex.charui_houndstooth.png',
+    XANADUBLOOD:          CDN  + 'tex.charui_xanadublood.png',
+    TIEADVANCED:          CDN  + 'tex.charui_tieadvanced.png',
+    RAZORCREST:           CDN  + 'tex.charui_razorcrest.png',
+    VULTUREDROID:         CDN  + 'tex.charui_vulturedroid.png',
+    BWINGREBEL:           CDN  + 'tex.charui_bwingrebel.png',
+    TIEDAGGER:            CDN  + 'tex.charui_tiedagger.png',
+    PHANTOM2:             CDN  + 'tex.charui_phantom2.png',
+    TIEREAPER:            CDN  + 'tex.charui_tiereaper.png',
+    HYENABOMBER:          CDN  + 'tex.charui_hyenabomber.png',
+    TIEDEFENDER:          CDN  + 'tex.charui_tiedefender.png',
+    FURYCLASSINTERCEPTOR: CDN  + 'tex.charui_furyclassinterceptor.png',
+    SLAVE1:               CDN  + 'tex.charui_slave1.png',
+    PUNISHINGONE:         CDN  + 'tex.charui_punishingone.png',
+    SITHFIGHTER:          CDN  + 'tex.charui_sithfighter.png',
+    SITHSUPREMACYCLASS:   CDN  + 'tex.charui_sithsupremacyclass.png',
+    RAVENSCLAW:           CDN  + 'tex.charui_ravensclaw.png',
+    MARAUDER:             CDN  + 'tex.charui_marauder.png',
+    IG2000:               CDN  + 'tex.charui_ig2000.png',
+    ROGUEONESHIP:         CDN  + 'tex.charui_rogueoneship.png',
+    GHOST:                CDN  + 'tex.charui_ghost.png',
+    EBONHAWK:             CDN  + 'tex.charui_ebonhawk.png',
+    OUTRIDER:             CDN  + 'tex.charui_outrider.png',
+    SCYTHE:               CDN  + 'tex.charui_scythe.png',
+    // CDN hits — alternate texture names
+    YWINGREBEL:           CDN  + 'tex.charui_ywing.png',
+    YWINGCLONEWARS:       CDN  + 'tex.charui_ywing_btlb.png',
+    TIEBOMBERIMPERIAL:    CDN  + 'tex.charui_tiebomber.png',
+    TIEFIGHTERIMPERIAL:   CDN  + 'tex.charui_tiefighter.png',
+    TIESILENCER:          CDN  + 'tex.charui_tie_silencer.png',
+    GAUNTLETSTARFIGHTER:  CDN  + 'tex.charui_gauntlet.png',
+    IMPERIALSHUTTLE:      CDN  + 'tex.charui_imperialshuttle.png',
+    EMPERORSSHUTTLE:      CDN  + 'tex.charui_imperialshuttle.png',
+    BLADEOFDORIN:         CDN  + 'tex.charui_plokoon.png',
+    GEONOSIANSTARFIGHTER1: CDN + 'tex.charui_geonosian_sunfac.png',
+    GEONOSIANSTARFIGHTER2: CDN + 'tex.charui_geonosian_soldier.png',
+    GEONOSIANSTARFIGHTER3: CDN + 'tex.charui_geonosian_spy.png',
+    UWINGSCARIF:          CDN  + 'tex.charui_uwing.png',
+    ARC170REX:            CDN  + 'tex.charui_arc170.png',
+    XWINGRED2:            CDN  + 'tex.charui_xwing_red2.png',
+    XWINGRED3:            CDN  + 'tex.charui_xwing_red3.png',
+    XWINGBLACKONE:        CDN  + 'tex.charui_xwing_blackone.png',
+    XWINGRESISTANCE:      CDN  + 'tex.charui_xwing_resistance.png',
+    // Wiki thumbnails — CDN texture name unknown
+    TIEFIGHTERFIRSTORDER: WIKI_SHIP + '6/6f/Unit-Ship-First_Order_TIE_Fighter-portrait.png/107px-Unit-Ship-First_Order_TIE_Fighter-portrait.png',
+    TIEFIGHTERFOSF:       WIKI_SHIP + '7/7c/Unit-Ship-First_Order_SF_TIE_Fighter-portrait.png/107px-Unit-Ship-First_Order_SF_TIE_Fighter-portrait.png',
+    UMBARANSTARFIGHTER:   WIKI_SHIP + 'c/c8/Unit-Ship-Umbaran_Starfighter-portrait.png/107px-Unit-Ship-Umbaran_Starfighter-portrait.png',
+    COMMANDSHUTTLE:       WIKI_SHIP + "2/2e/Unit-Ship-Kylo_Ren%27s_Command_Shuttle-portrait.png/107px-Unit-Ship-Kylo_Ren%27s_Command_Shuttle-portrait.png",
+    JEDISTARFIGHTERANAKIN: WIKI_SHIP + "3/36/Unit-Ship-Anakin%27s_Eta-2_Starfighter-portrait.png/107px-Unit-Ship-Anakin%27s_Eta-2_Starfighter-portrait.png",
+    JEDISTARFIGHTERCONSULAR: WIKI_SHIP + "0/07/Unit-Ship-Jedi_Consular%27s_Starfighter-portrait.png/107px-Unit-Ship-Jedi_Consular%27s_Starfighter-portrait.png",
+    JEDISTARFIGHTERAHSOKATANO: WIKI_SHIP + '5/5a/Unit-Ship-Ahsoka_Tano%27s_Jedi_Starfighter-portrait.png/107px-Unit-Ship-Ahsoka_Tano%27s_Jedi_Starfighter-portrait.png',
+    SITHBOMBER:           WIKI_SHIP + '5/56/Unit-Ship-B-28_Extinction-class_Bomber-portrait.png/107px-Unit-Ship-B-28_Extinction-class_Bomber-portrait.png',
+    UWINGROGUEONE:        WIKI_SHIP + "f/ff/Unit-Ship-Cassian%27s_U-wing-portrait.png/107px-Unit-Ship-Cassian%27s_U-wing-portrait.png",
+    ARC170CLONESERGEANT:  WIKI_SHIP + "e/ec/Unit-Ship-Clone_Sergeant%27s_ARC-170-portrait.png/107px-Unit-Ship-Clone_Sergeant%27s_ARC-170-portrait.png",
+    BLADEOFDORIN:         WIKI_SHIP + "1/1a/Unit-Ship-Plo_Koon%27s_Jedi_Starfighter-portrait.png/107px-Unit-Ship-Plo_Koon%27s_Jedi_Starfighter-portrait.png",
+};
 
 // Status index — built from in-description callouts (the "Blight: ..." pattern
 // extracted via splitDescriptionForCallouts). Each entry has the canonical
@@ -1754,7 +1836,6 @@ function highlightKeywordsInDescription(escapedText) {
 // main prose (or hides the next callout entirely).
 //
 // Returns: { main: string, callouts: [{name, definition}] }  — both raw text.
-const STATUS_NAME_RE = /(?:^|[.!?)]\s*)([A-Z][A-Za-z][A-Za-z\-'\s]{0,40}?):\s+(?=[A-Z\-+])/g;
 
 function preProcessDescription(rawText) {
     return String(rawText || '').replace(RUN_TOGETHER_FIX_RE, '$1. $2');
@@ -1908,10 +1989,6 @@ function rampStepFor(tier, tierMax) {
 
 // Real SWGOH game-asset icons, bundled locally under icons/. Same files served
 // by game-assets.swgoh.gg — saved here so we never depend on network or hotlink.
-const ICON_ZETA     = `<img src="icons/zeta.png"     alt="Zeta"     class="ability-icon-img">`;
-const ICON_OMEGA    = `<img src="icons/omega.png"    alt="Omega"    class="ability-icon-img">`;
-const ICON_OMICRON  = `<img src="icons/omicron.png"  alt="Omicron"  class="ability-icon-img">`;
-const ICON_ULTIMATE = `<img src="icons/ultimate.png" alt="Ultimate" class="ability-icon-img">`;
 
 function updateCacheStatus() {
     const timestamp = localStorage.getItem('swgoh_character_data_v2_timestamp');
@@ -2192,86 +2269,6 @@ syncModal?.addEventListener('click', e => { if (e.target === syncModal) closeSyn
 // Journey Guide
 // =============================================================================
 
-// Portrait URLs for all ships. Ships have no image field in the API response.
-// CDN texture names don't follow a simple base_id pattern — each is resolved
-// individually. CDN URLs confirmed 200; wiki thumbnail URLs used as fallback.
-const CDN = 'https://game-assets.swgoh.gg/textures/';
-const WIKI_SHIP = 'https://swgoh.wiki/images/thumb/';
-const SHIP_IMAGE_MAP = {
-    // Capital ships
-    CAPITALLEVIATHAN:     CDN  + 'tex.charui_leviathan.png',
-    CAPITALPROFUNDITY:    CDN  + 'tex.charui_profundity.png',
-    CAPITALEXECUTOR:      CDN  + 'tex.charui_executor.png',
-    CAPITALNEGOTIATOR:    CDN  + 'tex.charui_negotiator.png',
-    CAPITALFINALIZER:     CDN  + 'tex.charui_finalizer.png',
-    CAPITALRADDUS:        CDN  + 'tex.charui_raddus.png',
-    CAPITALCHIMAERA:      CDN  + 'tex.charui_chimaera.png',
-    CAPITALSTARDESTROYER: CDN  + 'tex.charui_stardestroyer.png',
-    CAPITALMONCALAMARICRUISER: WIKI_SHIP + 'd/db/Unit-Ship-Home_One-portrait.png/107px-Unit-Ship-Home_One-portrait.png',
-    CAPITALJEDICRUISER:   WIKI_SHIP + '1/1d/Unit-Ship-Endurance-portrait.png/107px-Unit-Ship-Endurance-portrait.png',
-    // Millennium Falcons
-    MILLENNIUMFALCON:     WIKI_SHIP + "2/29/Unit-Ship-Han%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Han%27s_Millennium_Falcon-portrait.png",
-    MILLENNIUMFALCONPRISTINE: WIKI_SHIP + "e/e1/Unit-Ship-Lando%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Lando%27s_Millennium_Falcon-portrait.png",
-    MILLENNIUMFALCONEP7:  WIKI_SHIP + "1/1d/Unit-Ship-Rey%27s_Millennium_Falcon-portrait.png/107px-Unit-Ship-Rey%27s_Millennium_Falcon-portrait.png",
-    // CDN hits — base_id lowercased
-    FIRSTORDERTIEECHELON: CDN  + 'tex.charui_firstordertieechelon.png',
-    SITHINFILTRATOR:      CDN  + 'tex.charui_sithinfiltrator.png',
-    HOUNDSTOOTH:          CDN  + 'tex.charui_houndstooth.png',
-    XANADUBLOOD:          CDN  + 'tex.charui_xanadublood.png',
-    TIEADVANCED:          CDN  + 'tex.charui_tieadvanced.png',
-    RAZORCREST:           CDN  + 'tex.charui_razorcrest.png',
-    VULTUREDROID:         CDN  + 'tex.charui_vulturedroid.png',
-    BWINGREBEL:           CDN  + 'tex.charui_bwingrebel.png',
-    TIEDAGGER:            CDN  + 'tex.charui_tiedagger.png',
-    PHANTOM2:             CDN  + 'tex.charui_phantom2.png',
-    TIEREAPER:            CDN  + 'tex.charui_tiereaper.png',
-    HYENABOMBER:          CDN  + 'tex.charui_hyenabomber.png',
-    TIEDEFENDER:          CDN  + 'tex.charui_tiedefender.png',
-    FURYCLASSINTERCEPTOR: CDN  + 'tex.charui_furyclassinterceptor.png',
-    SLAVE1:               CDN  + 'tex.charui_slave1.png',
-    PUNISHINGONE:         CDN  + 'tex.charui_punishingone.png',
-    SITHFIGHTER:          CDN  + 'tex.charui_sithfighter.png',
-    SITHSUPREMACYCLASS:   CDN  + 'tex.charui_sithsupremacyclass.png',
-    RAVENSCLAW:           CDN  + 'tex.charui_ravensclaw.png',
-    MARAUDER:             CDN  + 'tex.charui_marauder.png',
-    IG2000:               CDN  + 'tex.charui_ig2000.png',
-    ROGUEONESHIP:         CDN  + 'tex.charui_rogueoneship.png',
-    GHOST:                CDN  + 'tex.charui_ghost.png',
-    EBONHAWK:             CDN  + 'tex.charui_ebonhawk.png',
-    OUTRIDER:             CDN  + 'tex.charui_outrider.png',
-    SCYTHE:               CDN  + 'tex.charui_scythe.png',
-    // CDN hits — alternate texture names
-    YWINGREBEL:           CDN  + 'tex.charui_ywing.png',
-    YWINGCLONEWARS:       CDN  + 'tex.charui_ywing_btlb.png',
-    TIEBOMBERIMPERIAL:    CDN  + 'tex.charui_tiebomber.png',
-    TIEFIGHTERIMPERIAL:   CDN  + 'tex.charui_tiefighter.png',
-    TIESILENCER:          CDN  + 'tex.charui_tie_silencer.png',
-    GAUNTLETSTARFIGHTER:  CDN  + 'tex.charui_gauntlet.png',
-    IMPERIALSHUTTLE:      CDN  + 'tex.charui_imperialshuttle.png',
-    EMPERORSSHUTTLE:      CDN  + 'tex.charui_imperialshuttle.png',
-    BLADEOFDORIN:         CDN  + 'tex.charui_plokoon.png',
-    GEONOSIANSTARFIGHTER1: CDN + 'tex.charui_geonosian_sunfac.png',
-    GEONOSIANSTARFIGHTER2: CDN + 'tex.charui_geonosian_soldier.png',
-    GEONOSIANSTARFIGHTER3: CDN + 'tex.charui_geonosian_spy.png',
-    UWINGSCARIF:          CDN  + 'tex.charui_uwing.png',
-    ARC170REX:            CDN  + 'tex.charui_arc170.png',
-    XWINGRED2:            CDN  + 'tex.charui_xwing_red2.png',
-    XWINGRED3:            CDN  + 'tex.charui_xwing_red3.png',
-    XWINGBLACKONE:        CDN  + 'tex.charui_xwing_blackone.png',
-    XWINGRESISTANCE:      CDN  + 'tex.charui_xwing_resistance.png',
-    // Wiki thumbnails — CDN texture name unknown
-    TIEFIGHTERFIRSTORDER: WIKI_SHIP + '6/6f/Unit-Ship-First_Order_TIE_Fighter-portrait.png/107px-Unit-Ship-First_Order_TIE_Fighter-portrait.png',
-    TIEFIGHTERFOSF:       WIKI_SHIP + '7/7c/Unit-Ship-First_Order_SF_TIE_Fighter-portrait.png/107px-Unit-Ship-First_Order_SF_TIE_Fighter-portrait.png',
-    UMBARANSTARFIGHTER:   WIKI_SHIP + 'c/c8/Unit-Ship-Umbaran_Starfighter-portrait.png/107px-Unit-Ship-Umbaran_Starfighter-portrait.png',
-    COMMANDSHUTTLE:       WIKI_SHIP + "2/2e/Unit-Ship-Kylo_Ren%27s_Command_Shuttle-portrait.png/107px-Unit-Ship-Kylo_Ren%27s_Command_Shuttle-portrait.png",
-    JEDISTARFIGHTERANAKIN: WIKI_SHIP + "3/36/Unit-Ship-Anakin%27s_Eta-2_Starfighter-portrait.png/107px-Unit-Ship-Anakin%27s_Eta-2_Starfighter-portrait.png",
-    JEDISTARFIGHTERCONSULAR: WIKI_SHIP + "0/07/Unit-Ship-Jedi_Consular%27s_Starfighter-portrait.png/107px-Unit-Ship-Jedi_Consular%27s_Starfighter-portrait.png",
-    JEDISTARFIGHTERAHSOKATANO: WIKI_SHIP + '5/5a/Unit-Ship-Ahsoka_Tano%27s_Jedi_Starfighter-portrait.png/107px-Unit-Ship-Ahsoka_Tano%27s_Jedi_Starfighter-portrait.png',
-    SITHBOMBER:           WIKI_SHIP + '5/56/Unit-Ship-B-28_Extinction-class_Bomber-portrait.png/107px-Unit-Ship-B-28_Extinction-class_Bomber-portrait.png',
-    UWINGROGUEONE:        WIKI_SHIP + "f/ff/Unit-Ship-Cassian%27s_U-wing-portrait.png/107px-Unit-Ship-Cassian%27s_U-wing-portrait.png",
-    ARC170CLONESERGEANT:  WIKI_SHIP + "e/ec/Unit-Ship-Clone_Sergeant%27s_ARC-170-portrait.png/107px-Unit-Ship-Clone_Sergeant%27s_ARC-170-portrait.png",
-    BLADEOFDORIN:         WIKI_SHIP + "1/1a/Unit-Ship-Plo_Koon%27s_Jedi_Starfighter-portrait.png/107px-Unit-Ship-Plo_Koon%27s_Jedi_Starfighter-portrait.png",
-};
 
 // Lookup a unit in the player's roster by base_id. Returns null if not owned.
 function journeyLookupUnit(baseId) {
