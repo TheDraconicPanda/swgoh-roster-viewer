@@ -3688,7 +3688,7 @@ body {
     }
 
     .farm-unit-strip {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 6px;
         padding: 8px;
     }
