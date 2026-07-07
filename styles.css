@@ -519,6 +519,8 @@ body {
     overflow: hidden;
     background: #fff;
     cursor: pointer;
+    height: auto;
+    align-self: start;
     transition: box-shadow 0.15s, transform 0.15s;
 }
 .char-card:hover {
