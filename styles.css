@@ -271,7 +271,6 @@ body {
     display: grid;
     gap: 10px;
 }
-}
 
 .roster-item {
     cursor: pointer;
@@ -1044,7 +1043,6 @@ body {
 }
 .gear-tier[open] > summary {
     border-radius: 5px 5px 0 0;
-}
 }
 
 .gear-tier > summary::-webkit-details-marker { display: none; }
