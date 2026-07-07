@@ -123,6 +123,7 @@ let charSortMode = 'alpha-asc';  // 'alpha-asc' | 'alpha-desc' | 'gp-desc' | 'gp
 
 // Teams / Fleet / Farms data
 let farmsData = [];
+let trackedJourneys = new Set(JSON.parse(localStorage.getItem('swgoh_tracked_journeys') || '[]'));
 let relicMaterials = [];  // loaded from relic-materials-data.json
 
 // DOM elements
@@ -2550,10 +2551,12 @@ function renderJourneyCard(event) {
     const isComplete = readiness >= 1;
     const isUnavailable = event.type === 'Unavailable';
 
+    const isPinned = trackedJourneys.has(event.slug);
     return `
         <details class="journey-card ${statusClass}${isUnavailable ? ' journey-unavailable' : ''}" data-slug="${escapeHtml(event.slug)}" ${isComplete ? '' : 'open'}>
             <summary class="journey-card-header ${alignClass}">
                 <button class="journey-card-edit-btn" data-edit-slug="${escapeHtml(event.slug)}" title="Edit event">✏</button>
+                <button class="journey-card-pin-btn${isPinned ? ' pinned' : ''}" data-pin-slug="${escapeHtml(event.slug)}" title="${isPinned ? 'Remove from Farm tracker' : 'Track in Farms'}">📌</button>
                 ${isUnavailable ? '<span class="journey-lock-icon">🔒</span>' : ''}
                 ${rewardPortrait}
                 <div class="journey-card-header-text">
@@ -2983,6 +2986,26 @@ document.addEventListener('click', e => {
     if (event) jeOpen(event);
 });
 
+// Pin button clicks — toggle journey tracking in Farms
+document.addEventListener('click', e => {
+    const pinBtn = e.target.closest('.journey-card-pin-btn');
+    if (!pinBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const slug = pinBtn.dataset.pinSlug;
+    if (trackedJourneys.has(slug)) {
+        trackedJourneys.delete(slug);
+        pinBtn.classList.remove('pinned');
+        pinBtn.title = 'Track in Farms';
+    } else {
+        trackedJourneys.add(slug);
+        pinBtn.classList.add('pinned');
+        pinBtn.title = 'Remove from Farm tracker';
+    }
+    saveTrackedJourneys();
+    displayJourneyTracker();
+});
+
 // Requirement row clicks — open unit detail modal for owned units
 document.addEventListener('click', e => {
     const row = e.target.closest('.journey-req-row');
@@ -3185,8 +3208,79 @@ function saveFarms(data) {
     localStorage.setItem('swgoh_farms_data', JSON.stringify(data));
 }
 
+function saveTrackedJourneys() {
+    localStorage.setItem('swgoh_tracked_journeys', JSON.stringify([...trackedJourneys]));
+}
+
 function saveJourneyData(data) {
     localStorage.setItem('swgoh_journey_data_v4', JSON.stringify(data));
+}
+
+function displayJourneyTracker() {
+    const el = document.getElementById('journeyTracker');
+    if (!el) return;
+
+    const tracked = [...trackedJourneys]
+        .map(slug => (journeyData || []).find(e => e.slug === slug))
+        .filter(Boolean);
+
+    if (tracked.length === 0) {
+        el.style.display = 'none';
+        return;
+    }
+
+    el.style.display = 'block';
+    el.innerHTML = `
+        <div class="jt-header">Journey Progress</div>
+        <div class="jt-cards">
+            ${tracked.map(ev => {
+                const readiness = journeyCardReadiness(ev);
+                const pct = Math.floor(readiness * 100);
+                const color = pct >= 100 ? '#40c057' : pct >= 75 ? '#94d82d' : pct >= 50 ? '#fab005' : pct >= 25 ? '#fd7e14' : '#fa5252';
+                const rewardBase = baseCharMap[ev.reward_base_id];
+                const rewardUnit = allCharacters.find(c => c.data.base_id === ev.reward_base_id) || allShips.find(s => s.data.base_id === ev.reward_base_id);
+                const img = ev.reward_image || rewardUnit?.data?.image || rewardBase?.image || SHIP_IMAGE_MAP[ev.reward_base_id] || null;
+                const portrait = img
+                    ? `<img class="jt-portrait" src="${escapeHtml(img)}" alt="" loading="lazy">`
+                    : `<div class="jt-portrait jt-portrait-placeholder">${escapeHtml((ev.reward_name || '?')[0])}</div>`;
+
+                const reqs = ev.requirements || [];
+                const unitSlots = reqs.map(req => {
+                    const unit = journeyLookupUnit(req.base_id);
+                    const d = unit?.data;
+                    const relicDisplay = d ? ((d.relic_tier || 0) > 2 ? d.relic_tier - 2 : 0) : 0;
+                    const starMet  = d && d.rarity >= req.stars;
+                    const relicMet = req.relic === null || (d && relicDisplay >= req.relic);
+                    const met = starMet && relicMet;
+                    const uImg = d?.image || baseCharMap[req.base_id]?.image || null;
+                    const uPortrait = uImg
+                        ? `<img class="jt-unit-img${met ? ' met' : ''}" src="${escapeHtml(uImg)}" alt="" loading="lazy">`
+                        : `<div class="jt-unit-img jt-unit-placeholder${met ? ' met' : ''}">${escapeHtml((req.name || '?')[0])}</div>`;
+                    const label = req.relic !== null
+                        ? `R${relicDisplay}/${req.relic}`
+                        : `${d?.rarity || 0}★/${req.stars}★`;
+                    return `<div class="jt-unit-slot" title="${escapeHtml(req.name || req.base_id)}">
+                        ${uPortrait}
+                        <span class="jt-unit-label${met ? ' met' : ''}">${label}</span>
+                    </div>`;
+                }).join('');
+
+                return `<div class="jt-card">
+                    <div class="jt-card-top">
+                        ${portrait}
+                        <div class="jt-card-info">
+                            <div class="jt-card-name">${escapeHtml(ev.reward_name)}</div>
+                            <div class="jt-progress-bar-wrap">
+                                <div class="jt-progress-bar" style="width:${pct}%;background:${color};"></div>
+                            </div>
+                            <div class="jt-pct">${pct}%</div>
+                        </div>
+                        <button class="jt-unpin-btn journey-card-pin-btn pinned" data-pin-slug="${escapeHtml(ev.slug)}" title="Remove from tracker">✕</button>
+                    </div>
+                    ${reqs.length ? `<div class="jt-units">${unitSlots}</div>` : ''}
+                </div>`;
+            }).join('')}
+        </div>`;
 }
 
 function displayFarms(farms) {
@@ -3201,6 +3295,7 @@ function displayFarms(farms) {
     if (stats) stats.innerHTML = `<strong>Active Farms:</strong> ${farms.length}`;
     list.innerHTML = farms.map((f, i) => renderFarmCard(f, i)).join('');
     enableDragReorder(list, '.farm-card', 'data-farm-id', farmsData, 'id', saveFarms, () => displayFarms(farmsData));
+    displayJourneyTracker();
 }
 
 // ===================================================
