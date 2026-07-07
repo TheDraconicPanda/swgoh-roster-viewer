@@ -3155,16 +3155,16 @@ function renderFarmCard(farm, index) {
                 </tr>`).join('');
 
         summaryHtml = `
-            <div class="farm-summary">
-                <details class="farm-mat-details">
-                    <summary class="farm-summary-header">Missing Relic levels: <strong>${totalRelicLevels}</strong></summary>
+            <details class="farm-summary farm-mat-details">
+                <summary class="farm-summary-header">−${totalRelicLevels}R</summary>
+                <div class="farm-mat-popover">
                     <table class="farm-mat-table">
                         <tbody>${matRows}</tbody>
                     </table>
-                </details>
-            </div>`;
+                </div>
+            </details>`;
     } else if (anyMissing) {
-        summaryHtml = `<div class="farm-summary"><span class="farm-summary-header">Gear incomplete</span></div>`;
+        summaryHtml = `<span class="farm-summary farm-summary-gear">Gear incomplete</span>`;
     }
 
     return `
@@ -3172,11 +3172,12 @@ function renderFarmCard(farm, index) {
             <div class="farm-card-header">
                 <span class="farm-card-priority">#${index + 1}</span>
                 <span class="farm-card-name">${escapeHtml(farm.name)}</span>
+                ${summaryHtml}
                 <div class="farm-card-actions">
                     <button class="farm-card-edit-btn" data-edit-farm-id="${escapeHtml(farm.id)}" title="Edit farm">✏</button>
                 </div>
             </div>
-            <div class="farm-unit-strip">${unitSlots}${summaryHtml}</div>
+            <div class="farm-unit-strip">${unitSlots}</div>
         </div>`;
 }
 

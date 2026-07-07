@@ -3040,6 +3040,7 @@ body {
     color: white;
     cursor: grab;
     user-select: none;
+    position: relative;
 }
 .farm-card-header:active { cursor: grabbing; }
 .farm-card-priority {
@@ -3158,26 +3159,44 @@ body {
 
 /* Farm summary row */
 .farm-summary {
-    border-top: 1px solid #dee2e6;
-    padding: 8px 14px;
-    background: #f8f9fa;
-    font-size: 0.8rem;
-    min-width: 180px;
+    position: relative;
+    margin-left: auto;
     flex-shrink: 0;
-    align-self: flex-start;
+}
+.farm-summary-gear {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
 }
 .farm-summary-header {
     font-size: 0.72rem;
     font-weight: 700;
-    color: #495057;
-    margin-bottom: 6px;
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    padding: 2px 8px;
     cursor: pointer;
     user-select: none;
     list-style: none;
+    white-space: nowrap;
 }
 .farm-summary-header::-webkit-details-marker { display: none; }
-.farm-mat-details[open] .farm-summary-header { margin-bottom: 6px; }
-.farm-mat-details .farm-mat-table { margin-top: 4px; }
+.farm-mat-popover {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    z-index: 10;
+    min-width: 160px;
+}
 .farm-mat-table {
     border-collapse: collapse;
     width: 100%;
