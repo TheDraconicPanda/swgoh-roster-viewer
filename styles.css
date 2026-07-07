@@ -140,9 +140,37 @@ body {
 
 
 .filter-section {
-    padding: 20px 30px;
     background: #f1f3f5;
     border-bottom: 1px solid #dee2e6;
+}
+
+.filter-collapsible {
+    display: block;
+}
+
+.filter-collapsible-summary {
+    display: flex;
+    align-items: center;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #495057;
+    user-select: none;
+    list-style: none;
+}
+.filter-collapsible-summary::-webkit-details-marker { display: none; }
+.filter-collapsible-summary::after {
+    content: '▾';
+    margin-left: 6px;
+    transition: transform 0.15s;
+}
+.filter-collapsible[open] .filter-collapsible-summary::after {
+    transform: rotate(-180deg);
+}
+
+.filter-collapsible-body {
+    padding: 12px 30px 20px;
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
@@ -3593,11 +3621,15 @@ body {
         white-space: nowrap;
     }
 
-    /* Filter section: stack vertically */
-    .filter-section {
+    /* Filter section: collapsed by default on mobile */
+    .filter-collapsible-body {
         flex-direction: column;
         gap: 6px;
-        padding: 8px 12px;
+        padding: 8px 12px 12px;
+    }
+
+    .filter-collapsible-summary {
+        padding: 10px 12px;
     }
 
     .filter-section input,

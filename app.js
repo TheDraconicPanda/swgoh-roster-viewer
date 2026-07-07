@@ -523,7 +523,10 @@ async function fetchRoster() {
 
         // Show UI elements
         loadingDiv.style.display = 'none';
-        filterSection.style.display = 'flex';
+        filterSection.style.display = 'block';
+        if (window.innerWidth <= 480) {
+            document.getElementById('filterCollapsible').removeAttribute('open');
+        }
         switchTab('farms');
 
     } catch (error) {
