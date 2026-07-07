@@ -3689,13 +3689,16 @@ body {
 
     .farm-unit-strip {
         flex-wrap: nowrap;
-        gap: 6px;
-        padding: 8px;
+        gap: 2px;
+        padding: 6px 8px;
     }
 
     .farm-unit-slot {
-        min-width: calc(50% - 3px);
-        flex: 1 1 calc(50% - 3px);
+        min-width: 0;
+        flex: 1 1 0;
+        width: auto;
+        padding: 0 4px 0 0;
+        margin-right: 4px;
     }
 
     /* Farm unit table: reduce sizing */
@@ -3704,8 +3707,13 @@ body {
     }
 
     .farm-unit-portrait {
-        width: 38px !important;
-        height: 38px !important;
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .farm-unit-table-name {
+        max-width: 44px;
+        font-size: 0.65rem;
     }
 
     .stat-xy {
