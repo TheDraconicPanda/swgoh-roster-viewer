@@ -505,6 +505,7 @@ body {
     grid-template-columns: repeat(5, 1fr);
     gap: 12px;
     align-items: start;
+    grid-auto-rows: max-content;
 }
 /* In factions mode the outer container is a column of sections, not a grid */
 .char-card-grid.char-faction-mode {
