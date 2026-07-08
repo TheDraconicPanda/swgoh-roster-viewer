@@ -8,7 +8,9 @@
 //   1. Open https://swgoh.gg/ in a tab
 //   2. F12 → Console
 //   3. Paste this entire script → Enter
-//   4. Done in ~2 seconds — POSTs directly to localhost:8765/save-characters
+//   4. A characters-data.json file will be downloaded automatically
+//   5. Replace the existing characters-data.json in the project folder
+//   6. Commit and push to update GitHub Pages
 //
 // Run whenever new units are released to keep characters-data.json current.
 // =============================================================================
@@ -40,12 +42,14 @@
         console.log(`%c[swgoh-chars] ✓ Saved — ${json.total} total units in characters-data.json (${json.added} new/updated).`,
                     'color:#28a745;font-weight:bold;');
     } catch (e) {
-        console.warn('[swgoh-chars] Could not POST to server:', e.message, '— downloading as fallback');
+        console.warn('[swgoh-chars] Could not POST to server:', e.message, '— downloading characters-data.json');
         const blob = new Blob([JSON.stringify(characters, null, 2)], { type: 'application/json' });
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
         a.href = url; a.download = 'characters-data.json';
         document.body.appendChild(a); a.click();
         document.body.removeChild(a); URL.revokeObjectURL(url);
+        console.log('%c[swgoh-chars] ✓ Download started — replace characters-data.json in your project folder and commit.',
+                    'color:#28a745;font-weight:bold;');
     }
 })();
