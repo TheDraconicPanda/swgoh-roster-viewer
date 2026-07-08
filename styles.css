@@ -3914,3 +3914,68 @@ body {
     #manage { padding: 12px; }
     .manage-section { max-width: 100%; padding: 16px; }
 }
+
+/* ===================================================
+   DESKTOP LAYOUT OVERRIDE (>480px)
+   Switch from fixed-viewport flex to natural page scroll.
+   Player header sticks to top; everything else scrolls.
+   =================================================== */
+@media (min-width: 481px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        align-items: flex-start;
+    }
+
+    .container {
+        overflow: visible;
+        min-height: 0;
+    }
+
+    .player-info {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .tab-content {
+        flex: none;
+        overflow: visible;
+        min-height: 0;
+    }
+
+    .tab-pane {
+        flex: none;
+        min-height: 0;
+        overflow: visible;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    /* Remove independent scroll from inner containers — page scrolls instead */
+    .char-card-grid,
+    .roster-list,
+    .keyword-list,
+    .status-list,
+    .journey-list,
+    .farms-list {
+        flex: none;
+        overflow-y: visible;
+        min-height: 0;
+    }
+
+    #characters, #ships, #keywords, #statuses, #journeyguide {
+        overflow: visible;
+    }
+
+    /* Tab sub-headers no longer need to be sticky (page scrolls) */
+    #characters .char-view-toggle,
+    #ships .stats-summary,
+    #keywords .stats-summary,
+    #statuses .stats-summary,
+    .journey-guide-header {
+        position: static;
+    }
+}
