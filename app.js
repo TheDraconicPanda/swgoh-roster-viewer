@@ -138,6 +138,9 @@ const searchInput = document.getElementById('searchInput');
 const rarityFilter = document.getElementById('rarityFilter');
 const gearFilter = document.getElementById('gearFilter');
 const relicFilter = document.getElementById('relicFilter');
+const tagFilterBtn   = document.getElementById('tagFilterBtn');
+const tagFilterPanel = document.getElementById('tagFilterPanel');
+const tagFilterWrap  = document.getElementById('tagFilterWrap');
 const clearFiltersBtn = document.getElementById('clearFilters');
 const unitModal = document.getElementById('unitModal');
 const modalContent = document.getElementById('modalContent');
@@ -181,9 +184,6 @@ relicFilter.addEventListener('change', applyFilters);
 clearFiltersBtn.addEventListener('click', clearAllFilters);
 
 // Tag filter dropdown toggle
-const tagFilterBtn   = document.getElementById('tagFilterBtn');
-const tagFilterPanel = document.getElementById('tagFilterPanel');
-const tagFilterWrap  = document.getElementById('tagFilterWrap');
 tagFilterBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     const open = tagFilterPanel.style.display !== 'none';
