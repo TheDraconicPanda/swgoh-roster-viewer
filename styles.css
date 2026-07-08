@@ -3777,19 +3777,58 @@ body {
 @media (max-width: 480px) {
     body {
         padding: 0;
-        height: 100dvh;
-        align-items: stretch;
+        height: auto;
+        min-height: 100dvh;
+        align-items: flex-start;
     }
 
     .container {
         border-radius: 0;
         box-shadow: none;
-        height: 100dvh;
+        min-height: 100dvh;
         max-width: 100%;
+        overflow: visible;
+    }
+
+    .player-info {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .tab-content {
+        flex: none;
+        overflow: visible;
+        min-height: 0;
+    }
+
+    .tab-pane {
+        flex: none;
+        min-height: 0;
+        overflow: visible;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    .char-card-grid,
+    .roster-list,
+    .keyword-list,
+    .status-list,
+    .journey-list,
+    .farms-list {
+        flex: none;
+        overflow-y: visible;
+        min-height: 0;
+    }
+
+    #characters, #ships, #keywords, #statuses, #journeyguide {
+        overflow: visible;
     }
 
     /* Header: compact, just name + stats */
-    .player-info {
+    .player-info-top {
         padding: 8px 12px;
         gap: 4px;
     }
