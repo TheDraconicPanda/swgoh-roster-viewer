@@ -3251,7 +3251,7 @@ function displayJourneyTracker() {
                     const relicDisplay = d ? ((d.relic_tier || 0) > 2 ? d.relic_tier - 2 : 0) : 0;
                     const starMet  = d && d.rarity >= req.stars;
                     const relicMet = req.relic === null || (d && relicDisplay >= req.relic);
-                    const met = starMet && relicMet;
+                    const met = req.relic !== null ? relicMet : starMet;
                     const uImg = d?.image || baseCharMap[req.base_id]?.image || null;
                     const uPortrait = uImg
                         ? `<img class="jt-unit-img${met ? ' met' : ''}" src="${escapeHtml(uImg)}" alt="" loading="lazy">`
