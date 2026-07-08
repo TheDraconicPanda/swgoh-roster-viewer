@@ -10,70 +10,72 @@
     <div class="container">
 
         <div id="playerInfo" class="player-info">
-            <div class="player-info-left" id="playerInfoLeft">
-                <h2 id="playerName">SWGOH Roster</h2>
-                <div class="player-stats">
-                    <span id="playerGP"></span>
-                    <span id="playerGuild"></span>
-                    <span id="playerLeague"></span>
+            <div class="player-info-top">
+                <div class="player-info-left" id="playerInfoLeft">
+                    <h2 id="playerName">SWGOH Roster</h2>
+                    <div class="player-stats">
+                        <span id="playerGP"></span>
+                        <span id="playerGuild"></span>
+                        <span id="playerLeague"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="filter-section" id="filterSection" style="display: none;">
-            <details class="filter-collapsible" id="filterCollapsible" open>
-                <summary class="filter-collapsible-summary">Filters</summary>
-                <div class="filter-collapsible-body">
-                    <input type="text" id="searchInput" placeholder="Search by name...">
-                    <select id="rarityFilter">
-                        <option value="">All Stars</option>
-                        <option value="7">7 Stars</option>
-                        <option value="6">6 Stars</option>
-                        <option value="5">5 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="2">2 Stars</option>
-                        <option value="1">1 Star</option>
-                    </select>
-                    <select id="gearFilter">
-                        <option value="">All Gear</option>
-                        <option value="13">Gear 13</option>
-                        <option value="12">Gear 12</option>
-                        <option value="11">Gear 11</option>
-                        <option value="10">Gear 10</option>
-                        <option value="9">Gear 9</option>
-                        <option value="8">Gear 8</option>
-                    </select>
-                    <select id="relicFilter">
-                        <option value="">All Relics</option>
-                        <option value="9">Relic 9</option>
-                        <option value="8">Relic 8</option>
-                        <option value="7">Relic 7</option>
-                        <option value="6">Relic 6</option>
-                        <option value="5">Relic 5</option>
-                        <option value="4">Relic 4</option>
-                        <option value="3">Relic 3</option>
-                        <option value="2">Relic 2</option>
-                        <option value="1">Relic 1</option>
-                        <option value="0">No Relic</option>
-                    </select>
-                    <div class="tag-filter-wrap" id="tagFilterWrap">
-                        <button class="tag-filter-btn" id="tagFilterBtn" type="button">Tags ▾</button>
-                        <div class="tag-filter-panel" id="tagFilterPanel" style="display:none;"></div>
+            <div class="filter-section" id="filterSection" style="display: none;">
+                <details class="filter-collapsible" id="filterCollapsible">
+                    <summary class="filter-collapsible-summary">Filters</summary>
+                    <div class="filter-collapsible-body">
+                        <input type="text" id="searchInput" placeholder="Search by name...">
+                        <select id="rarityFilter">
+                            <option value="">All Stars</option>
+                            <option value="7">7 Stars</option>
+                            <option value="6">6 Stars</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+                        <select id="gearFilter">
+                            <option value="">All Gear</option>
+                            <option value="13">Gear 13</option>
+                            <option value="12">Gear 12</option>
+                            <option value="11">Gear 11</option>
+                            <option value="10">Gear 10</option>
+                            <option value="9">Gear 9</option>
+                            <option value="8">Gear 8</option>
+                        </select>
+                        <select id="relicFilter">
+                            <option value="">All Relics</option>
+                            <option value="9">Relic 9</option>
+                            <option value="8">Relic 8</option>
+                            <option value="7">Relic 7</option>
+                            <option value="6">Relic 6</option>
+                            <option value="5">Relic 5</option>
+                            <option value="4">Relic 4</option>
+                            <option value="3">Relic 3</option>
+                            <option value="2">Relic 2</option>
+                            <option value="1">Relic 1</option>
+                            <option value="0">No Relic</option>
+                        </select>
+                        <div class="tag-filter-wrap" id="tagFilterWrap">
+                            <button class="tag-filter-btn" id="tagFilterBtn" type="button">Tags ▾</button>
+                            <div class="tag-filter-panel" id="tagFilterPanel" style="display:none;"></div>
+                        </div>
+                        <button id="clearFilters" class="clear-btn">Clear Filters</button>
                     </div>
-                    <button id="clearFilters" class="clear-btn">Clear Filters</button>
-                </div>
-            </details>
-        </div>
+                </details>
+            </div>
 
-        <div class="tabs" id="tabs">
-            <button class="tab-btn active" data-tab="farms">Farms</button>
-            <button class="tab-btn" data-tab="characters">Characters</button>
-            <button class="tab-btn" data-tab="ships">Ships</button>
-            <button class="tab-btn" data-tab="keywords">Keywords</button>
-            <button class="tab-btn" data-tab="statuses">Status</button>
-            <button class="tab-btn" data-tab="journeyguide">Journey</button>
-            <button class="tab-btn" data-tab="manage">Manage</button>
+            <div class="tabs" id="tabs">
+                <button class="tab-btn active" data-tab="farms">Farms</button>
+                <button class="tab-btn" data-tab="characters">Characters</button>
+                <button class="tab-btn" data-tab="ships">Ships</button>
+                <button class="tab-btn" data-tab="keywords">Keywords</button>
+                <button class="tab-btn" data-tab="statuses">Status</button>
+                <button class="tab-btn" data-tab="journeyguide">Journey</button>
+                <button class="tab-btn" data-tab="manage">Manage</button>
+            </div>
         </div>
 
         <div class="tab-content">
