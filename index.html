@@ -320,14 +320,24 @@
                         <div style="margin-top:8px;">
                             <textarea id="syncCharsScript" class="refresh-script" readonly rows="5"></textarea>
                             <button id="syncCharsCopyBtn" class="refresh-action-btn refresh-copy-btn" style="margin-top:4px;">📋 Copy script</button>
-                            <div class="refresh-step-hint">F12 → Console → paste → Enter. Saves directly to disk via the local server. Takes ~2 seconds.</div>
+                            <div class="refresh-step-hint">F12 → Console → paste → Enter. Downloads <code>characters-data.json</code> to your Downloads folder.</div>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <div class="refresh-step-head">Check what was saved</div>
+                    <div class="refresh-step-head">Replace the file and publish</div>
+                    <div class="refresh-step-body">
+                        <div class="refresh-step-hint">Copy the downloaded file to the project folder, then run:</div>
+                        <textarea class="refresh-script" readonly rows="3" style="margin-top:6px;">cd C:\Users\I853368\Projects\swgoh-roster-viewer
+git add characters-data.json
+git commit -m "Update characters-data.json" && git push origin master && git push public master</textarea>
+                    </div>
+                </li>
+                <li>
+                    <div class="refresh-step-head">Check what was added</div>
                     <div class="refresh-step-body">
                         <button class="refresh-action-btn" id="syncFetchBtn">🔍 Check for new units</button>
+                        <div class="refresh-step-hint" style="margin-top:4px;">Run after GitHub Pages has deployed (≈1 min after push).</div>
                         <div id="syncFetchStatus" class="refresh-status"></div>
                     </div>
                 </li>
@@ -340,10 +350,10 @@
                 <li id="syncStep3" style="display:none;">
                     <div class="refresh-step-head">Scrape abilities for new units</div>
                     <div class="refresh-step-body">
-                        <p class="refresh-step-hint">Pre-filled delta script — only scrapes the new units (~1–2 min). Auto-saves to disk via the local server.</p>
+                        <p class="refresh-step-hint">Pre-filled delta script — only scrapes the new units (~1–2 min).</p>
                         <textarea id="syncAbilitiesScript" class="refresh-script" readonly rows="5"></textarea>
                         <button id="syncAbilitiesCopyBtn" class="refresh-action-btn refresh-copy-btn" style="margin-top:4px;">📋 Copy script</button>
-                        <div class="refresh-step-hint">Paste in the same swgoh.gg tab.</div>
+                        <div class="refresh-step-hint">Paste in the same swgoh.gg tab. Then commit and push <code>abilities-data.json</code> the same way.</div>
                     </div>
                 </li>
             </ol>
