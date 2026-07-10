@@ -62,6 +62,13 @@
                             <button class="tag-filter-btn" id="tagFilterBtn" type="button">Tags ▾</button>
                             <div class="tag-filter-panel" id="tagFilterPanel" style="display:none;"></div>
                         </div>
+                        <select id="farmFilter">
+                            <option value="">All Farms</option>
+                            <option value="Energy">Energy (Light &amp; Dark)</option>
+                            <option value="Cantina">Cantina</option>
+                            <option value="Fleet">Fleet</option>
+                            <option value="Conquest">Conquest</option>
+                        </select>
                         <button id="clearFilters" class="clear-btn">Clear Filters</button>
                     </div>
                 </details>
@@ -164,6 +171,10 @@
                     <div class="manage-row">
                         <button id="clearCacheBtn" class="manage-btn manage-btn-danger" type="button">✕ Clear cache</button>
                         <p class="manage-hint">Clears all cached roster and game data from localStorage.</p>
+                    </div>
+                    <div class="manage-row">
+                        <button id="exportFarmBtn" class="manage-btn" type="button">⬇ Export farm locations</button>
+                        <p class="manage-hint">Download unit-farm-data.json with all saved farm locations for committing to Git.</p>
                     </div>
                 </div>
             </div>

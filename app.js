@@ -121,6 +121,30 @@ let requiredAtMap = {};   // base_id -> e.g. "R7", "G13", "7★"
 let charViewMode = 'all';  // 'all' | 'factions'
 let charSortMode = 'alpha-asc';  // 'alpha-asc' | 'alpha-desc' | 'gp-desc' | 'gp-asc'
 
+// Unit farm location data — keyed by base_id, value: { place, node }
+// place: 'Light Side' | 'Dark Side' | 'Fleet' | 'Cantina' | 'Conquest'
+// node: e.g. '3D', '1A'
+let unitFarmData = {};
+
+const FARM_PLACES = ['Light Side', 'Dark Side', 'Fleet', 'Cantina', 'Conquest'];
+
+const FARM_ENERGY_ICONS = {
+    'Light Side':  'https://swgoh.wiki/images/thumb/b/ba/Game-Icon-Energy.png/21px-Game-Icon-Energy.png',
+    'Dark Side':   'https://swgoh.wiki/images/thumb/b/ba/Game-Icon-Energy.png/21px-Game-Icon-Energy.png',
+    'Fleet':       'https://swgoh.wiki/images/thumb/3/3f/Game-Icon-Ship_Energy.png/21px-Game-Icon-Ship_Energy.png',
+    'Cantina':     'https://swgoh.wiki/images/thumb/4/4c/Game-Icon-Cantina_Energy.png/21px-Game-Icon-Cantina_Energy.png',
+    'Conquest':    'https://swgoh.wiki/images/thumb/4/4e/Game-Icon-Conquest_Energy.png/20px-Game-Icon-Conquest_Energy.png',
+};
+
+// Energy type grouping for the filter dropdown
+const FARM_ENERGY_TYPE = {
+    'Light Side': 'Energy',
+    'Dark Side':  'Energy',
+    'Fleet':      'Fleet',
+    'Cantina':    'Cantina',
+    'Conquest':   'Conquest',
+};
+
 // Teams / Fleet / Farms data
 let farmsData = [];
 let trackedJourneys = new Set(JSON.parse(localStorage.getItem('swgoh_tracked_journeys') || '[]'));
@@ -142,6 +166,7 @@ const tagFilterBtn   = document.getElementById('tagFilterBtn');
 const tagFilterPanel = document.getElementById('tagFilterPanel');
 const tagFilterWrap  = document.getElementById('tagFilterWrap');
 const clearFiltersBtn = document.getElementById('clearFilters');
+const farmFilter = document.getElementById('farmFilter');
 const unitModal = document.getElementById('unitModal');
 const modalContent = document.getElementById('modalContent');
 
@@ -181,6 +206,7 @@ searchInput.addEventListener('input', applyFilters);
 rarityFilter.addEventListener('change', applyFilters);
 gearFilter.addEventListener('change', applyFilters);
 relicFilter.addEventListener('change', applyFilters);
+farmFilter?.addEventListener('change', applyFilters);
 clearFiltersBtn.addEventListener('click', clearAllFilters);
 
 // Tag filter dropdown toggle
@@ -504,6 +530,21 @@ async function fetchRoster() {
             console.error('Failed to load relic materials:', e);
         }
 
+        // Load unit farm location data — localStorage first, then bundled file
+        try {
+            const storedFarms = localStorage.getItem('swgoh_unit_farm_data');
+            if (storedFarms) {
+                unitFarmData = JSON.parse(storedFarms);
+            } else {
+                const res = await fetch('unit-farm-data.json');
+                unitFarmData = res.ok ? await res.json() : {};
+            }
+            console.log(`✓ Loaded farm locations for ${Object.keys(unitFarmData).length} units`);
+        } catch (e) {
+            console.error('Failed to load unit farm data:', e);
+            unitFarmData = {};
+        }
+
         allShips = data.units
             .filter(u => u.data.combat_type === 2)
             .sort((a, b) => b.data.power - a.data.power);
@@ -647,6 +688,14 @@ function renderCharCard(char) {
         reqBadge = `<button class="char-card-badge req-at" ${slugsAttr} title="${escapeHtml(top.rewardName)}${count > 1 ? ` +${count - 1} more` : ''}">${escapeHtml(top.label)}${thumb}${countBubble}</button>`;
     }
 
+    // Farm location badge — shown when a farm location is set
+    let farmBadge = '';
+    const farmEntry = unitFarmData[d.base_id];
+    if (farmEntry) {
+        const icon = FARM_ENERGY_ICONS[farmEntry.place] || '';
+        farmBadge = `<span class="char-card-badge farm-loc-badge" title="${escapeHtml(farmEntry.place)} ${escapeHtml(farmEntry.node)}"><img src="${escapeHtml(icon)}" alt="${escapeHtml(farmEntry.place)}" class="farm-badge-icon"> ${escapeHtml(farmEntry.node)}</span>`;
+    }
+
     // Faction/category tags as clickable filter buttons
     const cats = d.categories || [];
     const tagButtons = cats.slice(0, 5).map(t =>
@@ -668,6 +717,7 @@ function renderCharCard(char) {
                     ${isOwned ? `<span class="char-card-badge gear">G${d.gear_level}</span>` : ''}
                     ${isOwned ? `<span class="char-card-badge relic">R${relicDisplay}</span>` : ''}
                     ${reqBadge}
+                    ${farmBadge}
                 </div>
                 ${tagButtons ? `<div class="char-card-tags">${tagButtons}</div>` : ''}
             </div>
@@ -916,6 +966,7 @@ function applyFilters() {
     const rarityValue = rarityFilter.value;
     const gearValue = gearFilter.value;
     const relicValue = relicFilter.value;
+    const farmFilterValue = farmFilter ? farmFilter.value : '';
 
     const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
 
@@ -949,6 +1000,10 @@ function applyFilters() {
                 const reqIds = new Set((ev?.requirements || []).map(r => r.base_id));
                 if (!reqIds.has(d.base_id)) return false;
             }
+            if (farmFilterValue) {
+                const fe = unitFarmData[d.base_id];
+                if (!fe || FARM_ENERGY_TYPE[fe.place] !== farmFilterValue) return false;
+            }
             return true;
         });
 
@@ -974,7 +1029,12 @@ function applyFilters() {
         const filteredShips = allShips.filter(ship => {
             const matchesSearch = ship.data.name.toLowerCase().includes(searchTerm);
             const matchesRarity = !rarityValue || ship.data.rarity === parseInt(rarityValue);
-            return matchesSearch && matchesRarity;
+            if (!matchesSearch || !matchesRarity) return false;
+            if (farmFilterValue) {
+                const fe = unitFarmData[ship.data.base_id];
+                if (!fe || FARM_ENERGY_TYPE[fe.place] !== farmFilterValue) return false;
+            }
+            return true;
         });
         displayShips(filteredShips);
     } else if (activeTab === 'keywords') {
@@ -1000,6 +1060,7 @@ function clearAllFilters() {
     rarityFilter.value = '';
     gearFilter.value = '';
     relicFilter.value = '';
+    if (farmFilter) farmFilter.value = '';
     activeTagFilters.clear();
     journeyReqFilterSlug = null;
     document.querySelectorAll('.tag-filter-cb').forEach(cb => { cb.checked = false; });
@@ -1273,6 +1334,34 @@ function openUnitDetail(unit, type, options = {}) {
     if (d.alignment)   infoRows.push(`<div class="modal-info-row"><strong>Alignment:</strong> ${escapeHtml(d.alignment)}</div>`);
     if (d.role)        infoRows.push(`<div class="modal-info-row"><strong>Role:</strong> ${escapeHtml(d.role)}</div>`);
     if (d.activate_shard_count) infoRows.push(`<div class="modal-info-row"><strong>Shards to unlock:</strong> ${d.activate_shard_count}</div>`);
+
+    // Farm location row — editable inline
+    const farmEntry = unitFarmData[d.base_id];
+    const farmDisplayHtml = farmEntry
+        ? `<span class="farm-loc-display">
+               <img src="${escapeHtml(FARM_ENERGY_ICONS[farmEntry.place])}" alt="${escapeHtml(farmEntry.place)}" class="farm-loc-icon">
+               ${escapeHtml(farmEntry.place)} ${escapeHtml(farmEntry.node)}
+           </span>`
+        : `<span class="farm-loc-none">Not set</span>`;
+    const farmPlaceOptions = FARM_PLACES.map(p =>
+        `<option value="${escapeHtml(p)}"${farmEntry && farmEntry.place === p ? ' selected' : ''}>${escapeHtml(p)}</option>`
+    ).join('');
+    infoRows.push(`
+        <div class="modal-info-row farm-loc-row" data-farm-base-id="${escapeHtml(d.base_id)}">
+            <strong>Farm location:</strong>
+            <span class="farm-loc-view">
+                ${farmDisplayHtml}
+                <button class="farm-loc-edit-btn" title="Edit farm location">✏</button>
+                ${farmEntry ? `<button class="farm-loc-clear-btn" title="Clear farm location">✕</button>` : ''}
+            </span>
+            <span class="farm-loc-form" style="display:none;">
+                <select class="farm-loc-place">${farmPlaceOptions}</select>
+                <input class="farm-loc-node" type="text" maxlength="2" placeholder="e.g. 3D" value="${farmEntry ? escapeHtml(farmEntry.node) : ''}">
+                <button class="farm-loc-save-btn">Save</button>
+                <button class="farm-loc-cancel-btn">Cancel</button>
+            </span>
+        </div>
+    `);
     infoRows.push(`<div class="modal-section-label" style="margin-top:14px;">Tags</div>${tagsHtml}`);
     const infoHtml = infoRows.join('');
 
@@ -1314,7 +1403,45 @@ function openUnitDetail(unit, type, options = {}) {
         });
     });
 
-    // Apply alignment theme to the card itself (for background tint)
+    // Wire up farm location inline editor
+    modalContent.addEventListener('click', (e) => {
+        const row = e.target.closest('.farm-loc-row');
+        if (!row) return;
+        const baseId = row.dataset.farmBaseId;
+        const viewSpan = row.querySelector('.farm-loc-view');
+        const formSpan = row.querySelector('.farm-loc-form');
+
+        if (e.target.closest('.farm-loc-edit-btn')) {
+            viewSpan.style.display = 'none';
+            formSpan.style.display = 'inline-flex';
+            row.querySelector('.farm-loc-node').focus();
+        } else if (e.target.closest('.farm-loc-cancel-btn')) {
+            viewSpan.style.display = '';
+            formSpan.style.display = 'none';
+        } else if (e.target.closest('.farm-loc-clear-btn')) {
+            delete unitFarmData[baseId];
+            saveUnitFarmData();
+            applyFilters();
+            openUnitDetail(unit, type, options);
+        } else if (e.target.closest('.farm-loc-save-btn')) {
+            const place = row.querySelector('.farm-loc-place').value;
+            const nodeRaw = row.querySelector('.farm-loc-node').value.trim().toUpperCase();
+            if (!/^[1-9][A-H]$/.test(nodeRaw)) {
+                row.querySelector('.farm-loc-node').classList.add('farm-loc-node-err');
+                return;
+            }
+            unitFarmData[baseId] = { place, node: nodeRaw };
+            saveUnitFarmData();
+            applyFilters();
+            openUnitDetail(unit, type, options);
+        }
+    });
+
+    modalContent.addEventListener('input', (e) => {
+        if (e.target.classList.contains('farm-loc-node')) {
+            e.target.classList.remove('farm-loc-node-err');
+        }
+    });
     const card = unitModal.querySelector('.modal-card');
     card.classList.remove('align-dark', 'align-light', 'align-neutral');
     card.classList.add(alignmentClass);
@@ -2677,6 +2804,18 @@ if (clearCacheBtn) {
     });
 }
 
+const exportFarmBtn = document.getElementById('exportFarmBtn');
+if (exportFarmBtn) {
+    exportFarmBtn.addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(unitFarmData, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'unit-farm-data.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
+}
+
 // ── Journey event editor ─────────────────────────────────────────────────────
 
 const journeyEditorModal = document.getElementById('journeyEditorModal');
@@ -3203,6 +3342,10 @@ function renderFarmCard(farm, index) {
 
 function saveFarms(data) {
     localStorage.setItem('swgoh_farms_data', JSON.stringify(data));
+}
+
+function saveUnitFarmData() {
+    localStorage.setItem('swgoh_unit_farm_data', JSON.stringify(unitFarmData));
 }
 
 function saveTrackedJourneys() {

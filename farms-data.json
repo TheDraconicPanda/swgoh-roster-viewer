@@ -410,5 +410,51 @@
         "target_relic": 7
       }
     ]
+  },
+  {
+    "id": "iron_family",
+    "name": "Iron Family",
+    "units": [
+      {
+        "base_id": "50RT",
+        "name": "50R-T",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_50rt.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 5
+      },
+      {
+        "base_id": "T3_M4",
+        "name": "T3-M4",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_t3m4.png",
+        "target_stars": 7,
+        "target_gear": 12,
+        "target_relic": 0
+      },
+      {
+        "base_id": "IG11",
+        "name": "IG-11",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_ig11_nurse.png",
+        "target_stars": 7,
+        "target_gear": 12,
+        "target_relic": 0
+      },
+      {
+        "base_id": "L3_37",
+        "name": "L3-37",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_l337.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 0
+      },
+      {
+        "base_id": "LOBOT",
+        "name": "Lobot",
+        "image": "https://game-assets.swgoh.gg/textures/tex.charui_lobot.png",
+        "target_stars": 7,
+        "target_gear": 13,
+        "target_relic": 3
+      }
+    ]
   }
 ]

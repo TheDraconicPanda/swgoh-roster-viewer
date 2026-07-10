@@ -4030,3 +4030,133 @@ body {
         position: static;
     }
 }
+
+/* ── Farm location badge on character cards ──────────────────────────────── */
+.char-card-badge.farm-loc-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.farm-badge-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+/* ── Farm location row in Info modal ─────────────────────────────────────── */
+.farm-loc-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.farm-loc-row strong {
+    flex-shrink: 0;
+    margin-right: 2px;
+}
+
+.farm-loc-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.farm-loc-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.farm-loc-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.farm-loc-none {
+    font-size: 0.85rem;
+    color: #aaa;
+    font-style: italic;
+}
+
+.farm-loc-edit-btn,
+.farm-loc-clear-btn {
+    background: none;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #495057;
+    line-height: 1.4;
+}
+
+.farm-loc-edit-btn:hover { background: #e9ecef; }
+.farm-loc-clear-btn { color: #dc3545; border-color: #f5c6cb; }
+.farm-loc-clear-btn:hover { background: #f8d7da; }
+
+.farm-loc-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.farm-loc-place {
+    font-size: 0.85rem;
+    padding: 2px 4px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.farm-loc-node {
+    width: 46px;
+    font-size: 0.85rem;
+    padding: 2px 4px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.farm-loc-node.farm-loc-node-err {
+    border-color: #dc3545;
+    background: #fff5f5;
+}
+
+.farm-loc-save-btn,
+.farm-loc-cancel-btn {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+}
+
+.farm-loc-save-btn {
+    background: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.farm-loc-save-btn:hover { background: #218838; border-color: #218838; }
+
+.farm-loc-cancel-btn {
+    background: #fff;
+    color: #495057;
+    border-color: #ced4da;
+}
+
+.farm-loc-cancel-btn:hover { background: #e9ecef; }
